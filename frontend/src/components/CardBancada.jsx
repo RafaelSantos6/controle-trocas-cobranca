@@ -2,16 +2,16 @@ import { Monitor, User, Ban, Wrench, CheckCircle2, Circle, ArrowRightLeft } from
 
 const ESTILOS_STATUS = {
   OCUPADA: {
-    card: 'bg-emerald-950/40 border-emerald-500/60 text-emerald-100 hover:bg-emerald-900/40 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-950/50',
-    headerBadge: 'bg-emerald-600 text-white shadow-xs',
-    hostnameBox: 'bg-emerald-900/40 text-emerald-300 border-emerald-700/50',
-    iconeStatus: <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />,
+    card: 'bg-emerald-50/90 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-500/60 text-emerald-950 dark:text-emerald-100 hover:bg-emerald-100/90 dark:hover:bg-emerald-900/40 hover:border-emerald-500 hover:shadow-md dark:hover:shadow-emerald-950/50',
+    headerBadge: 'bg-emerald-600 text-white shadow-2xs',
+    hostnameBox: 'bg-emerald-100/80 dark:bg-emerald-900/40 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/50',
+    iconeStatus: <CheckCircle2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400 shrink-0" />,
     labelStatus: 'OCUPADA',
   },
   RESERVA: {
-    card: 'bg-sky-950/70 border-sky-500 text-sky-200 hover:bg-sky-900/60 hover:border-sky-400 hover:shadow-lg hover:shadow-sky-950/60',
-    headerBadge: 'bg-sky-600 text-white shadow-xs',
-    hostnameBox: 'bg-sky-900/60 text-sky-100 border-sky-400/50',
+    card: 'bg-sky-50/90 dark:bg-sky-950/70 border-sky-400 dark:border-sky-500 text-sky-950 dark:text-sky-200 hover:bg-sky-100/90 dark:hover:bg-sky-900/60 hover:border-sky-500 hover:shadow-md dark:hover:shadow-sky-950/60',
+    headerBadge: 'bg-henn-500 text-white shadow-2xs',
+    hostnameBox: 'bg-sky-100/90 dark:bg-sky-900/60 text-sky-950 dark:text-sky-100 border-sky-300 dark:border-sky-400/50',
     iconeStatus: (
       <span className="text-[10px] leading-none shrink-0" title="Bancada em Reserva">
         🔵
@@ -20,24 +20,24 @@ const ESTILOS_STATUS = {
     labelStatus: 'RESERVA - PRONTA P/ USO',
   },
   LIVRE: {
-    card: 'bg-slate-900/80 border-slate-700/80 text-slate-300 hover:bg-slate-800/80 hover:border-slate-500 hover:shadow-md',
-    headerBadge: 'bg-slate-700 text-slate-200',
-    hostnameBox: 'bg-slate-800/70 text-slate-400 border-slate-700/70',
-    iconeStatus: <Circle className="h-3 w-3 text-slate-500 shrink-0" />,
+    card: 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/80 hover:border-slate-400 hover:shadow-xs',
+    headerBadge: 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200',
+    hostnameBox: 'bg-slate-100 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700/70',
+    iconeStatus: <Circle className="h-3 w-3 text-slate-400 dark:text-slate-500 shrink-0" />,
     labelStatus: 'LIVRE',
   },
   DESATIVADA: {
-    card: 'bg-rose-950/40 border-rose-600/70 text-rose-100 hover:bg-rose-900/40 hover:border-rose-400 hover:shadow-lg hover:shadow-rose-950/50',
-    headerBadge: 'bg-rose-600 text-white shadow-xs',
-    hostnameBox: 'bg-rose-900/40 text-rose-300 border-rose-700/50',
-    iconeStatus: <Ban className="h-3 w-3 text-rose-400 shrink-0" />,
+    card: 'bg-rose-50/90 dark:bg-rose-950/40 border-rose-400 dark:border-rose-600/70 text-rose-950 dark:text-rose-100 hover:bg-rose-100/90 dark:hover:bg-rose-900/40 hover:border-rose-500 hover:shadow-md dark:hover:shadow-rose-950/50',
+    headerBadge: 'bg-rose-600 text-white shadow-2xs',
+    hostnameBox: 'bg-rose-100/80 dark:bg-rose-900/40 text-rose-900 dark:text-rose-300 border-rose-300 dark:border-rose-700/50',
+    iconeStatus: <Ban className="h-3 w-3 text-rose-600 dark:text-rose-400 shrink-0" />,
     labelStatus: 'DESATIVADA',
   },
   MANUTENCAO: {
-    card: 'bg-amber-950/40 border-amber-600/70 text-amber-100 hover:bg-amber-900/40 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-950/50',
-    headerBadge: 'bg-amber-600 text-white shadow-xs',
-    hostnameBox: 'bg-amber-900/40 text-amber-300 border-amber-700/50',
-    iconeStatus: <Wrench className="h-3 w-3 text-amber-400 shrink-0" />,
+    card: 'bg-amber-50/90 dark:bg-amber-950/40 border-amber-400 dark:border-amber-600/70 text-amber-950 dark:text-amber-100 hover:bg-amber-100/90 dark:hover:bg-amber-900/40 hover:border-amber-500 hover:shadow-md dark:hover:shadow-amber-950/50',
+    headerBadge: 'bg-amber-600 text-white shadow-2xs',
+    hostnameBox: 'bg-amber-100/80 dark:bg-amber-900/40 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700/50',
+    iconeStatus: <Wrench className="h-3 w-3 text-amber-600 dark:text-amber-400 shrink-0" />,
     labelStatus: 'MANUTENÇÃO',
   },
 };
@@ -60,12 +60,12 @@ export default function CardBancada({
     : '';
 
   const classeOrigemModoTroca = isOrigemSelecionada
-    ? 'ring-4 ring-amber-400 !border-amber-300 !bg-amber-950/70 shadow-[0_0_22px_rgba(251,191,36,0.9)] z-20 scale-[1.03]'
+    ? 'ring-4 ring-amber-400 !border-amber-400 !bg-amber-100 dark:!bg-amber-950/70 shadow-[0_0_22px_rgba(251,191,36,0.9)] z-20 scale-[1.03]'
     : '';
 
   const classeTrocaPendente =
     infoTrocaPendente && !isOrigemSelecionada
-      ? '!border-dashed !border-amber-400 ring-2 ring-amber-400/50 !bg-amber-950/35 z-10'
+      ? '!border-dashed !border-amber-500 ring-2 ring-amber-400/50 !bg-amber-50 dark:!bg-amber-950/35 z-10'
       : '';
 
   return (
@@ -92,7 +92,7 @@ export default function CardBancada({
         modoTrocaAtivo && status !== 'DESATIVADA' ? 'cursor-pointer hover:scale-[1.02]' : ''
       }`}
     >
-      {/* Badge Flutuante quando em Modo Troca (Origem Selecionada ou Troca Pendente na Fila) */}
+      {/* Badge Flutuante quando em Modo Troca */}
       {isOrigemSelecionada && (
         <span className="absolute -top-2.5 right-1.5 z-30 rounded-full bg-amber-400 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-slate-950 shadow-md">
           ORIGEM SELECIONADA
@@ -115,7 +115,7 @@ export default function CardBancada({
         </span>
         <div className="flex items-center gap-1">
           {bancada.pontoRede && (
-            <span className="hidden text-[9px] font-mono text-slate-400 2xl:inline">
+            <span className="hidden text-[9px] font-mono text-slate-500 dark:text-slate-400 2xl:inline">
               {bancada.pontoRede}
             </span>
           )}
@@ -140,20 +140,20 @@ export default function CardBancada({
       {/* Rodapé: Etiqueta [RESERVA - PRONTA P/ USO], Colaboradora ou Motivo de Bloqueio */}
       <div className="flex items-center gap-1 text-[10px] leading-tight">
         {status === 'RESERVA' ? (
-          <span className="w-full truncate rounded bg-sky-500/20 px-1 py-0.5 text-center text-[9px] font-extrabold tracking-tight text-sky-200 ring-1 ring-sky-400/40">
+          <span className="w-full truncate rounded bg-sky-100 dark:bg-sky-500/20 px-1 py-0.5 text-center text-[9px] font-extrabold tracking-tight text-sky-800 dark:text-sky-200 ring-1 ring-sky-300 dark:ring-sky-400/40">
             [RESERVA - PRONTA P/ USO]
           </span>
         ) : status === 'DESATIVADA' || status === 'MANUTENCAO' ? (
-          <span className="truncate font-medium text-rose-300" title={bancada.motivoBloqueio || ''}>
+          <span className="truncate font-medium text-rose-700 dark:text-rose-300" title={bancada.motivoBloqueio || ''}>
             {bancada.motivoBloqueio || 'Indisponível'}
           </span>
         ) : colaborador ? (
           <>
-            <User className="h-2.5 w-2.5 shrink-0 opacity-80 text-slate-300" />
-            <span className="truncate font-semibold text-slate-200">{colaborador}</span>
+            <User className="h-2.5 w-2.5 shrink-0 opacity-80 text-slate-500 dark:text-slate-300" />
+            <span className="truncate font-semibold text-slate-800 dark:text-slate-200">{colaborador}</span>
           </>
         ) : (
-          <span className="truncate italic text-slate-500">Posto disponível</span>
+          <span className="truncate italic text-slate-400 dark:text-slate-500">Posto disponível</span>
         )}
       </div>
     </button>

@@ -1,47 +1,66 @@
-# 🏢 Sistema de Controle de Alocação e Trocas Mensais · Setor de Cobrança
+# 🏢 Sistema de Controle de Alocação e Trocas Mensais
+### 🚀 Desenvolvido por HENN Tecnologia · Prestação de Serviços de TI para o Grupo Consulth Soluções
 
-Sistema Full Stack corporativo projetado para gestão visual, governança patrimonial de TI e rastreabilidade histórica de postos de trabalho e computadores (`COBCON...`) em um ambiente de operação de cobrança composto por **10 corredores e 122 bancadas**.
+<p align="center">
+  <img src="frontend/public/logo-henn.png" alt="HENN Tecnologia" width="180" />
+</p>
+
+Sistema corporativo de gestão visual, governança patrimonial de TI e rastreabilidade histórica de postos de trabalho e computadores (`COBCON...`), projetado e implementado pela **HENN Tecnologia** para a operação de cobrança do **Grupo Consulth Soluções** (**10 corredores e 122 bancadas**).
 
 ---
 
 ## 🎯 Guia de Funcionalidades para o Cliente
 
-### 1. 🗺️ Planta Baixa Visual e Interativa (100% Dark Mode)
-- **Distribuição Real do Setor:** Mapeamento fiel das 122 bancadas de atendimento divididas em 10 corredores horizontais:
-  - **Corredores 01 a 09:** 12 bancadas cada (6 no Lado A e 6 no Lado B).
-  - **Corredor 10:** 14 bancadas (7 no Lado A e 7 no Lado B).
-- **Interface Otimizada:** Visualização contínua que preenche a largura total da tela, com contraste balanceado em modo escuro (Dark Mode exclusivo) para reduzir o cansaço visual dos operadores de TI e supervisores.
+### 1. 🏢 Identidade Visual & Design System HENN Tecnologia (Inspirado no Site Oficial)
+- **Identidade Corporativa:** Toda a interface do sistema adota os elementos de design, tipografia e paleta do site oficial da **HENN Tecnologia** ([henntecnologia.com.br](https://henntecnologia.com.br/)), destacando o azul ciano elétrico característico (`#019cdc`), azul royal e tons sóbrios corporativos.
+- **Chancela e Reconhecimento:** O logotipo oficial da HENN Tecnologia está presente na tela de login, no cabeçalho operacional, no rodapé e nos documentos oficiais (Romaneios de Troca), formalizando a autoria da solução e a prestação contínua de serviços para o **Grupo Consulth Soluções**.
 
 ---
 
-### 2. 🚦 Identificação Visual e Estados das Bancadas
-Cada posto possui um cartão de status com cores normatizadas e ícones de identificação imediata:
+### 2. ☀️/🌙 Tema Claro / Escuro Opcional (Alternância com Persistência)
+- **Flexibilidade e Conforto Visual:** O modo escuro agora é **opcional**. O usuário pode alternar instantaneamente entre o **Modo Claro** (estilo corporativo moderno, fundo limpo e cartões nítidos) e o **Modo Escuro** (alto contraste para longos períodos de operação técnica).
+- **Botão Alternador Rápido:** Disponível tanto na tela de Login quanto no cabeçalho superior (`HeaderBusca`), com ícones dinâmicos de Sol (☀️) e Lua (🌙).
+- **Memória de Preferência:** A escolha do usuário é gravada automaticamente no navegador (`localStorage`), mantendo o tema selecionado mesmo após fechar a aba ou realizar novo login.
+
+---
+
+### 3. 🗺️ Planta Baixa Visual e Interativa
+- **Distribuição Real do Setor:** Mapeamento fiel das 122 bancadas de atendimento divididas em 10 corredores horizontais:
+  - **Corredores 01 a 09:** 12 bancadas cada (6 no Lado A e 6 no Lado B).
+  - **Corredor 10:** 14 bancadas (7 no Lado A e 7 no Lado B).
+- **Interface Otimizada de Ponta a Ponta:** Aproveitamento total da largura da tela com ilhas de bancadas organizadas, corredores de circulação e visualização instantânea de todos os postos.
+
+---
+
+### 4. 🚦 Identificação Visual e Estados das Bancadas
+Cada posto possui um cartão de status com cores normatizadas e ícones de identificação imediata, adaptadas perfeitamente para temas claro e escuro:
 - 🟢 **Ocupada (Verde):** Posto ativo com computador alocado e operador em atendimento.
-- 🔵 **Reserva - Pronta p/ Uso (Azul/Ciano):** Posto com máquina física montada (computador, monitor e periféricos), porém sem operador vinculado (ideal para desligamentos recentes ou postos de contingência prontos para novas contratações).
+- 🔵 **Reserva - Pronta p/ Uso (Azul HENN `#019cdc` / Ciano):** Posto com máquina física montada (computador, monitor e periféricos), porém sem operador vinculado (ideal para desligamentos recentes ou postos de contingência prontos para novas contratações).
 - ⚪ **Livre (Cinza):** Posto desocupado sem nenhum equipamento vinculado, pronto para novas instalações.
 - 🔴 **Desativada (Vermelho):** Bancada bloqueada por avaria física, elétrica ou de rede, exibindo o motivo da inoperância.
 - 🟡 **Manutenção (Âmbar):** Posto em intervenção técnica ou reparo predial.
 
 ---
 
-### 3. 🔍 Busca Global Instantânea
-- Localize instantaneamente qualquer posto digitando no campo superior:
+### 5. 🔍 Busca Global Instantânea com Ampla Visibilidade
+- **Campo de Busca Dedicado e Amplo:** Campo de pesquisa proeminente e expansivo (`max-w-xl`), estrategicamente posicionado em linha própria para garantir que o texto digitado pelo usuário permaneça sempre 100% legível e nunca comprimido por outros botões do cabeçalho.
+- **Localização Instantânea:** Localize qualquer posto em tempo real digitando:
   - **Hostname da Máquina:** Ex: `COBCON220`.
   - **Nome do(a) Colaborador(a):** Localize onde um operador está sentado.
   - **Equipe ou Carteira:** Ex: `Negociação Especial`, `Preventiva`, `60+`.
   - **Código da Bancada:** Ex: `C01-A01`, `C05-B04`.
   - **Ponto de Rede ou Status:** Localize facilmente postos em `RESERVA` ou `DESATIVADA`.
-- As bancadas encontradas recebem **destaque com borda amarela pulsante**, e o sistema exibe o total de resultados encontrados em tempo real.
+- **Contador Integrado & Limpeza Rápida:** As bancadas encontradas recebem **destaque com borda amarela pulsante**, e o campo exibe o badge de resultados (`X achadas`) com espaçamento protegido (`pr-32`) para que nunca sobreponha o termo pesquisado, contando ainda com botão `✕` para limpeza instantânea.
 
 ---
 
-### 4. 🔵 Gestão do Estado "RESERVA" & Desligamento Rápido
-- **Preservação de Ativos:** Ao ocorrer o desligamento ou remanejamento de um funcionário sem que a máquina precise sair da mesa, o operador pode acionar **"🔵 Desligamento (Colocar em Reserva)"**.
+### 6. 🔵 Gestão do Estado "RESERVA" & Desligamento Rápido
+- **Preservação de Ativos:** Ao ocorrer o desligamento ou remanejamento de um colaborador sem que a máquina precise sair da mesa, o operador pode acionar **"🔵 Desligamento (Colocar em Reserva)"**.
 - O sistema desvincula o operador anterior, mantém o computador, monitor e periféricos montados na mesa e registra o evento `DESLIGAMENTO_RESERVA` no histórico.
 
 ---
 
-### 5. 🔄 Modo Troca em Lote (Virada de Mês) com Romaneio / O.S.
+### 7. 🔄 Modo Troca em Lote (Virada de Mês) com Romaneio / O.S.
 Desenvolvido especificamente para atender a rotina de rodízio de carteiras e equipes entre supervisores:
 - **Fluxo Simples por Cliques:**
   1. Clique em **"🔄 Iniciar Modo Troca"** no topo da tela.
@@ -53,11 +72,11 @@ Desenvolvido especificamente para atender a rotina de rodízio de carteiras e eq
 - **Transação Segura:** Todas as mudanças são processadas pelo servidor de forma atômica (se uma falhar, nenhuma é aplicada indevidamente).
 - **Emissão Automática de Romaneio (O.S.):**
   - Ao confirmar o lote, abre-se uma tela com o **Romaneio de Movimentação de Ativos** formatado para impressão ou exportação em PDF (`window.print()`).
-  - O documento contém número de protocolo, data/hora, solicitante, técnico, tabela detalhada de movimentações e campos para assinaturas formais de entrega e recebimento.
+  - O documento é timbrado com a marca da **HENN Tecnologia** e os dados do cliente **Grupo Consulth Soluções**, contendo protocolo, data/hora, solicitante, técnico responsável e termos de entrega e recebimento para assinatura de ambas as partes.
 
 ---
 
-### 6. 📜 Rastreabilidade Histórica e Auditoria de Ativos
+### 8. 📜 Rastreabilidade Histórica e Auditoria de Ativos
 - Toda alteração realizada no sistema gera um registro permanente e imutável de movimentação.
 - Tipos de eventos auditados:
   - `ALOCACAO`: Nova máquina instalada em uma bancada.
@@ -69,14 +88,14 @@ Desenvolvido especificamente para atender a rotina de rodízio de carteiras e eq
 
 ---
 
-### 7. 🔐 Autenticação e Controle de Acesso por Papel (RBAC)
+### 9. 🔐 Autenticação e Controle de Acesso por Papel (RBAC)
 O sistema conta com autenticação via Token JWT seguro e controle de permissões em 3 níveis:
 
 | Nível / Perfil | Descrição | O que pode fazer | O que NÃO pode fazer |
 | :--- | :--- | :--- | :--- |
-| 👑 **ADM** *(Administrador)* | Acesso irrestrito a todas as áreas | Cria e gerencia usuários, reseta senhas de qualquer conta, altera status de bancadas, aloca máquinas, faz swaps e trocas em lote. | Sem restrições. |
-| 🛠️ **TI** *(Técnico de TI)* | Operação diária da infraestrutura de TI | Altera status individuais (Livre, Ocupada, Reserva, Desativada, Manutenção), faz alocações, swaps e trocas em lote; reseta senhas de Gestores (`Mudar@123`). | Não pode criar novos usuários nem resetar senhas de administradores. |
-| 👥 **GESTOR** *(Supervisor Cobrança)* | Operação de negócio e rodízio de equipes | Acesso de leitura à planta e ao histórico; utiliza o **Modo Troca em Lote** e emite o **Romaneio de Movimentação**. | Não pode desativar bancadas, colocar em reserva individual ou gerenciar usuários. |
+| 👑 **ADM** *(Administrador HENN)* | Acesso irrestrito a todas as áreas | Cria e gerencia usuários, reseta senhas de qualquer conta, altera status de bancadas, aloca máquinas, faz swaps e trocas em lote. | Sem restrições. |
+| 🛠️ **TI** *(Técnico HENN Tecnologia)* | Operação diária da infraestrutura de TI | Altera status individuais (Livre, Ocupada, Reserva, Desativada, Manutenção), faz alocações, swaps e trocas em lote; reseta senhas de Gestores (`Mudar@123`). | Não pode criar novos usuários nem resetar senhas de administradores. |
+| 👥 **GESTOR** *(Supervisor Grupo Consulth)* | Operação de negócio e rodízio de equipes | Acesso de leitura à planta e ao histórico; utiliza o **Modo Troca em Lote** e emite o **Romaneio de Movimentação**. | Não pode desativar bancadas, colocar em reserva individual ou gerenciar usuários. |
 
 ---
 
@@ -105,37 +124,25 @@ npm run dev
 
 ### 3. Credenciais Padrão Pré-cadastradas
 O sistema já inicializa com contas para demonstração imediata de cada nível de acesso:
-- **Administrador:** Usuário `admin` | Senha `admin123`
-- **Técnico de TI:** Usuário `ti` | Senha `ti123`
-- **Gestor de Cobrança:** Usuário `gestor` | Senha `gestor123`
+- **Administrador (HENN):** Usuário `admin` | Senha `admin123`
+- **Técnico de TI (HENN):** Usuário `ti` | Senha `ti123`
+- **Gestor de Cobrança (Consulth):** Usuário `gestor` | Senha `gestor123`
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Frontend:** React 18, Vite, Tailwind CSS, Lucide React, Axios.
+- **Frontend:** React 18, Vite, Tailwind CSS (com suporte a Light/Dark Mode), Lucide React, Axios.
 - **Backend:** Node.js, Express, Sequelize ORM, SQLite3, MySQL2.
 - **Segurança & Criptografia:** JWT (JSON Web Tokens), BcryptJS.
+- **Identidade & Design:** HENN Tecnologia ([henntecnologia.com.br](https://henntecnologia.com.br/)).
 
 ---
 
 ## 📋 Resumo do Sistema
 
-> **O Sistema de Controle de Alocação e Trocas Mensais** foi desenvolvido para centralizar, simplificar e profissionalizar o gerenciamento de infraestrutura física e tecnológica do setor de cobrança da **Consult'H**.
+> **O Sistema de Controle de Alocação e Trocas Mensais** foi desenvolvido e customizado sob medida pela **HENN Tecnologia** como uma plataforma corporativa para a governança patrimonial, gestão de postos de trabalho e suporte operacional da infraestrutura de TI do **Grupo Consulth Soluções**.
 >
-> Unindo uma interface visual intuitiva a regras de negócio de alta confiabilidade (transações atômicas e controle RBAC), a plataforma elimina planilhas manuais descentralizadas, previne a perda ou extravio de equipamentos (computadores, monitores e kits de periféricos) e garante agilidade nas viradas de mês através do fluxo de trocas em lote com emissão de romaneios formais de entrega. Cada alteração realizada fica gravada para fins de auditoria interna, garantindo total transparência operacional entre a equipe de TI e a supervisão de cobrança.
-
-## 🛠️ Tecnologias Utilizadas
-
-- **Frontend:** React 18, Vite, Tailwind CSS, Lucide React, Axios.
-- **Backend:** Node.js, Express, Sequelize ORM, SQLite3, MySQL2.
-- **Segurança & Criptografia:** JWT (JSON Web Tokens), BcryptJS.
-
----
-
-## 📋 Resumo do Sistema
-
-> **O Sistema de Controle de Alocação e Trocas Mensais** foi desenvolvido para centralizar, simplificar e profissionalizar o gerenciamento de infraestrutura física e tecnológica do setor de cobrança da **Consult'H**.
+> Inspirado na identidade visual e no padrão de excelência da **HENN Tecnologia** ([henntecnologia.com.br](https://henntecnologia.com.br/)), o software oferece total flexibilidade visual ao usuário por meio da alternância entre **Tema Claro** e **Tema Escuro** (Dark Mode opcional persistido em navegador), alto poder de usabilidade na visualização interativa dos 10 corredores e 122 bancadas de atendimento, segurança robusta com autenticação JWT e controle de papéis (RBAC - ADM, TI e GESTOR), além de estrita integridade transacional nas operações de alocação, swap e rodízio em lote com geração instantânea de Romaneios/Ordens de Serviço oficiais.
 >
-> Unindo uma interface visual intuitiva a regras de negócio de alta confiabilidade (transações atômicas e controle RBAC), a plataforma elimina planilhas manuais descentralizadas, previne a perda ou extravio de equipamentos (computadores, monitores e kits de periféricos) e garante agilidade nas viradas de mês através do fluxo de trocas em lote com emissão de romaneios formais de entrega. Cada alteração realizada fica gravada para fins de auditoria interna, garantindo total transparência operacional entre a equipe de TI e a supervisão de cobrança.
-
+> Com esta solução, eliminam-se planilhas manuais vulneráveis a falhas, assegura-se o controle total sobre computadores (`COBCON...`), monitores e periféricos, e consolida-se um fluxo de trabalho ágil, moderno e transparente entre a equipe técnica da **HENN Tecnologia** e a operação de cobrança do **Grupo Consulth Soluções**.

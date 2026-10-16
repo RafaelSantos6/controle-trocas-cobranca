@@ -85,20 +85,31 @@ export default function DocumentoTrocaModal({ dadosRomaneio, onClose }) {
         <div className="flex-1 overflow-y-auto p-6 sm:p-8 print:overflow-visible print:p-0">
           <div className="mx-auto rounded-xl border border-slate-300 bg-white p-6 text-slate-900 shadow-lg sm:p-8 print:border-none print:p-2 print:shadow-none">
             {/* Cabeçalho do Documento */}
+            {/* Cabeçalho do Documento: HENN Tecnologia + Grupo Consulth Soluções */}
             <div className="flex flex-col justify-between gap-4 border-b-2 border-slate-900 pb-4 sm:flex-row sm:items-center">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 text-amber-400 print:border print:border-slate-900">
-                  <Building2 className="h-7 w-7" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white p-1 ring-1 ring-slate-300 print:ring-0">
+                  <img
+                    src="/logo-henn.png"
+                    alt="HENN Tecnologia"
+                    className="h-full w-full object-contain"
+                  />
                 </div>
                 <div>
-                  <div className="text-xs font-black uppercase tracking-widest text-slate-500">
-                    CONSULT&apos;H COBRANÇA · GESTÃO DE ATIVOS DE TI
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-black uppercase tracking-wider text-blue-700">
+                      HENN TECNOLOGIA · GESTÃO DE ATIVOS DE TI
+                    </span>
+                    <span className="text-xs text-slate-400">|</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-amber-700">
+                      CLIENTE: GRUPO CONSULTH SOLUÇÕES
+                    </span>
                   </div>
                   <h1 className="text-lg font-black uppercase tracking-tight text-slate-950 sm:text-xl">
                     Romaneio de Movimentação de Ativos (O.S.)
                   </h1>
                   <p className="text-xs text-slate-600">
-                    Controle Físico de Trocas Mensais de Computadores e Postos de Atendimento
+                    Controle Físico e Governança de Trocas Mensais de Computadores e Postos de Atendimento
                   </p>
                 </div>
               </div>
@@ -217,9 +228,10 @@ export default function DocumentoTrocaModal({ dadosRomaneio, onClose }) {
 
             {/* Termo de Conferência Técnica */}
             <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-3 text-[11px] text-slate-600">
-              Declaro que os equipamentos listados acima (CPU, monitor, teclado, mouse e headset)
-              foram movimentados, revisados e testados nos respectivos pontos de rede e energia das
-              bancadas de destino, encontrando-se em pleno funcionamento.
+              Ordem de Serviço técnica executada pela <strong>HENN Tecnologia</strong> para o cliente{' '}
+              <strong>Grupo Consulth Soluções</strong>. Declaro que os equipamentos listados acima
+              (CPU, monitor, teclado, mouse e headset) foram movimentados, revisados e testados nos
+              respectivos pontos de rede e energia das bancadas de destino, encontrando-se em pleno funcionamento.
             </div>
 
             {/* Rodapé com Linhas de Assinatura */}
@@ -228,7 +240,7 @@ export default function DocumentoTrocaModal({ dadosRomaneio, onClose }) {
                 <div className="mx-auto w-72 border-b border-slate-900 pb-1 font-mono text-slate-400">
                   &nbsp;
                 </div>
-                <p className="mt-2 font-bold uppercase text-slate-900">Assinatura do Gestor</p>
+                <p className="mt-2 font-bold uppercase text-slate-900">Gestor Solicitante · Grupo Consulth</p>
                 <p className="text-[11px] text-slate-600">{gestor}</p>
               </div>
 
@@ -236,7 +248,7 @@ export default function DocumentoTrocaModal({ dadosRomaneio, onClose }) {
                 <div className="mx-auto w-72 border-b border-slate-900 pb-1 font-mono text-slate-400">
                   &nbsp;
                 </div>
-                <p className="mt-2 font-bold uppercase text-slate-900">Assinatura do Técnico TI</p>
+                <p className="mt-2 font-bold uppercase text-slate-900">Técnico Responsável · HENN Tecnologia</p>
                 <p className="text-[11px] text-slate-600">{tecnico}</p>
               </div>
             </div>

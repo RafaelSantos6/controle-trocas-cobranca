@@ -4,66 +4,60 @@
 
 @layer base {
   html {
+    scroll-behavior: smooth;
+  }
+  
+  html.dark {
     color-scheme: dark;
   }
+
+  html:not(.dark) {
+    color-scheme: light;
+  }
+
   body {
-    @apply bg-slate-950 text-slate-100 antialiased selection:bg-sky-500 selection:text-white;
+    @apply antialiased transition-colors duration-200 selection:bg-henn-500 selection:text-white;
+  }
+
+  html.dark body {
+    @apply bg-slate-950 text-slate-100;
+  }
+
+  html:not(.dark) body {
+    @apply bg-slate-100 text-slate-900;
   }
 }
 
-/* Scrollbar customizado escuro */
+/* Scrollbar customizado */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-::-webkit-scrollbar-track {
+html.dark ::-webkit-scrollbar-track {
   background: #090d16;
 }
 
-::-webkit-scrollbar-thumb {
+html.dark ::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+html.dark ::-webkit-scrollbar-thumb:hover {
   background: #334155;
 }
 
-/* Estilos dedicados para impressão limpa do Romaneio de Movimentação de Ativos */
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 12mm;
-  }
+html:not(.dark) ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
 
-  html,
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
-    color-scheme: light !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
+html:not(.dark) ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
 
-  .no-print {
-    display: none !important;
-  }
-
-  .print-only-container {
-    position: static !important;
-    inset: auto !important;
-    background: #ffffff !important;
-    color: #000000 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
-    max-height: none !important;
-    overflow: visible !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
+html:not(.dark) ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 /* Estilos dedicados para impressão limpa do Romaneio de Movimentação de Ativos */
@@ -101,4 +95,3 @@
     max-width: 100% !important;
   }
 }
-

@@ -301,8 +301,8 @@ export default function App() {
   // Verificação inicial do token salvo
   if (carregandoAuth) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-slate-950 text-slate-400">
-        <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 transition-colors">
+        <Loader2 className="h-8 w-8 animate-spin text-henn-blue" />
         <p className="text-sm font-medium">Validando sessão de acesso...</p>
       </div>
     );
@@ -314,20 +314,20 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-24">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-24 transition-colors duration-200">
       {/* Notificação Toast */}
       {toast && (
-        <div className="no-print fixed bottom-5 right-5 z-50 flex max-w-md items-center gap-3 rounded-xl border px-4 py-3 shadow-2xl transition-all duration-200 bg-slate-900/95 backdrop-blur-md text-white border-slate-700/80">
+        <div className="no-print fixed bottom-5 right-5 z-50 flex max-w-md items-center gap-3 rounded-xl border px-4 py-3 shadow-2xl transition-all duration-200 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-900 dark:text-white border-slate-200 dark:border-slate-700/80">
           {toast.tipo === 'erro' ? (
-            <AlertCircle className="h-5 w-5 shrink-0 text-rose-400" />
+            <AlertCircle className="h-5 w-5 shrink-0 text-rose-500 dark:text-rose-400" />
           ) : (
-            <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400" />
+            <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-500 dark:text-emerald-400" />
           )}
           <span className="text-xs font-medium sm:text-sm">{toast.mensagem}</span>
           <button
             type="button"
             onClick={() => setToast(null)}
-            className="ml-2 rounded p-1 text-slate-400 hover:bg-slate-800 hover:text-white"
+            className="ml-2 rounded p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-white"
           >
             <X className="h-4 w-4" />
           </button>
@@ -399,8 +399,8 @@ export default function App() {
 
       {/* Planta Baixa do Setor ou Indicador de Carregamento */}
       {carregando && bancadas.length === 0 ? (
-        <div className="no-print flex h-96 flex-col items-center justify-center gap-3 text-slate-400">
-          <Loader2 className="h-8 w-8 animate-spin text-sky-500" />
+        <div className="no-print flex h-96 flex-col items-center justify-center gap-3 text-slate-500 dark:text-slate-400">
+          <Loader2 className="h-8 w-8 animate-spin text-henn-blue" />
           <p className="text-sm font-medium">
             Carregando planta das 122 bancadas do setor de cobrança...
           </p>
@@ -446,6 +446,27 @@ export default function App() {
           onClose={handleFecharRomaneio}
         />
       )}
+
+      {/* Rodapé Institucional: HENN Tecnologia + Grupo Consulth Soluções */}
+      <footer className="no-print mt-12 border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 py-4 text-center text-xs text-slate-600 dark:text-slate-500 backdrop-blur-sm transition-colors">
+        <div className="flex flex-wrap items-center justify-center gap-2 px-4">
+          <img
+            src="/logo-henn.png"
+            alt="HENN Tecnologia"
+            className="h-4 w-auto object-contain rounded bg-white p-0.5 shadow-xs"
+          />
+          <span>
+            Desenvolvido com excelência por <strong className="text-slate-800 dark:text-slate-300">HENN Tecnologia</strong>
+          </span>
+          <span>·</span>
+          <span>
+            Prestação de Serviços de TI para o <strong className="text-slate-800 dark:text-slate-300">Grupo Consulth Soluções</strong>
+          </span>
+          <span>·</span>
+          <span>Setor de Cobrança (122 Bancadas)</span>
+        </div>
+      </footer>
     </div>
   );
 }
+

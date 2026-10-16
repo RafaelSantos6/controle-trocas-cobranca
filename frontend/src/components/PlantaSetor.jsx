@@ -40,23 +40,23 @@ export default function PlantaSetor({
   return (
     <main className="no-print w-full px-3 py-4 sm:px-6 2xl:px-8">
       {/* Moldura da Planta Baixa preenchendo a tela toda */}
-      <div className="w-full overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-2xl backdrop-blur-sm">
+      <div className="w-full overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 p-4 shadow-md dark:shadow-2xl backdrop-blur-sm transition-colors duration-200">
         <div className="w-full min-w-[960px]">
           {/* Cabeçalho da Planta */}
-          <div className="mb-4 grid grid-cols-[1fr_210px] items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/90 px-4 py-2.5 text-xs text-white">
+          <div className="mb-4 grid grid-cols-[1fr_210px] items-center gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/90 px-4 py-2.5 text-xs text-slate-800 dark:text-white shadow-2xs">
             <div className="flex flex-wrap items-center justify-between gap-3 px-1">
-              <div className="flex items-center gap-2 font-semibold text-slate-200">
-                <Compass className="h-4 w-4 text-emerald-400" />
+              <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-slate-200">
+                <Compass className="h-4 w-4 text-henn-500 dark:text-emerald-400" />
                 <span>PLANTA FÍSICA DO SETOR DE COBRANÇA · 10 CORREDORES (122 BANCADAS)</span>
               </div>
-              <div className="flex items-center gap-4 text-[11px] text-slate-400">
+              <div className="flex items-center gap-4 text-[11px] text-slate-500 dark:text-slate-400">
                 <span>Corredores 01 a 09: 12 bancadas (6 Lado B + 6 Lado A)</span>
                 <span>·</span>
                 <span>Corredor 10: 14 bancadas (7 Lado B + 7 Lado A)</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 font-semibold text-amber-400">
+            <div className="flex items-center justify-end gap-2 font-bold text-amber-600 dark:text-amber-400">
               <ArrowUpDown className="h-4 w-4 shrink-0" />
               <span>CIRCULAÇÃO &amp; TESTEIRAS</span>
             </div>
@@ -79,15 +79,15 @@ export default function PlantaSetor({
                   className="grid grid-cols-[1fr_210px] items-stretch gap-3 w-full"
                 >
                   {/* Ilha Horizontal do Corredor (Lado B em cima, Lado A embaixo) - Ocupa 100% da largura */}
-                  <div className="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-950/70 p-3 shadow-inner w-full">
+                  <div className="flex flex-col justify-between rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/70 p-3 shadow-2xs w-full transition-colors duration-200">
                     {/* Fileira Superior: LADO B */}
                     <div>
                       <div className="mb-1.5 flex items-center justify-between text-[11px]">
-                        <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-slate-300">
-                          <span className="h-2 w-2 rounded-full bg-indigo-400 shadow-xs shadow-indigo-400/50" />
+                        <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                          <span className="h-2 w-2 rounded-full bg-indigo-500 dark:bg-indigo-400 shadow-2xs shadow-indigo-400/50" />
                           Corredor {pad(corredor)} · Fileira Lado B
                         </span>
-                        <span className="font-mono text-[10px] text-slate-400">
+                        <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">
                           {ladoB.length} posições (B01–B{pad(ladoB.length)})
                         </span>
                       </div>
@@ -113,11 +113,11 @@ export default function PlantaSetor({
 
                     {/* Divisória Central da Ilha (Calha de Rede e Energia) */}
                     <div className="my-2.5 flex items-center gap-2">
-                      <div className="h-0.5 flex-1 rounded-full bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800" />
-                      <span className="rounded-md border border-slate-700/80 bg-slate-900 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-slate-400">
+                      <div className="h-0.5 flex-1 rounded-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800" />
+                      <span className="rounded-md border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-900 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400 shadow-2xs">
                         Divisória Central · Calha de Rede &amp; Elétrica · C{pad(corredor)}
                       </span>
-                      <div className="h-0.5 flex-1 rounded-full bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800" />
+                      <div className="h-0.5 flex-1 rounded-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800" />
                     </div>
 
                     {/* Fileira Inferior: LADO A */}
@@ -141,11 +141,11 @@ export default function PlantaSetor({
                       </div>
 
                       <div className="mt-1.5 flex items-center justify-between text-[11px]">
-                        <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-slate-300">
-                          <span className="h-2 w-2 rounded-full bg-sky-400 shadow-xs shadow-sky-400/50" />
+                        <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                          <span className="h-2 w-2 rounded-full bg-henn-500 dark:bg-sky-400 shadow-2xs shadow-sky-400/50" />
                           Corredor {pad(corredor)} · Fileira Lado A
                         </span>
-                        <span className="font-mono text-[10px] text-slate-400">
+                        <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">
                           {ladoA.length} posições (A01–A{pad(ladoA.length)})
                         </span>
                       </div>
@@ -155,7 +155,7 @@ export default function PlantaSetor({
                   {/* DIREITA: Corredor de Circulação Principal + Testeira Preta CONSULT'H */}
                   <div className="flex items-stretch gap-2">
                     {/* Faixa do Corredor de Circulação Principal */}
-                    <div className="flex w-9 flex-col items-center justify-between rounded-lg border-x-2 border-dashed border-amber-500/40 bg-amber-950/20 py-2 text-amber-400">
+                    <div className="flex w-9 flex-col items-center justify-between rounded-lg border-x-2 border-dashed border-amber-400 dark:border-amber-500/40 bg-amber-50/80 dark:bg-amber-950/20 py-2 text-amber-700 dark:text-amber-400">
                       <ArrowUpDown className="h-3.5 w-3.5 opacity-70" />
                       <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] font-extrabold uppercase tracking-widest opacity-80">
                         CIRCULAÇÃO
