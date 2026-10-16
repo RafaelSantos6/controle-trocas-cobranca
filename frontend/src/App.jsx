@@ -5,14 +5,26 @@ import ModoTrocaBarra from './components/ModoTrocaBarra.jsx';
 import PlantaSetor from './components/PlantaSetor.jsx';
 import ModalGerenciar from './components/ModalGerenciar.jsx';
 import DocumentoTrocaModal from './components/DocumentoTrocaModal.jsx';
+import ModalUsuarios from './components/ModalUsuarios.jsx';
+import Login from './components/Login.jsx';
 import { api } from './services/api.js';
+import { useAuth } from './contexts/AuthContext.jsx';
 
 export default function App() {
+  const {
+    usuario,
+    autenticado,
+    carregandoAuth,
+    podeGerenciarBancadas,
+    podeGerenciarAcessos,
+  } = useAuth();
+
   const [bancadas, setBancadas] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erroCarregamento, setErroCarregamento] = useState('');
   const [busca, setBusca] = useState('');
   const [modalState, setModalState] = useState({ bancada: null, abaInicial: 'alocacao' });
+  const [modalUsuariosAberto, setModalUsuariosAberto] = useState(false);
   const [toast, setToast] = useState(null);
 
   // Estados do Modo Troca em Lote (Staging / Rascunho) e Romaneio
@@ -36,12 +48,14 @@ export default function App() {
   }, [toast]);
 
   const carregarBancadas = useCallback(async () => {
+    if (!autenticado) return;
     setCarregando(true);
     setErroCarregamento('');
     try {
       const dados = await api.listarBancadas();
       setBancadas(Array.isArray(dados) ? dados : []);
     } catch (err) {
+      if (err.response?.status === 401) return;
       const msg =
         err.response?.data?.erro ||
         'Não foi possível conectar ao servidor backend em http://localhost:3001/api.';
@@ -50,11 +64,19 @@ export default function App() {
     } finally {
       setCarregando(false);
     }
-  }, [exibirToast]);
+  }, [autenticado, exibirToast]);
 
   useEffect(() => {
-    carregarBancadas();
-  }, [carregarBancadas]);
+    if (autenticado) {
+      carregarBancadas();
+    } else {
+      setBancadas([]);
+      setModoTrocaAtivo(false);
+      setModalState({ bancada: null, abaInicial: 'alocacao' });
+      setModalUsuariosAberto(false);
+      setDadosRomaneio(null);
+    }
+  }, [autenticado, carregarBancadas]);
 
   // Estatísticas globais das 122 bancadas (incluindo RESERVA)
   const estatisticas = useMemo(() => {
@@ -139,6 +161,12 @@ export default function App() {
       setMovimentacoesPendentes([]);
     } else {
       setModalState({ bancada: null, abaInicial: 'alocacao' });
+      // Preenche automaticamente o nome do Gestor ou Técnico com base no usuário logado
+      if (usuario?.role === 'GESTOR' && !gestorLote.trim()) {
+        setGestorLote(usuario.nome);
+      } else if ((usuario?.role === 'TI' || usuario?.role === 'ADM') && !tecnicoLote.trim()) {
+        setTecnicoLote(usuario.nome);
+      }
       setModoTrocaAtivo(true);
       setOrigemSelecionada(null);
       exibirToast(
@@ -151,7 +179,10 @@ export default function App() {
   // Clique em uma bancada (Modo Normal vs Modo Troca em Lote)
   const handleSelectBancada = (bancada) => {
     if (!modoTrocaAtivo) {
-      setModalState({ bancada, abaInicial: 'alocacao' });
+      setModalState({
+        bancada,
+        abaInicial: podeGerenciarBancadas ? 'alocacao' : 'historico',
+      });
       return;
     }
 
@@ -260,11 +291,27 @@ export default function App() {
   };
 
   const handleAbrirSwapRapido = () => {
+    if (!podeGerenciarBancadas) return;
     const primeiraOcupada = bancadas.find((b) => b.status === 'OCUPADA') || bancadas[0];
     if (primeiraOcupada) {
       setModalState({ bancada: primeiraOcupada, abaInicial: 'swap' });
     }
   };
+
+  // Verificação inicial do token salvo
+  if (carregandoAuth) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-slate-950 text-slate-400">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+        <p className="text-sm font-medium">Validando sessão de acesso...</p>
+      </div>
+    );
+  }
+
+  // Se não houver token válido, redireciona para a tela de Login
+  if (!autenticado) {
+    return <Login />;
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 pb-24">
@@ -287,7 +334,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Cabeçalho com Busca Global, Legenda, Contadores (incluindo Reserva) e Botão Modo Troca */}
+      {/* Cabeçalho com Busca Global, Legenda, Contadores, Modo Troca e RBAC */}
       <HeaderBusca
         busca={busca}
         onBuscaChange={setBusca}
@@ -295,10 +342,13 @@ export default function App() {
         totalEncontradas={codigosDestacados.size}
         carregando={carregando}
         onRecarregar={carregarBancadas}
-        onAbrirSwapRapido={handleAbrirSwapRapido}
+        onAbrirSwapRapido={podeGerenciarBancadas ? handleAbrirSwapRapido : null}
         modoTrocaAtivo={modoTrocaAtivo}
         onToggleModoTroca={handleToggleModoTroca}
         totalTrocasPendentes={movimentacoesPendentes.length}
+        onAbrirGestaoUsuarios={
+          podeGerenciarAcessos ? () => setModalUsuariosAberto(true) : null
+        }
       />
 
       {/* Barra de Contexto e Painel Retrátil do Modo Troca em Lote */}
@@ -378,6 +428,14 @@ export default function App() {
             carregarBancadas();
           }}
           onError={(mensagem) => exibirToast(mensagem, 'erro')}
+        />
+      )}
+
+      {/* Modal de Gestão de Acessos / Usuários (ADM e TI) */}
+      {modalUsuariosAberto && podeGerenciarAcessos && (
+        <ModalUsuarios
+          onClose={() => setModalUsuariosAberto(false)}
+          onNotificar={(mensagem, tipo) => exibirToast(mensagem, tipo)}
         />
       )}
 

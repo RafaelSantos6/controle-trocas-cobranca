@@ -2,15 +2,20 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { sequelize } = require('./models');
+const authRoutes = require('./routes/auth.routes');
 const mapaRoutes = require('./routes/mapa.routes');
 const initBancadas = require('./seeders/initBancadas');
+const initAdmin = require('./seeders/initAdmin');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// Rotas principais da API
+// Rotas de Autenticação & Controle de Acesso (RBAC)
+app.use('/api/auth', authRoutes);
+
+// Rotas Principais do Mapa (Protegidas por JWT & RBAC)
 app.use('/api', mapaRoutes);
 
 // Healthcheck
@@ -24,6 +29,7 @@ async function iniciarServidor() {
   try {
     await sequelize.authenticate();
     await sequelize.sync();
+    await initAdmin({ closeConnection: false });
     await initBancadas({ closeConnection: false });
 
     app.listen(PORT, () => {

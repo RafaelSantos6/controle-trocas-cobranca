@@ -19,8 +19,10 @@ import {
   Cpu,
   Circle,
   UserMinus,
+  Lock,
 } from 'lucide-react';
 import { api } from '../services/api.js';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 const formatarData = (iso) => {
   if (!iso) return '—';
@@ -53,7 +55,10 @@ export default function ModalGerenciar({
   onSuccess,
   onError,
 }) {
-  const [abaAtiva, setAbaAtiva] = useState(abaInicial);
+  const { podeGerenciarBancadas } = useAuth();
+  const [abaAtiva, setAbaAtiva] = useState(
+    podeGerenciarBancadas ? abaInicial : 'historico'
+  );
   const [salvando, setSalvando] = useState(false);
   const [erroLocal, setErroLocal] = useState('');
 
@@ -340,53 +345,57 @@ export default function ModalGerenciar({
 
         {/* Navegação de Abas */}
         <div className="flex flex-wrap border-b border-slate-800 bg-slate-950/80 px-6 pt-2 text-xs font-semibold sm:text-sm">
-          <button
-            type="button"
-            onClick={() => {
-              setErroLocal('');
-              setAbaAtiva('alocacao');
-            }}
-            className={`flex items-center gap-2 border-b-2 px-4 py-2.5 transition ${
-              abaAtiva === 'alocacao'
-                ? 'border-sky-500 bg-slate-900 text-sky-400 rounded-t-lg font-bold'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
-            }`}
-          >
-            <Monitor className="h-4 w-4" />
-            <span>Alocar / Mover Máquina</span>
-          </button>
+          {podeGerenciarBancadas && (
+            <>
+              <button
+                type="button"
+                onClick={() => {
+                  setErroLocal('');
+                  setAbaAtiva('alocacao');
+                }}
+                className={`flex items-center gap-2 border-b-2 px-4 py-2.5 transition ${
+                  abaAtiva === 'alocacao'
+                    ? 'border-sky-500 bg-slate-900 text-sky-400 rounded-t-lg font-bold'
+                    : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+                }`}
+              >
+                <Monitor className="h-4 w-4" />
+                <span>Alocar / Mover Máquina</span>
+              </button>
 
-          <button
-            type="button"
-            onClick={() => {
-              setErroLocal('');
-              setAbaAtiva('status');
-            }}
-            className={`flex items-center gap-2 border-b-2 px-4 py-2.5 transition ${
-              abaAtiva === 'status'
-                ? 'border-sky-500 bg-slate-900 text-sky-400 rounded-t-lg font-bold'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
-            }`}
-          >
-            <Ban className="h-4 w-4" />
-            <span>Status / Reserva ({bancada.status})</span>
-          </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setErroLocal('');
+                  setAbaAtiva('status');
+                }}
+                className={`flex items-center gap-2 border-b-2 px-4 py-2.5 transition ${
+                  abaAtiva === 'status'
+                    ? 'border-sky-500 bg-slate-900 text-sky-400 rounded-t-lg font-bold'
+                    : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+                }`}
+              >
+                <Ban className="h-4 w-4" />
+                <span>Status / Reserva ({bancada.status})</span>
+              </button>
 
-          <button
-            type="button"
-            onClick={() => {
-              setErroLocal('');
-              setAbaAtiva('swap');
-            }}
-            className={`flex items-center gap-2 border-b-2 px-4 py-2.5 transition ${
-              abaAtiva === 'swap'
-                ? 'border-sky-500 bg-slate-900 text-sky-400 rounded-t-lg font-bold'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
-            }`}
-          >
-            <ArrowLeftRight className="h-4 w-4" />
-            <span>Swap de Postos</span>
-          </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setErroLocal('');
+                  setAbaAtiva('swap');
+                }}
+                className={`flex items-center gap-2 border-b-2 px-4 py-2.5 transition ${
+                  abaAtiva === 'swap'
+                    ? 'border-sky-500 bg-slate-900 text-sky-400 rounded-t-lg font-bold'
+                    : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+                }`}
+              >
+                <ArrowLeftRight className="h-4 w-4" />
+                <span>Swap de Postos</span>
+              </button>
+            </>
+          )}
 
           <button
             type="button"
@@ -407,6 +416,19 @@ export default function ModalGerenciar({
 
         {/* Corpo do Modal */}
         <div className="flex-1 overflow-y-auto p-6 bg-slate-900">
+          {!podeGerenciarBancadas && (
+            <div className="mb-4 flex items-center gap-2.5 rounded-xl border border-amber-500/30 bg-amber-950/30 px-4 py-3 text-xs text-amber-200">
+              <Lock className="h-4 w-4 shrink-0 text-amber-400" />
+              <span>
+                <strong className="text-amber-300">Acesso GESTOR (Modo Consulta):</strong> A
+                alteração individual de status (Desativada, Reserva, Livre) é exclusiva da TI/ADM.
+                Para realizar trocas de bancadas da sua equipe, utilize o botão{' '}
+                <strong className="text-amber-300">&quot;🔄 Iniciar Modo Troca&quot;</strong> no
+                topo da tela.
+              </span>
+            </div>
+          )}
+
           {erroLocal && (
             <div className="mb-4 flex items-center gap-2.5 rounded-xl border border-rose-800/60 bg-rose-950/40 px-4 py-3 text-sm text-rose-200">
               <AlertTriangle className="h-5 w-5 shrink-0 text-rose-400" />

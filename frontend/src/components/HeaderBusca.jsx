@@ -10,7 +10,17 @@ import {
   ArrowLeftRight,
   Building2,
   Repeat,
+  Users,
+  LogOut,
+  ShieldCheck,
 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext.jsx';
+
+const ROLE_BADGE_STYLES = {
+  ADM: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+  TI: 'bg-sky-500/20 text-sky-300 border-sky-500/40',
+  GESTOR: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+};
 
 export default function HeaderBusca({
   busca,
@@ -23,7 +33,15 @@ export default function HeaderBusca({
   modoTrocaAtivo,
   onToggleModoTroca,
   totalTrocasPendentes = 0,
+  onAbrirGestaoUsuarios,
 }) {
+  const {
+    usuario,
+    logout,
+    podeGerenciarBancadas,
+    podeGerenciarAcessos,
+  } = useAuth();
+
   const {
     total = 122,
     ocupadas = 0,
@@ -58,6 +76,7 @@ export default function HeaderBusca({
               </div>
             </div>
 
+            {/* Ações compactas para telas menores */}
             <div className="flex items-center gap-2 xl:hidden">
               <button
                 type="button"
@@ -70,6 +89,18 @@ export default function HeaderBusca({
               >
                 <span>🔄 {modoTrocaAtivo ? 'Modo Troca Ativo' : 'Iniciar Modo Troca'}</span>
               </button>
+
+              {podeGerenciarAcessos && onAbrirGestaoUsuarios && (
+                <button
+                  type="button"
+                  onClick={onAbrirGestaoUsuarios}
+                  className="rounded-lg border border-purple-500/40 bg-purple-950/40 p-2 text-purple-300 hover:bg-purple-900/50 hover:text-white"
+                  title="👥 Gerenciar Acessos"
+                >
+                  <Users className="h-4 w-4" />
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={onRecarregar}
@@ -78,6 +109,15 @@ export default function HeaderBusca({
                 title="Atualizar mapa"
               >
                 <RefreshCw className={`h-4 w-4 ${carregando ? 'animate-spin text-sky-400' : ''}`} />
+              </button>
+
+              <button
+                type="button"
+                onClick={logout}
+                className="rounded-lg border border-rose-500/40 bg-rose-950/40 p-2 text-rose-300 hover:bg-rose-900/60 hover:text-white"
+                title="Sair / Logout"
+              >
+                <LogOut className="h-4 w-4" />
               </button>
             </div>
           </div>
@@ -118,7 +158,7 @@ export default function HeaderBusca({
           {/* Contadores e Ações Rápidas */}
           <div className="flex flex-wrap items-center justify-between gap-2 sm:justify-end">
             {/* Contadores de Bancadas */}
-            <div className="flex flex-wrap items-center gap-2 text-xs">
+            <div className="flex flex-wrap items-center gap-1.5 text-xs">
               <div
                 className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900/90 px-2.5 py-1.5"
                 title="Total de bancadas no setor"
@@ -176,7 +216,7 @@ export default function HeaderBusca({
               )}
             </div>
 
-            {/* Botões de Ação */}
+            {/* Botões de Ação e Perfil Logado */}
             <div className="hidden items-center gap-2 xl:flex">
               <button
                 type="button"
@@ -196,7 +236,7 @@ export default function HeaderBusca({
                 </span>
               </button>
 
-              {onAbrirSwapRapido && !modoTrocaAtivo && (
+              {podeGerenciarBancadas && onAbrirSwapRapido && !modoTrocaAtivo && (
                 <button
                   type="button"
                   onClick={onAbrirSwapRapido}
@@ -205,6 +245,18 @@ export default function HeaderBusca({
                 >
                   <ArrowLeftRight className="h-3.5 w-3.5" />
                   <span>Swap Rápido</span>
+                </button>
+              )}
+
+              {podeGerenciarAcessos && onAbrirGestaoUsuarios && (
+                <button
+                  type="button"
+                  onClick={onAbrirGestaoUsuarios}
+                  className="flex items-center gap-1.5 rounded-lg border border-purple-500/40 bg-purple-950/40 px-3 py-1.5 text-xs font-semibold text-purple-300 transition hover:bg-purple-900/50 hover:text-white"
+                  title="Gerenciar contas de usuários e resetar senhas"
+                >
+                  <Users className="h-3.5 w-3.5" />
+                  <span>👥 Gerenciar Acessos</span>
                 </button>
               )}
 
@@ -220,11 +272,41 @@ export default function HeaderBusca({
                 />
                 <span>Atualizar</span>
               </button>
+
+              {/* Card do Usuário Logado + Role Badge + Botão Sair */}
+              {usuario && (
+                <div className="ml-1 flex items-center gap-2 rounded-lg border border-slate-800 bg-slate-900/90 pl-2.5 pr-1.5 py-1">
+                  <div className="flex items-center gap-1.5 text-xs">
+                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                    <span className="max-w-[130px] truncate font-semibold text-slate-200" title={usuario.nome}>
+                      {usuario.nome}
+                    </span>
+                    <span
+                      className={`rounded border px-1.5 py-0.5 text-[10px] font-extrabold uppercase ${
+                        ROLE_BADGE_STYLES[usuario.role] ||
+                        'border-slate-700 bg-slate-800 text-slate-300'
+                      }`}
+                    >
+                      {usuario.role}
+                    </span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={logout}
+                    className="flex items-center gap-1 rounded-md border border-rose-500/30 bg-rose-950/50 px-2 py-1 text-[11px] font-bold text-rose-300 transition hover:bg-rose-600 hover:text-white"
+                    title="Encerrar sessão (Logout)"
+                  >
+                    <LogOut className="h-3 w-3" />
+                    <span>Sair</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Barra Inferior: Legenda Visual dos Status */}
+        {/* Barra Inferior: Legenda Visual dos Status + Perfil Mobile */}
         <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-800/80 pt-2 text-[11px] text-slate-300">
           <div className="flex flex-wrap items-center gap-4">
             <span className="font-semibold uppercase tracking-wider text-slate-400">
@@ -266,7 +348,9 @@ export default function HeaderBusca({
           <div className="text-slate-400 hidden lg:block">
             {modoTrocaAtivo
               ? 'Modo Troca em Lote: clique na bancada de ORIGEM e depois na bancada de DESTINO.'
-              : 'Clique em qualquer bancada para alocar máquina, colocar em reserva, desativar ou ver histórico.'}
+              : podeGerenciarBancadas
+              ? 'Clique em qualquer bancada para alocar máquina, colocar em reserva, desativar ou ver histórico.'
+              : 'Perfil GESTOR: clique em "🔄 Iniciar Modo Troca" para movimentar equipes ou clique em uma bancada para ver o histórico.'}
           </div>
         </div>
       </div>

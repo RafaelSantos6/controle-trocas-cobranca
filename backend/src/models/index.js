@@ -2,6 +2,7 @@ const sequelize = require('../config/database');
 const Bancada = require('./Bancada');
 const Maquina = require('./Maquina');
 const HistoricoMovimento = require('./HistoricoMovimento');
+const Usuario = require('./Usuario');
 
 // Relacionamentos entre Bancada e Maquina
 Bancada.belongsTo(Maquina, {
@@ -38,4 +39,5 @@ module.exports = {
   Bancada,
   Maquina,
   HistoricoMovimento,
+  Usuario,
 };
