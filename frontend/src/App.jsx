@@ -94,10 +94,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 pb-10">
+    <div className="min-h-screen bg-slate-950 text-slate-100 pb-10">
       {/* Notificação Toast */}
       {toast && (
-        <div className="fixed bottom-5 right-5 z-50 flex max-w-md items-center gap-3 rounded-xl border px-4 py-3 shadow-2xl transition-all duration-200 bg-slate-900 text-white border-slate-700">
+        <div className="fixed bottom-5 right-5 z-50 flex max-w-md items-center gap-3 rounded-xl border px-4 py-3 shadow-2xl transition-all duration-200 bg-slate-900/95 backdrop-blur-md text-white border-slate-700/80">
           {toast.tipo === 'erro' ? (
             <AlertCircle className="h-5 w-5 shrink-0 text-rose-400" />
           ) : (
@@ -128,9 +128,9 @@ export default function App() {
       {/* Estado de Erro de Conexão */}
       {erroCarregamento && (
         <div className="mx-auto mt-4 max-w-[1600px] px-4 sm:px-6">
-          <div className="flex items-center justify-between rounded-xl border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+          <div className="flex items-center justify-between rounded-xl border border-rose-800/60 bg-rose-950/40 px-4 py-3 text-sm text-rose-200">
             <div className="flex items-center gap-2">
-              <AlertCircle className="h-5 w-5 text-rose-600" />
+              <AlertCircle className="h-5 w-5 text-rose-400" />
               <span>{erroCarregamento}</span>
             </div>
             <button
@@ -146,8 +146,8 @@ export default function App() {
 
       {/* Planta Baixa do Setor ou Indicador de Carregamento */}
       {carregando && bancadas.length === 0 ? (
-        <div className="flex h-96 flex-col items-center justify-center gap-3 text-slate-500">
-          <Loader2 className="h-8 w-8 animate-spin text-sky-600" />
+        <div className="flex h-96 flex-col items-center justify-center gap-3 text-slate-400">
+          <Loader2 className="h-8 w-8 animate-spin text-sky-500" />
           <p className="text-sm font-medium">
             Carregando planta das 122 bancadas do setor de cobrança...
           </p>

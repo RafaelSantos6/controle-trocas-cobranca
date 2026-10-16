@@ -2,31 +2,31 @@ import { Monitor, User, Ban, Wrench, CheckCircle2, Circle } from 'lucide-react';
 
 const ESTILOS_STATUS = {
   OCUPADA: {
-    card: 'bg-emerald-50/95 border-emerald-500 text-emerald-950 hover:bg-emerald-100 hover:shadow-md',
-    headerBadge: 'bg-emerald-600 text-white',
-    hostnameBox: 'bg-emerald-600/15 text-emerald-900 border-emerald-500/30',
-    iconeStatus: <CheckCircle2 className="h-3 w-3 text-emerald-600 shrink-0" />,
+    card: 'bg-emerald-950/40 border-emerald-500/60 text-emerald-100 hover:bg-emerald-900/40 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-950/50',
+    headerBadge: 'bg-emerald-600 text-white shadow-xs',
+    hostnameBox: 'bg-emerald-900/40 text-emerald-300 border-emerald-700/50',
+    iconeStatus: <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />,
     labelStatus: 'OCUPADA',
   },
   LIVRE: {
-    card: 'bg-slate-100/90 border-slate-300 text-slate-600 hover:bg-slate-200/80 hover:border-slate-400',
-    headerBadge: 'bg-slate-500 text-white',
-    hostnameBox: 'bg-slate-200/80 text-slate-500 border-slate-300',
-    iconeStatus: <Circle className="h-3 w-3 text-slate-400 shrink-0" />,
+    card: 'bg-slate-900/80 border-slate-700/80 text-slate-300 hover:bg-slate-800/80 hover:border-slate-500 hover:shadow-md',
+    headerBadge: 'bg-slate-700 text-slate-200',
+    hostnameBox: 'bg-slate-800/70 text-slate-400 border-slate-700/70',
+    iconeStatus: <Circle className="h-3 w-3 text-slate-500 shrink-0" />,
     labelStatus: 'LIVRE',
   },
   DESATIVADA: {
-    card: 'bg-rose-50/95 border-rose-500 text-rose-950 hover:bg-rose-100 hover:shadow-md',
-    headerBadge: 'bg-rose-600 text-white',
-    hostnameBox: 'bg-rose-600/15 text-rose-800 border-rose-500/30',
-    iconeStatus: <Ban className="h-3 w-3 text-rose-600 shrink-0" />,
+    card: 'bg-rose-950/40 border-rose-600/70 text-rose-100 hover:bg-rose-900/40 hover:border-rose-400 hover:shadow-lg hover:shadow-rose-950/50',
+    headerBadge: 'bg-rose-600 text-white shadow-xs',
+    hostnameBox: 'bg-rose-900/40 text-rose-300 border-rose-700/50',
+    iconeStatus: <Ban className="h-3 w-3 text-rose-400 shrink-0" />,
     labelStatus: 'DESATIVADA',
   },
   MANUTENCAO: {
-    card: 'bg-amber-50/95 border-amber-500 text-amber-950 hover:bg-amber-100 hover:shadow-md',
-    headerBadge: 'bg-amber-600 text-white',
-    hostnameBox: 'bg-amber-500/15 text-amber-900 border-amber-500/30',
-    iconeStatus: <Wrench className="h-3 w-3 text-amber-600 shrink-0" />,
+    card: 'bg-amber-950/40 border-amber-600/70 text-amber-100 hover:bg-amber-900/40 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-950/50',
+    headerBadge: 'bg-amber-600 text-white shadow-xs',
+    hostnameBox: 'bg-amber-900/40 text-amber-300 border-amber-700/50',
+    iconeStatus: <Wrench className="h-3 w-3 text-amber-400 shrink-0" />,
     labelStatus: 'MANUTENÇÃO',
   },
 };
@@ -38,7 +38,7 @@ export default function CardBancada({ bancada, destacada, onSelect }) {
   const colaborador = bancada.colaborador || null;
 
   const classeDestaque = destacada
-    ? 'ring-4 ring-yellow-400 !border-yellow-400 shadow-[0_0_22px_rgba(250,204,21,0.95)] animate-pulse z-20 scale-[1.04]'
+    ? 'ring-4 ring-yellow-400 !border-yellow-400 shadow-[0_0_24px_rgba(250,204,21,0.95)] animate-pulse z-20 scale-[1.04]'
     : '';
 
   return (
@@ -66,7 +66,7 @@ export default function CardBancada({ bancada, destacada, onSelect }) {
         </span>
         <div className="flex items-center gap-1">
           {bancada.pontoRede && (
-            <span className="hidden text-[9px] font-mono opacity-60 xl:inline">
+            <span className="hidden text-[9px] font-mono text-slate-400 xl:inline">
               {bancada.pontoRede}
             </span>
           )}
@@ -91,16 +91,16 @@ export default function CardBancada({ bancada, destacada, onSelect }) {
       {/* Rodapé: Colaboradora ou Motivo de Bloqueio */}
       <div className="flex items-center gap-1 text-[10px] leading-tight">
         {status === 'DESATIVADA' || status === 'MANUTENCAO' ? (
-          <span className="truncate font-medium text-rose-700" title={bancada.motivoBloqueio || ''}>
+          <span className="truncate font-medium text-rose-300" title={bancada.motivoBloqueio || ''}>
             {bancada.motivoBloqueio || 'Indisponível'}
           </span>
         ) : colaborador ? (
           <>
-            <User className="h-2.5 w-2.5 shrink-0 opacity-70" />
-            <span className="truncate font-semibold">{colaborador}</span>
+            <User className="h-2.5 w-2.5 shrink-0 opacity-80 text-slate-300" />
+            <span className="truncate font-semibold text-slate-200">{colaborador}</span>
           </>
         ) : (
-          <span className="truncate italic opacity-60">Posto disponível</span>
+          <span className="truncate italic text-slate-500">Posto disponível</span>
         )}
       </div>
     </button>
