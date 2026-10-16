@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CheckCircle2, AlertCircle, X, Loader2 } from 'lucide-react';
 import HeaderBusca from './components/HeaderBusca.jsx';
+import ModoTrocaBarra from './components/ModoTrocaBarra.jsx';
 import PlantaSetor from './components/PlantaSetor.jsx';
 import ModalGerenciar from './components/ModalGerenciar.jsx';
+import DocumentoTrocaModal from './components/DocumentoTrocaModal.jsx';
 import { api } from './services/api.js';
 
 export default function App() {
@@ -12,6 +14,16 @@ export default function App() {
   const [busca, setBusca] = useState('');
   const [modalState, setModalState] = useState({ bancada: null, abaInicial: 'alocacao' });
   const [toast, setToast] = useState(null);
+
+  // Estados do Modo Troca em Lote (Staging / Rascunho) e Romaneio
+  const [modoTrocaAtivo, setModoTrocaAtivo] = useState(false);
+  const [gestorLote, setGestorLote] = useState('');
+  const [tecnicoLote, setTecnicoLote] = useState('');
+  const [observacaoLote, setObservacaoLote] = useState('');
+  const [origemSelecionada, setOrigemSelecionada] = useState(null);
+  const [movimentacoesPendentes, setMovimentacoesPendentes] = useState([]);
+  const [salvandoLote, setSalvandoLote] = useState(false);
+  const [dadosRomaneio, setDadosRomaneio] = useState(null);
 
   const exibirToast = useCallback((mensagem, tipo = 'sucesso') => {
     setToast({ mensagem, tipo, id: Date.now() });
@@ -44,25 +56,27 @@ export default function App() {
     carregarBancadas();
   }, [carregarBancadas]);
 
-  // Estatísticas globais das 122 bancadas
+  // Estatísticas globais das 122 bancadas (incluindo RESERVA)
   const estatisticas = useMemo(() => {
     const total = bancadas.length;
     let ocupadas = 0;
+    let reserva = 0;
     let livres = 0;
     let desativadas = 0;
     let manutencao = 0;
 
     for (const b of bancadas) {
       if (b.status === 'OCUPADA') ocupadas++;
+      else if (b.status === 'RESERVA') reserva++;
       else if (b.status === 'DESATIVADA') desativadas++;
       else if (b.status === 'MANUTENCAO') manutencao++;
       else livres++;
     }
 
-    return { total, ocupadas, livres, desativadas, manutencao };
+    return { total, ocupadas, reserva, livres, desativadas, manutencao };
   }, [bancadas]);
 
-  // Pesquisa em tempo real por hostname (COBCON...), colaboradora, equipe ou código da bancada (C01-A01)
+  // Pesquisa em tempo real por hostname (COBCON...), colaboradora, equipe, status (RESERVA) ou código da bancada (C01-A01)
   const codigosDestacados = useMemo(() => {
     const termo = busca.trim().toLowerCase();
     if (!termo) return new Set();
@@ -74,16 +88,175 @@ export default function App() {
       const matchColaborador = b.colaborador?.toLowerCase().includes(termo);
       const matchEquipe = b.equipe?.toLowerCase().includes(termo);
       const matchPontoRede = b.pontoRede?.toLowerCase().includes(termo);
+      const matchStatus = b.status?.toLowerCase().includes(termo);
 
-      if (matchCodigo || matchHostname || matchColaborador || matchEquipe || matchPontoRede) {
+      if (
+        matchCodigo ||
+        matchHostname ||
+        matchColaborador ||
+        matchEquipe ||
+        matchPontoRede ||
+        matchStatus
+      ) {
         encontrados.add(b.codigo);
       }
     }
     return encontrados;
   }, [bancadas, busca]);
 
-  const handleAbrirBancada = (bancada, abaInicial = 'alocacao') => {
-    setModalState({ bancada, abaInicial });
+  // Mapa de badges das bancadas envolvidas em trocas pendentes no Modo Troca em Lote
+  const mapaTrocasPendentes = useMemo(() => {
+    const mapa = {};
+    for (const mov of movimentacoesPendentes) {
+      if (mov.isSwap) {
+        mapa[mov.origemCodigo] = {
+          badgeTexto: `⇄ ${mov.destinoCodigo}`,
+          tipo: 'SWAP',
+        };
+        mapa[mov.destinoCodigo] = {
+          badgeTexto: `⇄ ${mov.origemCodigo}`,
+          tipo: 'SWAP',
+        };
+      } else {
+        mapa[mov.origemCodigo] = {
+          badgeTexto: `➔ ${mov.destinoCodigo}`,
+          tipo: 'ORIGEM',
+        };
+        mapa[mov.destinoCodigo] = {
+          badgeTexto: `⬅ DE ${mov.origemCodigo}`,
+          tipo: 'DESTINO',
+        };
+      }
+    }
+    return mapa;
+  }, [movimentacoesPendentes]);
+
+  // Alternar Modo Troca em Lote
+  const handleToggleModoTroca = () => {
+    if (modoTrocaAtivo) {
+      setModoTrocaAtivo(false);
+      setOrigemSelecionada(null);
+      setMovimentacoesPendentes([]);
+    } else {
+      setModalState({ bancada: null, abaInicial: 'alocacao' });
+      setModoTrocaAtivo(true);
+      setOrigemSelecionada(null);
+      exibirToast(
+        'Modo Troca em Lote ativado! Selecione a bancada de Origem e depois a de Destino.',
+        'sucesso'
+      );
+    }
+  };
+
+  // Clique em uma bancada (Modo Normal vs Modo Troca em Lote)
+  const handleSelectBancada = (bancada) => {
+    if (!modoTrocaAtivo) {
+      setModalState({ bancada, abaInicial: 'alocacao' });
+      return;
+    }
+
+    // Regra no Modo Troca em Lote:
+    if (bancada.status === 'DESATIVADA') {
+      exibirToast(
+        `A bancada ${bancada.codigo} está DESATIVADA e não pode participar de trocas em lote.`,
+        'erro'
+      );
+      return;
+    }
+
+    // 1º Clique: Selecionar Bancada de Origem
+    if (!origemSelecionada) {
+      if (!bancada.maquina && !bancada.colaborador) {
+        exibirToast(
+          `Selecione como ORIGEM uma bancada que possua máquina ou colaborador (${bancada.codigo} está livre).`,
+          'erro'
+        );
+        return;
+      }
+      setOrigemSelecionada(bancada);
+      return;
+    }
+
+    // Se clicou na mesma bancada de origem, desmarca
+    if (origemSelecionada.codigo === bancada.codigo) {
+      setOrigemSelecionada(null);
+      return;
+    }
+
+    // 2º Clique: Selecionar Bancada de Destino e adicionar à fila de staging
+    const isSwap = Boolean(bancada.maquina || bancada.colaborador);
+
+    const novaMovimentacao = {
+      id: `${origemSelecionada.codigo}-${bancada.codigo}-${Date.now()}`,
+      origemCodigo: origemSelecionada.codigo,
+      origemHostname: origemSelecionada.maquina?.hostname || null,
+      origemColaborador: origemSelecionada.colaborador || null,
+      origemEquipe: origemSelecionada.equipe || null,
+      destinoCodigo: bancada.codigo,
+      destinoHostname: bancada.maquina?.hostname || null,
+      destinoColaborador: bancada.colaborador || null,
+      destinoEquipe: bancada.equipe || null,
+      isSwap,
+    };
+
+    setMovimentacoesPendentes((prev) => [...prev, novaMovimentacao]);
+    setOrigemSelecionada(null);
+
+    exibirToast(
+      isSwap
+        ? `Swap automático agendado: ${novaMovimentacao.origemCodigo} ⇄ ${novaMovimentacao.destinoCodigo}`
+        : `Transferência agendada: ${novaMovimentacao.origemCodigo} ➔ ${novaMovimentacao.destinoCodigo}`,
+      'sucesso'
+    );
+  };
+
+  const handleRemoverMovimentacao = (id) => {
+    setMovimentacoesPendentes((prev) => prev.filter((m) => m.id !== id));
+  };
+
+  // Efetivar o lote no backend e abrir o Romaneio de Movimentação
+  const handleConfirmarLote = async () => {
+    if (!gestorLote.trim()) {
+      exibirToast('Informe o Nome do Gestor / Equipe Solicitante na barra superior.', 'erro');
+      return;
+    }
+    if (movimentacoesPendentes.length === 0) {
+      exibirToast('Adicione pelo menos uma movimentação antes de confirmar.', 'erro');
+      return;
+    }
+
+    setSalvandoLote(true);
+    try {
+      const resposta = await api.realizarTrocaEmLote({
+        gestor: gestorLote.trim(),
+        tecnico: tecnicoLote.trim() || 'Suporte TI',
+        observacao: observacaoLote.trim(),
+        movimentacoes: movimentacoesPendentes.map((m) => ({
+          origemCodigo: m.origemCodigo,
+          destinoCodigo: m.destinoCodigo,
+        })),
+      });
+
+      setDadosRomaneio(resposta);
+      setMovimentacoesPendentes([]);
+      setOrigemSelecionada(null);
+      await carregarBancadas();
+      exibirToast('Trocas em lote efetivadas com sucesso! Romaneio gerado.', 'sucesso');
+    } catch (err) {
+      const msg =
+        err.response?.data?.erro || 'Erro ao processar a troca em lote no servidor.';
+      exibirToast(msg, 'erro');
+    } finally {
+      setSalvandoLote(false);
+    }
+  };
+
+  const handleFecharRomaneio = () => {
+    setDadosRomaneio(null);
+    setModoTrocaAtivo(false);
+    setOrigemSelecionada(null);
+    setMovimentacoesPendentes([]);
+    carregarBancadas();
   };
 
   const handleAbrirSwapRapido = () => {
@@ -94,10 +267,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-10">
+    <div className="min-h-screen bg-slate-950 text-slate-100 pb-24">
       {/* Notificação Toast */}
       {toast && (
-        <div className="fixed bottom-5 right-5 z-50 flex max-w-md items-center gap-3 rounded-xl border px-4 py-3 shadow-2xl transition-all duration-200 bg-slate-900/95 backdrop-blur-md text-white border-slate-700/80">
+        <div className="no-print fixed bottom-5 right-5 z-50 flex max-w-md items-center gap-3 rounded-xl border px-4 py-3 shadow-2xl transition-all duration-200 bg-slate-900/95 backdrop-blur-md text-white border-slate-700/80">
           {toast.tipo === 'erro' ? (
             <AlertCircle className="h-5 w-5 shrink-0 text-rose-400" />
           ) : (
@@ -114,7 +287,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Cabeçalho com Busca Global, Legenda e Contadores */}
+      {/* Cabeçalho com Busca Global, Legenda, Contadores (incluindo Reserva) e Botão Modo Troca */}
       <HeaderBusca
         busca={busca}
         onBuscaChange={setBusca}
@@ -123,11 +296,41 @@ export default function App() {
         carregando={carregando}
         onRecarregar={carregarBancadas}
         onAbrirSwapRapido={handleAbrirSwapRapido}
+        modoTrocaAtivo={modoTrocaAtivo}
+        onToggleModoTroca={handleToggleModoTroca}
+        totalTrocasPendentes={movimentacoesPendentes.length}
       />
+
+      {/* Barra de Contexto e Painel Retrátil do Modo Troca em Lote */}
+      {modoTrocaAtivo && (
+        <ModoTrocaBarra
+          gestor={gestorLote}
+          onGestorChange={setGestorLote}
+          tecnico={tecnicoLote}
+          onTecnicoChange={setTecnicoLote}
+          observacaoLote={observacaoLote}
+          onObservacaoLoteChange={setObservacaoLote}
+          origemSelecionada={origemSelecionada}
+          onCancelarOrigem={() => setOrigemSelecionada(null)}
+          movimentacoesPendentes={movimentacoesPendentes}
+          onRemoverMovimentacao={handleRemoverMovimentacao}
+          onLimparMovimentacoes={() => {
+            setMovimentacoesPendentes([]);
+            setOrigemSelecionada(null);
+          }}
+          onConfirmarLote={handleConfirmarLote}
+          onCancelarModoTroca={() => {
+            setModoTrocaAtivo(false);
+            setOrigemSelecionada(null);
+            setMovimentacoesPendentes([]);
+          }}
+          salvandoLote={salvandoLote}
+        />
+      )}
 
       {/* Estado de Erro de Conexão */}
       {erroCarregamento && (
-        <div className="mx-auto mt-4 max-w-[1600px] px-4 sm:px-6">
+        <div className="no-print w-full mt-4 px-4 sm:px-6 2xl:px-8">
           <div className="flex items-center justify-between rounded-xl border border-rose-800/60 bg-rose-950/40 px-4 py-3 text-sm text-rose-200">
             <div className="flex items-center gap-2">
               <AlertCircle className="h-5 w-5 text-rose-400" />
@@ -146,7 +349,7 @@ export default function App() {
 
       {/* Planta Baixa do Setor ou Indicador de Carregamento */}
       {carregando && bancadas.length === 0 ? (
-        <div className="flex h-96 flex-col items-center justify-center gap-3 text-slate-400">
+        <div className="no-print flex h-96 flex-col items-center justify-center gap-3 text-slate-400">
           <Loader2 className="h-8 w-8 animate-spin text-sky-500" />
           <p className="text-sm font-medium">
             Carregando planta das 122 bancadas do setor de cobrança...
@@ -156,12 +359,15 @@ export default function App() {
         <PlantaSetor
           bancadas={bancadas}
           codigosDestacados={codigosDestacados}
-          onSelectBancada={(b) => handleAbrirBancada(b, 'alocacao')}
+          onSelectBancada={handleSelectBancada}
+          modoTrocaAtivo={modoTrocaAtivo}
+          origemSelecionada={origemSelecionada}
+          mapaTrocasPendentes={mapaTrocasPendentes}
         />
       )}
 
-      {/* Modal de Gerenciamento e Rastreabilidade */}
-      {modalState.bancada && (
+      {/* Modal Individual de Gerenciamento e Rastreabilidade */}
+      {modalState.bancada && !modoTrocaAtivo && (
         <ModalGerenciar
           bancada={modalState.bancada}
           todasBancadas={bancadas}
@@ -172,6 +378,14 @@ export default function App() {
             carregarBancadas();
           }}
           onError={(mensagem) => exibirToast(mensagem, 'erro')}
+        />
+      )}
+
+      {/* Modal do Romaneio de Movimentação de Ativos (Pronto para Impressão / PDF) */}
+      {dadosRomaneio && (
+        <DocumentoTrocaModal
+          dadosRomaneio={dadosRomaneio}
+          onClose={handleFecharRomaneio}
         />
       )}
     </div>

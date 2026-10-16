@@ -149,6 +149,36 @@ const DADOS_INICIAIS_OCUPACAO = [
   },
 ];
 
+const BANCADAS_RESERVA_INICIAIS = [
+  {
+    codigoBancada: 'C01-A06',
+    hostname: 'COBCON208',
+    colaboradorAnterior: 'Marcos Vinícius',
+    equipe: 'Cobrança Preventiva',
+    patrimonioPc: 'PAT-PC-9208',
+    patrimonioMonitor: 'PAT-MON-4208',
+    observacao: 'Desligamento de Marcos Vinícius — Máquina COBCON208 higienizada e pronta p/ uso',
+  },
+  {
+    codigoBancada: 'C04-B02',
+    hostname: 'COBCON224',
+    colaboradorAnterior: 'Aline Cavalcanti',
+    equipe: 'Acordos Judiciais',
+    patrimonioPc: 'PAT-PC-9224',
+    patrimonioMonitor: 'PAT-MON-4224',
+    observacao: 'Transferência de setor de Aline Cavalcanti — Kit completo testado em RESERVA',
+  },
+  {
+    codigoBancada: 'C07-A05',
+    hostname: 'COBCON255',
+    colaboradorAnterior: 'Bruna Nascimento',
+    equipe: 'Cobrança Ativa',
+    patrimonioPc: 'PAT-PC-9255',
+    patrimonioMonitor: 'PAT-MON-4255',
+    observacao: 'Desligamento de colaboradora — Computador COBCON255 pronto para próxima contratação',
+  },
+];
+
 const BANCADAS_DESATIVADAS_INICIAIS = [
   {
     codigo: 'C02-A06',
@@ -209,9 +239,9 @@ async function initBancadas({ closeConnection = false } = {}) {
   await Bancada.bulkCreate(bancadasParaCriar);
   console.log(`[Seeder] ${bancadasParaCriar.length} bancadas criadas com sucesso.`);
 
-  // Popula máquinas e alocações iniciais de demonstração se não houver máquinas
   const totalMaquinas = await Maquina.count();
   if (totalMaquinas === 0) {
+    // 1. Bancadas OCUPADAS
     for (const item of DADOS_INICIAIS_OCUPACAO) {
       const maquina = await Maquina.create({
         hostname: item.hostname,
@@ -231,7 +261,6 @@ async function initBancadas({ closeConnection = false } = {}) {
         { where: { codigo: item.codigoBancada } }
       );
 
-      // Histórico base
       if (item.hostname === 'COBCON220') {
         const d1 = new Date(Date.now() - 1000 * 60 * 60 * 24 * 60);
         const d2 = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30);
@@ -282,6 +311,39 @@ async function initBancadas({ closeConnection = false } = {}) {
       }
     }
 
+    // 2. Bancadas em RESERVA (Máquina pronta p/ uso após desligamento)
+    for (const resItem of BANCADAS_RESERVA_INICIAIS) {
+      const maquina = await Maquina.create({
+        hostname: resItem.hostname,
+        patrimonioPc: resItem.patrimonioPc,
+        patrimonioMonitor: resItem.patrimonioMonitor,
+        kitPerifericos: 'Teclado + Mouse + Headset QD',
+        statusMaquina: 'ATIVA',
+      });
+
+      await Bancada.update(
+        {
+          status: 'RESERVA',
+          maquinaId: maquina.id,
+          colaborador: null,
+          equipe: resItem.equipe,
+          motivoBloqueio: null,
+        },
+        { where: { codigo: resItem.codigoBancada } }
+      );
+
+      await HistoricoMovimento.create({
+        hostname: resItem.hostname,
+        bancadaOrigem: resItem.codigoBancada,
+        bancadaDestino: resItem.codigoBancada,
+        colaboradorAnterior: resItem.colaboradorAnterior,
+        colaboradorNovo: null,
+        tipoEvento: 'DESLIGAMENTO_RESERVA',
+        observacao: resItem.observacao,
+      });
+    }
+
+    // 3. Bancadas DESATIVADAS
     for (const bloq of BANCADAS_DESATIVADAS_INICIAIS) {
       await Bancada.update(
         {
@@ -304,7 +366,7 @@ async function initBancadas({ closeConnection = false } = {}) {
       });
     }
 
-    console.log('[Seeder] Alocações iniciais e histórico de rastreabilidade criados.');
+    console.log('[Seeder] Alocações iniciais, bancadas em RESERVA e histórico criados.');
   }
 
   if (closeConnection) {
@@ -320,4 +382,3 @@ if (require.main === module) {
 }
 
 module.exports = initBancadas;
-

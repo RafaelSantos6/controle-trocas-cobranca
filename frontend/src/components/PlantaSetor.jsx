@@ -1,10 +1,17 @@
 import { useMemo } from 'react';
-import { Wind, Snowflake, Sun, Compass, ArrowUpDown, Layers } from 'lucide-react';
+import { Compass, ArrowUpDown } from 'lucide-react';
 import CardBancada from './CardBancada.jsx';
 
 const pad = (n) => String(n).padStart(2, '0');
 
-export default function PlantaSetor({ bancadas, codigosDestacados, onSelectBancada }) {
+export default function PlantaSetor({
+  bancadas,
+  codigosDestacados,
+  onSelectBancada,
+  modoTrocaAtivo = false,
+  origemSelecionada = null,
+  mapaTrocasPendentes = {},
+}) {
   // Agrupa as 122 bancadas nos 10 corredores horizontais, separando Fileira Lado B e Fileira Lado A
   const corredores = useMemo(() => {
     const mapa = new Map();
@@ -31,26 +38,21 @@ export default function PlantaSetor({ bancadas, codigosDestacados, onSelectBanca
   }, [bancadas]);
 
   return (
-    <main className="mx-auto max-w-[1600px] px-3 py-5 sm:px-6">
-      {/* Moldura Arquitetônica da Planta Baixa no Tema Escuro */}
-      <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-2xl backdrop-blur-sm">
-        <div className="min-w-[1120px]">
-          {/* Cabeçalho de Orientação Espacial da Planta */}
-          <div className="mb-4 grid grid-cols-[120px_1fr_210px] items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/90 px-4 py-2.5 text-xs text-white">
-            <div className="flex items-center gap-2 font-semibold text-sky-400">
-              <Snowflake className="h-4 w-4 shrink-0" />
-              <span>JANELAS / A.C.</span>
-            </div>
-
-            <div className="flex items-center justify-between px-2">
+    <main className="no-print w-full px-3 py-4 sm:px-6 2xl:px-8">
+      {/* Moldura da Planta Baixa preenchendo a tela toda */}
+      <div className="w-full overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-2xl backdrop-blur-sm">
+        <div className="w-full min-w-[960px]">
+          {/* Cabeçalho da Planta */}
+          <div className="mb-4 grid grid-cols-[1fr_210px] items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/90 px-4 py-2.5 text-xs text-white">
+            <div className="flex flex-wrap items-center justify-between gap-3 px-1">
               <div className="flex items-center gap-2 font-semibold text-slate-200">
                 <Compass className="h-4 w-4 text-emerald-400" />
-                <span>PLANTA FÍSICA DO SETOR DE COBRANÇA · 10 CORREDORES HORIZONTAIS</span>
+                <span>PLANTA FÍSICA DO SETOR DE COBRANÇA · 10 CORREDORES (122 BANCADAS)</span>
               </div>
               <div className="flex items-center gap-4 text-[11px] text-slate-400">
-                <span>Posições 01 → 06 (Corredores 01 a 09)</span>
+                <span>Corredores 01 a 09: 12 bancadas (6 Lado B + 6 Lado A)</span>
                 <span>·</span>
-                <span>Posições 01 → 07 (Corredor 10)</span>
+                <span>Corredor 10: 14 bancadas (7 Lado B + 7 Lado A)</span>
               </div>
             </div>
 
@@ -60,52 +62,24 @@ export default function PlantaSetor({ bancadas, codigosDestacados, onSelectBanca
             </div>
           </div>
 
-          {/* Lista dos 10 Corredores Horizontais */}
+          {/* Lista dos 10 Corredores Horizontais preenchendo o espaço */}
           <div className="space-y-4">
             {corredores.map(({ corredor, ladoB, ladoA }) => {
               const todasCorredor = [...ladoB, ...ladoA];
               const ocupadasCorredor = todasCorredor.filter((b) => b.status === 'OCUPADA').length;
+              const reservaCorredor = todasCorredor.filter((b) => b.status === 'RESERVA').length;
               const desativadasCorredor = todasCorredor.filter(
                 (b) => b.status === 'DESATIVADA'
               ).length;
               const isCorredor10 = corredor === 10;
-              const temArCondicionado = corredor % 2 === 1;
 
               return (
                 <div
                   key={corredor}
-                  className="grid grid-cols-[120px_1fr_210px] items-stretch gap-3"
+                  className="grid grid-cols-[1fr_210px] items-stretch gap-3 w-full"
                 >
-                  {/* ESQUERDA: Janelas e Aparelhos de Ar-Condicionado */}
-                  <div className="flex flex-col items-center justify-center rounded-xl border border-sky-500/20 bg-slate-950/80 p-2 text-center shadow-inner">
-                    {temArCondicionado ? (
-                      <>
-                        <div className="mb-1 flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/15 text-sky-400 ring-1 ring-sky-500/30">
-                          <Wind className="h-4 w-4" />
-                        </div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-sky-300">
-                          Ar-Cond. #{pad(Math.ceil(corredor / 2))}
-                        </span>
-                        <span className="text-[9px] text-sky-400/80">Split Climatizado</span>
-                      </>
-                    ) : (
-                      <>
-                        <div className="mb-1 flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/30">
-                          <Sun className="h-4 w-4" />
-                        </div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300">
-                          Janela #{pad(corredor / 2)}
-                        </span>
-                        <span className="text-[9px] text-slate-400">Fachada Externa</span>
-                      </>
-                    )}
-                    <div className="mt-2 w-full rounded border border-slate-800 bg-slate-900/90 py-0.5 text-[9px] font-semibold text-slate-400">
-                      Parede Oeste
-                    </div>
-                  </div>
-
-                  {/* CENTRO: Ilha Horizontal do Corredor (Lado B em cima, Lado A embaixo) */}
-                  <div className="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-950/70 p-3 shadow-inner">
+                  {/* Ilha Horizontal do Corredor (Lado B em cima, Lado A embaixo) - Ocupa 100% da largura */}
+                  <div className="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-950/70 p-3 shadow-inner w-full">
                     {/* Fileira Superior: LADO B */}
                     <div>
                       <div className="mb-1.5 flex items-center justify-between text-[11px]">
@@ -118,21 +92,22 @@ export default function PlantaSetor({ bancadas, codigosDestacados, onSelectBanca
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-7 gap-2">
+                      <div
+                        className={`grid ${
+                          isCorredor10 ? 'grid-cols-7' : 'grid-cols-6'
+                        } gap-2.5 w-full`}
+                      >
                         {ladoB.map((bancada) => (
                           <CardBancada
                             key={bancada.codigo}
                             bancada={bancada}
                             destacada={codigosDestacados.has(bancada.codigo)}
                             onSelect={onSelectBancada}
+                            modoTrocaAtivo={modoTrocaAtivo}
+                            isOrigemSelecionada={origemSelecionada?.codigo === bancada.codigo}
+                            infoTrocaPendente={mapaTrocasPendentes[bancada.codigo] || null}
                           />
                         ))}
-                        {!isCorredor10 && (
-                          <div className="flex h-[78px] flex-col items-center justify-center rounded-lg border border-dashed border-slate-800 bg-slate-900/40 p-1 text-center text-[10px] text-slate-500">
-                            <Layers className="mb-0.5 h-3.5 w-3.5 opacity-40" />
-                            <span>Recuo / Pilar</span>
-                          </div>
-                        )}
                       </div>
                     </div>
 
@@ -147,21 +122,22 @@ export default function PlantaSetor({ bancadas, codigosDestacados, onSelectBanca
 
                     {/* Fileira Inferior: LADO A */}
                     <div>
-                      <div className="grid grid-cols-7 gap-2">
+                      <div
+                        className={`grid ${
+                          isCorredor10 ? 'grid-cols-7' : 'grid-cols-6'
+                        } gap-2.5 w-full`}
+                      >
                         {ladoA.map((bancada) => (
                           <CardBancada
                             key={bancada.codigo}
                             bancada={bancada}
                             destacada={codigosDestacados.has(bancada.codigo)}
                             onSelect={onSelectBancada}
+                            modoTrocaAtivo={modoTrocaAtivo}
+                            isOrigemSelecionada={origemSelecionada?.codigo === bancada.codigo}
+                            infoTrocaPendente={mapaTrocasPendentes[bancada.codigo] || null}
                           />
                         ))}
-                        {!isCorredor10 && (
-                          <div className="flex h-[78px] flex-col items-center justify-center rounded-lg border border-dashed border-slate-800 bg-slate-900/40 p-1 text-center text-[10px] text-slate-500">
-                            <Layers className="mb-0.5 h-3.5 w-3.5 opacity-40" />
-                            <span>Recuo / Pilar</span>
-                          </div>
-                        )}
                       </div>
 
                       <div className="mt-1.5 flex items-center justify-between text-[11px]">
@@ -216,14 +192,21 @@ export default function PlantaSetor({ bancadas, codigosDestacados, onSelectBanca
                         <span className="text-emerald-400 font-semibold">
                           ● {ocupadasCorredor} ativas
                         </span>
+                        {reservaCorredor > 0 && (
+                          <span className="text-sky-400 font-semibold">
+                            🔵 {reservaCorredor} res.
+                          </span>
+                        )}
                         {desativadasCorredor > 0 ? (
                           <span className="text-rose-400 font-semibold">
                             ● {desativadasCorredor} bloq.
                           </span>
                         ) : (
-                          <span className="text-neutral-400">
-                            {todasCorredor.length - ocupadasCorredor} livres
-                          </span>
+                          reservaCorredor === 0 && (
+                            <span className="text-neutral-400">
+                              {todasCorredor.length - ocupadasCorredor} livres
+                            </span>
+                          )
                         )}
                       </div>
                     </div>

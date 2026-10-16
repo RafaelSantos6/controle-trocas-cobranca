@@ -9,6 +9,7 @@ import {
   RefreshCw,
   ArrowLeftRight,
   Building2,
+  Repeat,
 } from 'lucide-react';
 
 export default function HeaderBusca({
@@ -19,14 +20,23 @@ export default function HeaderBusca({
   carregando,
   onRecarregar,
   onAbrirSwapRapido,
+  modoTrocaAtivo,
+  onToggleModoTroca,
+  totalTrocasPendentes = 0,
 }) {
-  const { total = 122, ocupadas = 0, livres = 0, desativadas = 0, manutencao = 0 } =
-    estatisticas || {};
+  const {
+    total = 122,
+    ocupadas = 0,
+    reserva = 0,
+    livres = 0,
+    desativadas = 0,
+    manutencao = 0,
+  } = estatisticas || {};
 
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-800 bg-slate-950/95 backdrop-blur-md text-white shadow-xl">
-      <div className="mx-auto max-w-[1600px] px-4 py-3 sm:px-6">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+    <header className="no-print sticky top-0 z-30 border-b border-slate-800 bg-slate-950/95 backdrop-blur-md text-white shadow-xl">
+      <div className="w-full px-4 py-3 sm:px-6 2xl:px-8">
+        <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           {/* Título e Identidade do Setor */}
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -48,7 +58,18 @@ export default function HeaderBusca({
               </div>
             </div>
 
-            <div className="flex items-center gap-2 lg:hidden">
+            <div className="flex items-center gap-2 xl:hidden">
+              <button
+                type="button"
+                onClick={onToggleModoTroca}
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold shadow-sm transition ${
+                  modoTrocaAtivo
+                    ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300'
+                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500/30'
+                }`}
+              >
+                <span>🔄 {modoTrocaAtivo ? 'Modo Troca Ativo' : 'Iniciar Modo Troca'}</span>
+              </button>
               <button
                 type="button"
                 onClick={onRecarregar}
@@ -117,6 +138,15 @@ export default function HeaderBusca({
               </div>
 
               <div
+                className="flex items-center gap-1.5 rounded-lg border border-sky-500/40 bg-sky-950/60 px-2.5 py-1.5"
+                title="Bancadas em Reserva - Máquina pronta p/ uso sem operador (Azul/Ciano)"
+              >
+                <span className="text-[11px] leading-none">🔵</span>
+                <span className="text-sky-200">Reserva:</span>
+                <span className="font-bold text-sky-300">{reserva}</span>
+              </div>
+
+              <div
                 className="flex items-center gap-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 px-2.5 py-1.5"
                 title="Bancadas Livres / Disponíveis (Cinza)"
               >
@@ -147,8 +177,26 @@ export default function HeaderBusca({
             </div>
 
             {/* Botões de Ação */}
-            <div className="hidden items-center gap-2 lg:flex">
-              {onAbrirSwapRapido && (
+            <div className="hidden items-center gap-2 xl:flex">
+              <button
+                type="button"
+                onClick={onToggleModoTroca}
+                className={`flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-extrabold tracking-tight transition shadow-md ${
+                  modoTrocaAtivo
+                    ? 'bg-amber-400 text-slate-950 ring-2 ring-amber-300 shadow-amber-500/20'
+                    : 'border border-amber-500/60 bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-slate-950'
+                }`}
+                title="Ativar Modo de Troca em Lote com emissão de Romaneio / O.S."
+              >
+                <Repeat className={`h-3.5 w-3.5 ${modoTrocaAtivo ? 'animate-spin' : ''}`} />
+                <span>
+                  {modoTrocaAtivo
+                    ? `🔄 Modo Troca Ativo (${totalTrocasPendentes})`
+                    : '🔄 Iniciar Modo Troca'}
+                </span>
+              </button>
+
+              {onAbrirSwapRapido && !modoTrocaAtivo && (
                 <button
                   type="button"
                   onClick={onAbrirSwapRapido}
@@ -167,7 +215,9 @@ export default function HeaderBusca({
                 className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-slate-800 hover:text-white disabled:opacity-50"
                 title="Sincronizar planta com o servidor"
               >
-                <RefreshCw className={`h-3.5 w-3.5 ${carregando ? 'animate-spin text-sky-400' : ''}`} />
+                <RefreshCw
+                  className={`h-3.5 w-3.5 ${carregando ? 'animate-spin text-sky-400' : ''}`}
+                />
                 <span>Atualizar</span>
               </button>
             </div>
@@ -187,9 +237,16 @@ export default function HeaderBusca({
               </span>
             </span>
             <span className="flex items-center gap-1.5">
+              <span className="h-3 w-3 rounded-sm border border-sky-400 bg-sky-500 shadow-sm shadow-sky-500/50" />
+              <span>
+                <strong className="text-sky-300">Azul/Ciano (🔵)</strong> = Reserva (Pronta p/ Uso
+                s/ Operador)
+              </span>
+            </span>
+            <span className="flex items-center gap-1.5">
               <span className="h-3 w-3 rounded-sm border border-slate-500 bg-slate-700" />
               <span>
-                <strong className="text-slate-300">Cinza</strong> = Livre (Disponível)
+                <strong className="text-slate-300">Cinza</strong> = Livre (Sem Máquina)
               </span>
             </span>
             <span className="flex items-center gap-1.5">
@@ -201,13 +258,15 @@ export default function HeaderBusca({
             <span className="flex items-center gap-1.5">
               <span className="h-3 w-3 rounded-sm border border-yellow-300 bg-yellow-400 animate-pulse shadow-sm shadow-yellow-400/50" />
               <span>
-                <strong className="text-yellow-300">Borda Amarela Pulsante</strong> = Destaque da Busca
+                <strong className="text-yellow-300">Borda Amarela</strong> = Destaque da Busca
               </span>
             </span>
           </div>
 
-          <div className="text-slate-400 hidden sm:block">
-            Clique em qualquer bancada para alocar máquina, registrar troca mensal, desativar ou consultar o histórico.
+          <div className="text-slate-400 hidden lg:block">
+            {modoTrocaAtivo
+              ? 'Modo Troca em Lote: clique na bancada de ORIGEM e depois na bancada de DESTINO.'
+              : 'Clique em qualquer bancada para alocar máquina, colocar em reserva, desativar ou ver histórico.'}
           </div>
         </div>
       </div>

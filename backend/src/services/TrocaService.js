@@ -86,6 +86,7 @@ const TrocaService = {
     kitPerifericos,
     pontoRede,
     tipoEvento,
+    emReserva = false,
   }) {
     if (!codigoBancada) {
       throw criarErro('O código da bancada é obrigatório.', 400);
@@ -114,7 +115,8 @@ const TrocaService = {
         defaults: {
           hostname: hostnameNorm,
           patrimonioPc: patrimonioPc || `PAT-PC-${hostnameNorm.replace(/\D/g, '') || '001'}`,
-          patrimonioMonitor: patrimonioMonitor || `PAT-MON-${hostnameNorm.replace(/\D/g, '') || '001'}`,
+          patrimonioMonitor:
+            patrimonioMonitor || `PAT-MON-${hostnameNorm.replace(/\D/g, '') || '001'}`,
           kitPerifericos: kitPerifericos || 'Teclado + Mouse + Headset',
           statusMaquina: 'ATIVA',
         },
@@ -123,7 +125,8 @@ const TrocaService = {
 
       if (!criada) {
         const camposAtualizar = { statusMaquina: 'ATIVA' };
-        if (patrimonioPc !== undefined && patrimonioPc !== '') camposAtualizar.patrimonioPc = patrimonioPc;
+        if (patrimonioPc !== undefined && patrimonioPc !== '')
+          camposAtualizar.patrimonioPc = patrimonioPc;
         if (patrimonioMonitor !== undefined && patrimonioMonitor !== '')
           camposAtualizar.patrimonioMonitor = patrimonioMonitor;
         if (kitPerifericos !== undefined && kitPerifericos !== '')
@@ -179,18 +182,24 @@ const TrocaService = {
         }
       }
 
-      const novoColaborador =
-        colaborador !== undefined ? (String(colaborador).trim() || null) : bancadaDestino.colaborador;
+      const novoColaborador = emReserva
+        ? null
+        : colaborador !== undefined
+        ? String(colaborador).trim() || null
+        : bancadaDestino.colaborador;
+
       const novaEquipe =
-        equipe !== undefined ? (String(equipe).trim() || null) : bancadaDestino.equipe;
+        equipe !== undefined ? String(equipe).trim() || null : bancadaDestino.equipe;
       const novoPontoRede =
         pontoRede !== undefined && String(pontoRede).trim()
           ? String(pontoRede).trim()
           : bancadaDestino.pontoRede;
 
+      const statusFinal = emReserva ? 'RESERVA' : 'OCUPADA';
+
       await bancadaDestino.update(
         {
-          status: 'OCUPADA',
+          status: statusFinal,
           maquinaId: maquina.id,
           colaborador: novoColaborador,
           equipe: novaEquipe,
@@ -200,18 +209,27 @@ const TrocaService = {
         { transaction: t }
       );
 
-      const eventosValidos = ['ALOCACAO', 'TROCA_MENSAL', 'SWAP', 'DESATIVACAO_BANCADA'];
+      const eventosValidos = [
+        'ALOCACAO',
+        'TROCA_MENSAL',
+        'SWAP',
+        'DESATIVACAO_BANCADA',
+        'DESLIGAMENTO_RESERVA',
+      ];
       const eventoFinal =
         tipoEvento && eventosValidos.includes(tipoEvento)
           ? tipoEvento
+          : emReserva
+          ? 'DESLIGAMENTO_RESERVA'
           : codigoOrigem && codigoOrigem !== bancadaDestino.codigo
           ? 'TROCA_MENSAL'
           : 'ALOCACAO';
 
-      const obsPadrao =
-        codigoOrigem && codigoOrigem !== bancadaDestino.codigo
-          ? `Movimentação da bancada ${codigoOrigem} para ${bancadaDestino.codigo}`
-          : `Alocação na bancada ${bancadaDestino.codigo}`;
+      const obsPadrao = emReserva
+        ? `Máquina ${maquina.hostname} deixada em RESERVA (pronta p/ uso) na bancada ${bancadaDestino.codigo}`
+        : codigoOrigem && codigoOrigem !== bancadaDestino.codigo
+        ? `Movimentação da bancada ${codigoOrigem} para ${bancadaDestino.codigo}`
+        : `Alocação na bancada ${bancadaDestino.codigo}`;
 
       await HistoricoMovimento.create(
         {
@@ -231,11 +249,12 @@ const TrocaService = {
   },
 
   /**
-   * Altera o status de uma bancada ('LIVRE', 'OCUPADA', 'DESATIVADA', 'MANUTENCAO').
-   * Se DESATIVADA ou LIVRE (ou MANUTENCAO), desvincula a máquina e registra no histórico.
+   * Altera o status de uma bancada ('LIVRE', 'OCUPADA', 'RESERVA', 'DESATIVADA', 'MANUTENCAO').
+   * - Se RESERVA: mantém a máquina associada pronta para uso, limpa o colaborador e grava 'DESLIGAMENTO_RESERVA'.
+   * - Se DESATIVADA ou LIVRE (ou MANUTENCAO): desvincula a máquina e registra no histórico.
    */
-  async alterarStatusBancada({ codigoBancada, status, motivoBloqueio }) {
-    const statusValidos = ['LIVRE', 'OCUPADA', 'DESATIVADA', 'MANUTENCAO'];
+  async alterarStatusBancada({ codigoBancada, status, motivoBloqueio, observacao }) {
+    const statusValidos = ['LIVRE', 'OCUPADA', 'RESERVA', 'DESATIVADA', 'MANUTENCAO'];
     if (!status || !statusValidos.includes(status)) {
       throw criarErro(`Status inválido. Use um dos seguintes: ${statusValidos.join(', ')}.`, 400);
     }
@@ -245,7 +264,46 @@ const TrocaService = {
       const maquinaAtual = bancada.maquina;
       const colaboradorAnterior = bancada.colaborador;
 
-      if (status === 'DESATIVADA' || status === 'LIVRE' || status === 'MANUTENCAO') {
+      if (status === 'RESERVA') {
+        if (!maquinaAtual) {
+          throw criarErro(
+            `A bancada ${bancada.codigo} não possui máquina alocada. Aloque um computador antes de colocá-la em RESERVA.`,
+            400
+          );
+        }
+
+        await maquinaAtual.update({ statusMaquina: 'ATIVA' }, { transaction: t });
+
+        await bancada.update(
+          {
+            status: 'RESERVA',
+            maquinaId: maquinaAtual.id,
+            colaborador: null,
+            motivoBloqueio: null,
+          },
+          { transaction: t }
+        );
+
+        const obsReserva =
+          (motivoBloqueio && String(motivoBloqueio).trim()) ||
+          (observacao && String(observacao).trim()) ||
+          (colaboradorAnterior
+            ? `Desligamento / saída de ${colaboradorAnterior} — Máquina ${maquinaAtual.hostname} mantida em RESERVA (pronta p/ uso)`
+            : `Bancada ${bancada.codigo} definida como RESERVA com a máquina ${maquinaAtual.hostname} pronta para uso`);
+
+        await HistoricoMovimento.create(
+          {
+            hostname: maquinaAtual.hostname,
+            bancadaOrigem: bancada.codigo,
+            bancadaDestino: bancada.codigo,
+            colaboradorAnterior,
+            colaboradorNovo: null,
+            tipoEvento: 'DESLIGAMENTO_RESERVA',
+            observacao: obsReserva,
+          },
+          { transaction: t }
+        );
+      } else if (status === 'DESATIVADA' || status === 'LIVRE' || status === 'MANUTENCAO') {
         if (status === 'DESATIVADA' && (!motivoBloqueio || !String(motivoBloqueio).trim())) {
           throw criarErro('Informe o motivo do bloqueio/desativação da bancada.', 400);
         }
@@ -307,7 +365,6 @@ const TrocaService = {
 
   /**
    * Inversão direta de postos (Swap) entre duas bancadas.
-   * Aceita (codigoBancadaOrigem, codigoBancadaDestino, observacao) ou objeto.
    */
   async realizarSwap(arg1, arg2, arg3) {
     let codigoBancadaOrigem = arg1;
@@ -321,7 +378,10 @@ const TrocaService = {
     }
 
     if (!codigoBancadaOrigem || !codigoBancadaDestino) {
-      throw criarErro('Informe os códigos da bancada de origem e da bancada de destino para o swap.', 400);
+      throw criarErro(
+        'Informe os códigos da bancada de origem e da bancada de destino para o swap.',
+        400
+      );
     }
 
     const codOrigemNorm = String(codigoBancadaOrigem).trim().toUpperCase();
@@ -345,6 +405,8 @@ const TrocaService = {
       const colabDestino = bancadaDestino.colaborador;
       const equipeOrigem = bancadaOrigem.equipe;
       const equipeDestino = bancadaDestino.equipe;
+      const statusOrigem = bancadaOrigem.status;
+      const statusDestino = bancadaDestino.status;
 
       if (!maqOrigem && !maqDestino && !colabOrigem && !colabDestino) {
         throw criarErro('Ambas as bancadas selecionadas estão vazias.', 400);
@@ -354,13 +416,33 @@ const TrocaService = {
       await bancadaOrigem.update({ maquinaId: null }, { transaction: t });
       await bancadaDestino.update({ maquinaId: null }, { transaction: t });
 
+      const novoStatusOrigem = maqDestino
+        ? colabDestino
+          ? 'OCUPADA'
+          : statusDestino === 'RESERVA'
+          ? 'RESERVA'
+          : 'OCUPADA'
+        : colabDestino
+        ? 'OCUPADA'
+        : 'LIVRE';
+
+      const novoStatusDestino = maqOrigem
+        ? colabOrigem
+          ? 'OCUPADA'
+          : statusOrigem === 'RESERVA'
+          ? 'RESERVA'
+          : 'OCUPADA'
+        : colabOrigem
+        ? 'OCUPADA'
+        : 'LIVRE';
+
       // Inverte máquinas, colaboradores, equipes e status
       await bancadaOrigem.update(
         {
           maquinaId: maqDestino ? maqDestino.id : null,
           colaborador: colabDestino,
           equipe: equipeDestino,
-          status: maqDestino || colabDestino ? 'OCUPADA' : 'LIVRE',
+          status: novoStatusOrigem,
           motivoBloqueio: null,
         },
         { transaction: t }
@@ -371,7 +453,7 @@ const TrocaService = {
           maquinaId: maqOrigem ? maqOrigem.id : null,
           colaborador: colabOrigem,
           equipe: equipeOrigem,
-          status: maqOrigem || colabOrigem ? 'OCUPADA' : 'LIVRE',
+          status: novoStatusDestino,
           motivoBloqueio: null,
         },
         { transaction: t }
@@ -415,6 +497,220 @@ const TrocaService = {
       return {
         bancadaOrigem: await buscarBancadaPorCodigo(codOrigemNorm, t),
         bancadaDestino: await buscarBancadaPorCodigo(codDestinoNorm, t),
+      };
+    });
+  },
+
+  /**
+   * Executa Trocas Mensais em Lote dentro de uma única transação atômica.
+   * Ao mover a máquina, o colaborador associado vai junto automaticamente.
+   * Se a bancada de destino já estiver ocupada, realiza o Swap automático.
+   * Todos os movimentos geram registros em HistoricoMovimento com tipoEvento = 'TROCA_MENSAL'.
+   */
+  async realizarTrocaEmLote({ gestor, tecnico, observacao, movimentacoes }) {
+    if (!gestor || !String(gestor).trim()) {
+      throw criarErro('Informe o Nome do Gestor / Equipe Solicitante para efetivar a troca em lote.', 400);
+    }
+    if (!Array.isArray(movimentacoes) || movimentacoes.length === 0) {
+      throw criarErro('Nenhuma movimentação foi adicionada ao lote.', 400);
+    }
+
+    const gestorNorm = String(gestor).trim();
+    const tecnicoNorm = tecnico && String(tecnico).trim() ? String(tecnico).trim() : 'Suporte TI';
+    const obsExtra = observacao && String(observacao).trim() ? String(observacao).trim() : '';
+
+    return sequelize.transaction(async (t) => {
+      const registrosHistorico = [];
+      const itensRomaneio = [];
+
+      for (let i = 0; i < movimentacoes.length; i++) {
+        const mov = movimentacoes[i];
+        const origemCodigo = String(mov.origemCodigo || mov.origem || '')
+          .trim()
+          .toUpperCase();
+        const destinoCodigo = String(mov.destinoCodigo || mov.destino || '')
+          .trim()
+          .toUpperCase();
+
+        if (!origemCodigo || !destinoCodigo) {
+          throw criarErro(`Movimentação #${i + 1} inválida: informe origem e destino.`, 400);
+        }
+        if (origemCodigo === destinoCodigo) {
+          throw criarErro(
+            `Movimentação #${i + 1}: origem e destino não podem ser a mesma bancada (${origemCodigo}).`,
+            400
+          );
+        }
+
+        const bancadaOrigem = await buscarBancadaPorCodigo(origemCodigo, t);
+        const bancadaDestino = await buscarBancadaPorCodigo(destinoCodigo, t);
+
+        if (bancadaOrigem.status === 'DESATIVADA' || bancadaDestino.status === 'DESATIVADA') {
+          throw criarErro(
+            `Movimentação #${i + 1}: não é permitido movimentar para/de bancada DESATIVADA (${origemCodigo} -> ${destinoCodigo}).`,
+            400
+          );
+        }
+
+        const maqOrigem = bancadaOrigem.maquina;
+        const colabOrigem = bancadaOrigem.colaborador;
+        const equipeOrigem = bancadaOrigem.equipe;
+        const statusOrigem = bancadaOrigem.status;
+
+        const maqDestino = bancadaDestino.maquina;
+        const colabDestino = bancadaDestino.colaborador;
+        const equipeDestino = bancadaDestino.equipe;
+        const statusDestino = bancadaDestino.status;
+
+        if (!maqOrigem && !colabOrigem) {
+          throw criarErro(
+            `Movimentação #${i + 1}: a bancada de origem ${origemCodigo} está livre/vazia.`,
+            400
+          );
+        }
+
+        const isSwapAutomatico = Boolean(maqDestino || colabDestino);
+
+        // Desvincula temporariamente para evitar conflito de chave estrangeira/única
+        await bancadaOrigem.update({ maquinaId: null }, { transaction: t });
+        await bancadaDestino.update({ maquinaId: null }, { transaction: t });
+
+        const novoStatusDestino = maqOrigem
+          ? colabOrigem
+            ? 'OCUPADA'
+            : statusOrigem === 'RESERVA'
+            ? 'RESERVA'
+            : 'OCUPADA'
+          : colabOrigem
+          ? 'OCUPADA'
+          : 'LIVRE';
+
+        let novoStatusOrigem = 'LIVRE';
+        if (isSwapAutomatico) {
+          novoStatusOrigem = maqDestino
+            ? colabDestino
+              ? 'OCUPADA'
+              : statusDestino === 'RESERVA'
+              ? 'RESERVA'
+              : 'OCUPADA'
+            : colabDestino
+            ? 'OCUPADA'
+            : 'LIVRE';
+        }
+
+        // Atualiza bancada de destino com máquina + colaborador da origem
+        await bancadaDestino.update(
+          {
+            maquinaId: maqOrigem ? maqOrigem.id : null,
+            colaborador: colabOrigem,
+            equipe: equipeOrigem,
+            status: novoStatusDestino,
+            motivoBloqueio: null,
+          },
+          { transaction: t }
+        );
+
+        // Atualiza bancada de origem (recebe os dados do destino se for Swap, ou fica LIVRE)
+        if (isSwapAutomatico) {
+          await bancadaOrigem.update(
+            {
+              maquinaId: maqDestino ? maqDestino.id : null,
+              colaborador: colabDestino,
+              equipe: equipeDestino,
+              status: novoStatusOrigem,
+              motivoBloqueio: null,
+            },
+            { transaction: t }
+          );
+        } else {
+          await bancadaOrigem.update(
+            {
+              maquinaId: null,
+              colaborador: null,
+              equipe: null,
+              status: 'LIVRE',
+              motivoBloqueio: null,
+            },
+            { transaction: t }
+          );
+        }
+
+        const descricaoAcao = isSwapAutomatico
+          ? `Troca em Lote (Swap Automático ${origemCodigo} ⇄ ${destinoCodigo})`
+          : `Troca em Lote (${origemCodigo} ➔ ${destinoCodigo})`;
+
+        const observacaoFinal = [
+          `Gestor Solicitante: ${gestorNorm}`,
+          `Técnico: ${tecnicoNorm}`,
+          descricaoAcao,
+          obsExtra ? `Obs: ${obsExtra}` : null,
+        ]
+          .filter(Boolean)
+          .join(' · ');
+
+        registrosHistorico.push({
+          hostname: maqOrigem ? maqOrigem.hostname : null,
+          bancadaOrigem: origemCodigo,
+          bancadaDestino: destinoCodigo,
+          colaboradorAnterior: colabOrigem,
+          colaboradorNovo: colabOrigem,
+          tipoEvento: 'TROCA_MENSAL',
+          observacao: observacaoFinal,
+        });
+
+        itensRomaneio.push({
+          ordem: itensRomaneio.length + 1,
+          origem: origemCodigo,
+          destino: destinoCodigo,
+          hostname: maqOrigem ? maqOrigem.hostname : 'SEM MÁQUINA',
+          patrimonioPc: maqOrigem?.patrimonioPc || '—',
+          colaborador: colabOrigem || '[RESERVA - PRONTA P/ USO]',
+          equipe: equipeOrigem || '—',
+          statusDestino: novoStatusDestino,
+          modalidade: isSwapAutomatico ? 'SWAP AUTOMÁTICO' : 'TRANSFERÊNCIA',
+        });
+
+        if (isSwapAutomatico) {
+          registrosHistorico.push({
+            hostname: maqDestino ? maqDestino.hostname : null,
+            bancadaOrigem: destinoCodigo,
+            bancadaDestino: origemCodigo,
+            colaboradorAnterior: colabDestino,
+            colaboradorNovo: colabDestino,
+            tipoEvento: 'TROCA_MENSAL',
+            observacao: observacaoFinal,
+          });
+
+          itensRomaneio.push({
+            ordem: itensRomaneio.length + 1,
+            origem: destinoCodigo,
+            destino: origemCodigo,
+            hostname: maqDestino ? maqDestino.hostname : 'SEM MÁQUINA',
+            patrimonioPc: maqDestino?.patrimonioPc || '—',
+            colaborador: colabDestino || '[RESERVA - PRONTA P/ USO]',
+            equipe: equipeDestino || '—',
+            statusDestino: novoStatusOrigem,
+            modalidade: 'SWAP AUTOMÁTICO (INVERSÃO)',
+          });
+        }
+      }
+
+      if (registrosHistorico.length > 0) {
+        await HistoricoMovimento.bulkCreate(registrosHistorico, { transaction: t });
+      }
+
+      return {
+        protocolo: `ROM-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(
+          2,
+          '0'
+        )}-${String(Date.now()).slice(-5)}`,
+        dataHora: new Date().toISOString(),
+        gestor: gestorNorm,
+        tecnico: tecnicoNorm,
+        observacao: obsExtra,
+        totalParesSolicitados: movimentacoes.length,
+        totalMovimentacoesEfetivadas: itensRomaneio.length,
+        itensRomaneio,
       };
     });
   },

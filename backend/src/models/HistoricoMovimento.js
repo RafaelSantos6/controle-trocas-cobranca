@@ -30,7 +30,13 @@ const HistoricoMovimento = sequelize.define(
       allowNull: true,
     },
     tipoEvento: {
-      type: DataTypes.ENUM('ALOCACAO', 'TROCA_MENSAL', 'SWAP', 'DESATIVACAO_BANCADA'),
+      type: DataTypes.ENUM(
+        'ALOCACAO',
+        'TROCA_MENSAL',
+        'SWAP',
+        'DESATIVACAO_BANCADA',
+        'DESLIGAMENTO_RESERVA'
+      ),
       allowNull: false,
     },
     observacao: {

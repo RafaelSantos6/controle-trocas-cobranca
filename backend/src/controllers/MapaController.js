@@ -42,6 +42,11 @@ const MapaController = {
     return TrocaService.realizarSwap(codigoBancadaOrigem, codigoBancadaDestino, observacao);
   }),
 
+  // POST /api/bancadas/troca-em-lote
+  realizarTrocaEmLote: asyncHandler(async (req) => {
+    return TrocaService.realizarTrocaEmLote(req.body);
+  }),
+
   // GET /api/historico/:hostname
   obterHistoricoMaquina: asyncHandler(async (req) => {
     const { hostname } = req.params;

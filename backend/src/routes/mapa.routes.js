@@ -9,6 +9,7 @@ router.get('/bancadas/:codigo', MapaController.obterBancada);
 router.post('/bancadas/alocar', MapaController.alocarOuMover);
 router.patch('/bancadas/status', MapaController.alterarStatusBancada);
 router.post('/bancadas/swap', MapaController.realizarSwap);
+router.post('/bancadas/troca-em-lote', MapaController.realizarTrocaEmLote);
 
 // Histórico de Rastreabilidade
 router.get('/historico/bancada/:codigo', MapaController.obterHistoricoBancada);
@@ -18,4 +19,3 @@ router.get('/historico/:hostname', MapaController.obterHistoricoMaquina);
 router.get('/maquinas', MapaController.listarMaquinas);
 
 module.exports = router;
-

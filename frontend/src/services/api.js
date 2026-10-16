@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
-  timeout: 10000,
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -19,11 +19,15 @@ export const api = {
   // Executa alocação ou movimentação de máquina/colaborador
   alocarOuMover: (dados) => apiClient.post('/bancadas/alocar', dados).then((res) => res.data),
 
-  // Altera status da bancada (LIVRE, OCUPADA, DESATIVADA, MANUTENCAO)
+  // Altera status da bancada (LIVRE, OCUPADA, RESERVA, DESATIVADA, MANUTENCAO)
   alterarStatus: (dados) => apiClient.patch('/bancadas/status', dados).then((res) => res.data),
 
   // Inverte duas bancadas diretamente (Swap)
   realizarSwap: (dados) => apiClient.post('/bancadas/swap', dados).then((res) => res.data),
+
+  // Efetiva trocas mensais em lote e retorna dados do Romaneio
+  realizarTrocaEmLote: (dados) =>
+    apiClient.post('/bancadas/troca-em-lote', dados).then((res) => res.data),
 
   // Retorna a linha do tempo de movimentações de uma máquina pelo hostname
   obterHistoricoMaquina: (hostname) =>

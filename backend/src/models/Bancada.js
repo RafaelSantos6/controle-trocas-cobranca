@@ -36,7 +36,7 @@ const Bancada = sequelize.define(
       },
     },
     status: {
-      type: DataTypes.ENUM('LIVRE', 'OCUPADA', 'DESATIVADA', 'MANUTENCAO'),
+      type: DataTypes.ENUM('LIVRE', 'OCUPADA', 'RESERVA', 'DESATIVADA', 'MANUTENCAO'),
       allowNull: false,
       defaultValue: 'LIVRE',
     },

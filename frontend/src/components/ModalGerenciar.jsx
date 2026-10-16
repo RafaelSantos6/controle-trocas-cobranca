@@ -18,6 +18,7 @@ import {
   FileText,
   Cpu,
   Circle,
+  UserMinus,
 } from 'lucide-react';
 import { api } from '../services/api.js';
 
@@ -41,6 +42,7 @@ const BADGE_EVENTO = {
   TROCA_MENSAL: 'bg-sky-950/60 text-sky-300 border-sky-700/60',
   SWAP: 'bg-indigo-950/60 text-indigo-300 border-indigo-700/60',
   DESATIVACAO_BANCADA: 'bg-rose-950/60 text-rose-300 border-rose-700/60',
+  DESLIGAMENTO_RESERVA: 'bg-cyan-950/70 text-cyan-300 border-cyan-500/60',
 };
 
 export default function ModalGerenciar({
@@ -67,9 +69,10 @@ export default function ModalGerenciar({
   const [kitPerifericos, setKitPerifericos] = useState(
     bancada.maquina?.kitPerifericos || 'Teclado + Mouse + Headset'
   );
+  const [emReserva, setEmReserva] = useState(false);
   const [observacao, setObservacao] = useState('');
 
-  // Campos de Status / Bloqueio da Bancada
+  // Campos de Status / Bloqueio / Reserva da Bancada
   const [novoStatus, setNovoStatus] = useState(bancada.status || 'LIVRE');
   const [motivoBloqueio, setMotivoBloqueio] = useState(bancada.motivoBloqueio || '');
 
@@ -138,7 +141,6 @@ export default function ModalGerenciar({
 
     setSalvando(true);
     try {
-      // Se a bancada estava DESATIVADA e o usuário está alocando diretamente, reativa primeiro se necessário
       if (bancada.status === 'DESATIVADA') {
         await api.alterarStatus({
           codigoBancada: bancada.codigo,
@@ -150,17 +152,20 @@ export default function ModalGerenciar({
       await api.alocarOuMover({
         codigoBancada: bancada.codigo,
         hostname: hostname.trim().toUpperCase(),
-        colaborador: colaborador.trim(),
+        colaborador: emReserva ? null : colaborador.trim(),
         equipe: equipe.trim(),
         pontoRede: pontoRede.trim(),
         patrimonioPc: patrimonioPc.trim(),
         patrimonioMonitor: patrimonioMonitor.trim(),
         kitPerifericos: kitPerifericos.trim(),
         observacao: observacao.trim(),
+        emReserva,
       });
 
       onSuccess(
-        `Máquina ${hostname.trim().toUpperCase()} alocada com sucesso na bancada ${bancada.codigo}!`
+        emReserva
+          ? `Máquina ${hostname.trim().toUpperCase()} configurada em RESERVA na bancada ${bancada.codigo}!`
+          : `Máquina ${hostname.trim().toUpperCase()} alocada com sucesso na bancada ${bancada.codigo}!`
       );
       onClose();
     } catch (err) {
@@ -172,7 +177,40 @@ export default function ModalGerenciar({
     }
   };
 
-  // Salvar alteração de status da bancada (LIVRE, DESATIVADA, MANUTENCAO, OCUPADA)
+  // Atalho rápido para desligamento de colaborador -> Colocar bancada em RESERVA
+  const handleColocarEmReservaRapido = async () => {
+    setErroLocal('');
+    if (!bancada.maquina?.hostname) {
+      setErroLocal('Esta bancada não possui máquina associada para ficar em RESERVA.');
+      return;
+    }
+
+    setSalvando(true);
+    try {
+      await api.alterarStatus({
+        codigoBancada: bancada.codigo,
+        status: 'RESERVA',
+        observacao:
+          observacao.trim() ||
+          (bancada.colaborador
+            ? `Desligamento/saída de ${bancada.colaborador} — Máquina ${bancada.maquina.hostname} mantida em RESERVA`
+            : `Bancada ${bancada.codigo} colocada em RESERVA`),
+      });
+
+      onSuccess(
+        `Bancada ${bancada.codigo} colocada em RESERVA (máquina ${bancada.maquina.hostname} pronta p/ uso)!`
+      );
+      onClose();
+    } catch (err) {
+      const msg = err.response?.data?.erro || 'Erro ao colocar bancada em reserva.';
+      setErroLocal(msg);
+      if (onError) onError(msg);
+    } finally {
+      setSalvando(false);
+    }
+  };
+
+  // Salvar alteração de status da bancada (LIVRE, OCUPADA, RESERVA, DESATIVADA, MANUTENCAO)
   const handleAlterarStatus = async (e) => {
     e.preventDefault();
     setErroLocal('');
@@ -242,7 +280,7 @@ export default function ModalGerenciar({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-3 backdrop-blur-sm sm:p-6"
+      className="no-print fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-3 backdrop-blur-sm sm:p-6"
       onClick={onClose}
     >
       <div
@@ -264,6 +302,8 @@ export default function ModalGerenciar({
                 className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
                   bancada.status === 'OCUPADA'
                     ? 'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40'
+                    : bancada.status === 'RESERVA'
+                    ? 'bg-sky-500/20 text-sky-300 ring-1 ring-sky-400/50'
                     : bancada.status === 'DESATIVADA'
                     ? 'bg-rose-500/20 text-rose-300 ring-1 ring-rose-500/40'
                     : bancada.status === 'MANUTENCAO'
@@ -271,11 +311,13 @@ export default function ModalGerenciar({
                     : 'bg-slate-800 text-slate-300 border border-slate-700'
                 }`}
               >
-                {bancada.status}
+                {bancada.status === 'RESERVA' ? '🔵 RESERVA' : bancada.status}
               </span>
             </div>
             <p className="mt-1 text-xs text-slate-400">
-              {bancada.maquina?.hostname
+              {bancada.status === 'RESERVA'
+                ? `Máquina pronta p/ uso sem operador: ${bancada.maquina?.hostname || '—'}`
+                : bancada.maquina?.hostname
                 ? `Ativo atual: ${bancada.maquina.hostname} (${
                     bancada.colaborador || 'Sem colaborador vinculado'
                   })`
@@ -297,7 +339,7 @@ export default function ModalGerenciar({
         </div>
 
         {/* Navegação de Abas */}
-        <div className="flex border-b border-slate-800 bg-slate-950/80 px-6 pt-2 text-xs font-semibold sm:text-sm">
+        <div className="flex flex-wrap border-b border-slate-800 bg-slate-950/80 px-6 pt-2 text-xs font-semibold sm:text-sm">
           <button
             type="button"
             onClick={() => {
@@ -327,7 +369,7 @@ export default function ModalGerenciar({
             }`}
           >
             <Ban className="h-4 w-4" />
-            <span>Status / Bloqueio ({bancada.status})</span>
+            <span>Status / Reserva ({bancada.status})</span>
           </button>
 
           <button
@@ -376,12 +418,13 @@ export default function ModalGerenciar({
           {abaAtiva === 'alocacao' && (
             <form onSubmit={handleAlocarOuMover} className="space-y-4">
               <div className="rounded-xl border border-sky-500/30 bg-sky-950/30 p-3.5 text-xs text-sky-200">
-                <strong className="text-sky-300">Rastreabilidade Automática:</strong> Se o hostname informado (ex:{' '}
-                <code className="font-mono font-bold text-sky-300">COBCON220</code>) já estiver alocado em outra
-                bancada, o sistema liberará automaticamente a bancada de origem (definindo-a como{' '}
-                <span className="font-bold text-emerald-400">LIVRE</span>) e transferirá a máquina para{' '}
-                <span className="font-bold text-sky-300">{bancada.codigo}</span>, gravando a movimentação no
-                histórico.
+                <strong className="text-sky-300">Rastreabilidade Automática:</strong> Se o hostname
+                informado (ex: <code className="font-mono font-bold text-sky-300">COBCON220</code>)
+                já estiver alocado em outra bancada, o sistema liberará automaticamente a bancada de
+                origem (definindo-a como <span className="font-bold text-emerald-400">LIVRE</span>)
+                e transferirá a máquina para{' '}
+                <span className="font-bold text-sky-300">{bancada.codigo}</span>, gravando a
+                movimentação no histórico.
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -401,16 +444,32 @@ export default function ModalGerenciar({
                 </div>
 
                 <div>
-                  <label className="mb-1 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-300">
-                    <User className="h-3.5 w-3.5 text-emerald-400" />
-                    Colaborador(a)
+                  <label className="mb-1 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-300">
+                    <span className="flex items-center gap-1.5">
+                      <User className="h-3.5 w-3.5 text-emerald-400" />
+                      Colaborador(a)
+                    </span>
+                    <label className="flex cursor-pointer items-center gap-1.5 text-[11px] font-semibold normal-case text-sky-300">
+                      <input
+                        type="checkbox"
+                        checked={emReserva}
+                        onChange={(e) => setEmReserva(e.target.checked)}
+                        className="rounded border-slate-600 bg-slate-900 text-sky-500"
+                      />
+                      <span>🔵 Deixar em Reserva (s/ operador)</span>
+                    </label>
                   </label>
                   <input
                     type="text"
-                    value={colaborador}
+                    disabled={emReserva}
+                    value={emReserva ? '' : colaborador}
                     onChange={(e) => setColaborador(e.target.value)}
-                    placeholder="Nome da colaboradora ou operador"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white placeholder-slate-500 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
+                    placeholder={
+                      emReserva
+                        ? '[RESERVA - PRONTA P/ USO SEM OPERADOR]'
+                        : 'Nome da colaboradora ou operador'
+                    }
+                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white placeholder-slate-500 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 disabled:cursor-not-allowed disabled:bg-sky-950/30 disabled:text-sky-300"
                   />
                 </div>
 
@@ -498,42 +557,66 @@ export default function ModalGerenciar({
                   type="text"
                   value={observacao}
                   onChange={(e) => setObservacao(e.target.value)}
-                  placeholder="Ex: Rodízio mensal de outubro / Troca de posto solicitada pela supervisão"
+                  placeholder="Ex: Rodízio mensal de outubro / Contratação nova colaboradora"
                   className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white placeholder-slate-500 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 border-t border-slate-800 pt-4">
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  disabled={salvando}
-                  className="flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-500 disabled:opacity-50"
-                >
-                  <Save className="h-4 w-4" />
-                  <span>{salvando ? 'Salvando...' : 'Salvar Alocação / Movimentação'}</span>
-                </button>
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-800 pt-4">
+                <div>
+                  {bancada.maquina?.hostname && bancada.status === 'OCUPADA' && (
+                    <button
+                      type="button"
+                      disabled={salvando}
+                      onClick={handleColocarEmReservaRapido}
+                      className="flex items-center gap-1.5 rounded-lg border border-sky-500/50 bg-sky-950/60 px-3.5 py-2 text-xs font-bold text-sky-300 transition hover:bg-sky-900/80 hover:text-white disabled:opacity-50"
+                      title="Mantém a máquina atual na bancada, remove o colaborador e marca como RESERVA"
+                    >
+                      <UserMinus className="h-4 w-4 text-sky-400" />
+                      <span>🔵 Desligamento (Colocar em Reserva)</span>
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={salvando}
+                    className="flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-500 disabled:opacity-50"
+                  >
+                    <Save className="h-4 w-4" />
+                    <span>{salvando ? 'Salvando...' : 'Salvar Alocação / Movimentação'}</span>
+                  </button>
+                </div>
               </div>
             </form>
           )}
 
-          {/* ABA 2: ALTERAR STATUS / DESATIVAR BANCADA COM DEFEITO */}
+          {/* ABA 2: ALTERAR STATUS / RESERVA / DESATIVAR BANCADA COM DEFEITO */}
           {abaAtiva === 'status' && (
             <form onSubmit={handleAlterarStatus} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-5">
                 {[
                   {
                     valor: 'OCUPADA',
                     titulo: 'Ocupada',
-                    desc: 'Posto ativo em operação',
+                    desc: 'Posto ativo com operador',
                     cor: 'border-emerald-500 bg-emerald-950/40 text-emerald-200 ring-2 ring-emerald-500/50',
                     icone: <CheckCircle2 className="h-4 w-4 text-emerald-400" />,
+                  },
+                  {
+                    valor: 'RESERVA',
+                    titulo: 'Reserva',
+                    desc: 'Mantém PC s/ operador',
+                    cor: 'border-sky-500 bg-sky-950/60 text-sky-200 ring-2 ring-sky-500/50',
+                    icone: <span className="text-xs leading-none">🔵</span>,
                   },
                   {
                     valor: 'LIVRE',
@@ -576,6 +659,33 @@ export default function ModalGerenciar({
                 ))}
               </div>
 
+              {novoStatus === 'RESERVA' && (
+                <div className="space-y-3 rounded-xl border border-sky-500/40 bg-sky-950/30 p-4 text-xs text-sky-200">
+                  <div className="font-bold text-sky-300">
+                    🔵 Modo RESERVA (Desligamento / Máquina Pronta p/ Uso):
+                  </div>
+                  <p>
+                    A bancada <strong>{bancada.codigo}</strong> manterá a máquina física associada (
+                    <strong>{bancada.maquina?.hostname || 'Nenhuma máquina'}</strong>, monitor e
+                    periféricos), limpando o campo <strong>colaborador(a)</strong> e gravando o
+                    evento <code className="font-mono text-sky-300">DESLIGAMENTO_RESERVA</code> no
+                    histórico.
+                  </p>
+                  <div>
+                    <label className="mb-1 block text-[11px] font-bold uppercase text-sky-300">
+                      Observação do Desligamento / Reserva (Opcional)
+                    </label>
+                    <input
+                      type="text"
+                      value={motivoBloqueio}
+                      onChange={(e) => setMotivoBloqueio(e.target.value)}
+                      placeholder="Ex: Desligamento da colaboradora — Kit higienizado e testado pronto para uso"
+                      className="w-full rounded-lg border border-sky-700/60 bg-slate-950 px-3 py-2 text-xs text-white placeholder-slate-500 outline-none focus:border-sky-400"
+                    />
+                  </div>
+                </div>
+              )}
+
               {(novoStatus === 'DESATIVADA' || novoStatus === 'MANUTENCAO') && (
                 <div>
                   <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-rose-400">
@@ -591,8 +701,8 @@ export default function ModalGerenciar({
                   />
                   <p className="mt-1 text-xs text-slate-400">
                     Ao confirmar, qualquer máquina atualmente na bancada será desvinculada e o
-                    evento <code className="font-mono text-rose-300">DESATIVACAO_BANCADA</code> será registrado no
-                    histórico.
+                    evento <code className="font-mono text-rose-300">DESATIVACAO_BANCADA</code> será
+                    registrado no histórico.
                   </p>
                 </div>
               )}
@@ -633,9 +743,10 @@ export default function ModalGerenciar({
           {abaAtiva === 'swap' && (
             <form onSubmit={handleRealizarSwap} className="space-y-4">
               <div className="rounded-xl border border-indigo-500/30 bg-indigo-950/30 p-3.5 text-xs text-indigo-200">
-                <strong className="text-indigo-300">Inversão Direta de Postos (Swap):</strong> Troca simultaneamente os
-                computadores e colaboradores entre a bancada <strong>{bancada.codigo}</strong> e
-                outra bancada ativa do setor em uma única transação atômica.
+                <strong className="text-indigo-300">Inversão Direta de Postos (Swap):</strong> Troca
+                simultaneamente os computadores e colaboradores entre a bancada{' '}
+                <strong>{bancada.codigo}</strong> e outra bancada ativa do setor em uma única
+                transação atômica.
               </div>
 
               <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-[1fr_auto_1fr]">
@@ -648,7 +759,9 @@ export default function ModalGerenciar({
                     {bancada.maquina?.hostname || 'Sem máquina'}
                   </div>
                   <div className="text-xs text-slate-400">
-                    {bancada.colaborador || 'Sem colaborador'}
+                    {bancada.status === 'RESERVA'
+                      ? '[RESERVA - PRONTA P/ USO]'
+                      : bancada.colaborador || 'Sem colaborador'}
                   </div>
                 </div>
 
@@ -672,7 +785,11 @@ export default function ModalGerenciar({
                     {bancadasParaSwap.map((b) => (
                       <option key={b.codigo} value={b.codigo}>
                         {b.codigo} — {b.maquina?.hostname || 'LIVRE'}{' '}
-                        {b.colaborador ? `(${b.colaborador})` : ''}
+                        {b.status === 'RESERVA'
+                          ? '([RESERVA])'
+                          : b.colaborador
+                          ? `(${b.colaborador})`
+                          : ''}
                       </option>
                     ))}
                   </select>
@@ -821,7 +938,7 @@ export default function ModalGerenciar({
                             </span>
                             <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-500" />
                             <span className="truncate font-semibold text-white">
-                              {item.colaboradorNovo || '—'}
+                              {item.colaboradorNovo || '[RESERVA / SEM OPERADOR]'}
                             </span>
                           </div>
                         </div>
