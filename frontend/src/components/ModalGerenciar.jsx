@@ -300,7 +300,7 @@ export default function ModalGerenciar({
                 {bancada.codigo}
               </span>
               <h2 className="text-lg font-bold">
-                Corredor {String(bancada.corredor).padStart(2, '0')} · Fileira Lado {bancada.lado} ·
+                {bancada.corredor === 11 ? 'Meio Corredor 11' : `Corredor ${String(bancada.corredor).padStart(2, '0')}`} · Fileira Lado {bancada.lado} ·
                 Posição {String(bancada.posicao).padStart(2, '0')}
               </h2>
               <span
@@ -330,6 +330,7 @@ export default function ModalGerenciar({
                 ? `Motivo do bloqueio: ${bancada.motivoBloqueio || 'Não informado'}`
                 : 'Bancada livre pronta para alocação'}
               {bancada.pontoRede ? ` · Ponto de Rede: ${bancada.pontoRede}` : ''}
+              {bancada.maquina?.cpu ? ` · ${bancada.maquina.cpu}` : ''}
             </p>
           </div>
 
@@ -526,10 +527,46 @@ export default function ModalGerenciar({
 
               {/* Detalhes de Patrimônio do Computador */}
               <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 p-3.5">
-                <div className="mb-2.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
-                  <Cpu className="h-3.5 w-3.5 text-henn-500 dark:text-sky-400" />
-                  <span>Dados de Patrimônio &amp; Periféricos (Opcional)</span>
+                <div className="mb-2.5 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                    <Cpu className="h-3.5 w-3.5 text-henn-500 dark:text-sky-400" />
+                    <span>Dados de Patrimônio &amp; Especificações de TI</span>
+                  </div>
+                  {bancada.maquina?.hostname && (
+                    <span className="font-mono text-[11px] font-bold text-henn-600 dark:text-sky-400">
+                      {bancada.maquina.hostname}
+                    </span>
+                  )}
                 </div>
+
+                {/* Especificações da Máquina (cruzadas com a Planilha de TI) */}
+                {bancada.maquina?.cpu && (
+                  <div className="mb-3 flex flex-wrap items-center gap-1.5 rounded-lg border border-indigo-200/60 dark:border-indigo-900/40 bg-indigo-50/50 dark:bg-indigo-950/30 p-2 text-xs text-indigo-950 dark:text-indigo-200">
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">
+                      {bancada.maquina.cpu}
+                    </span>
+                    {bancada.maquina.ram && (
+                      <span className="rounded bg-indigo-100 dark:bg-indigo-900/60 px-1.5 py-0.5 text-[10px] font-bold text-indigo-800 dark:text-indigo-300">
+                        {bancada.maquina.ram} RAM
+                      </span>
+                    )}
+                    {bancada.maquina.hd && (
+                      <span className="rounded bg-indigo-100 dark:bg-indigo-900/60 px-1.5 py-0.5 text-[10px] font-bold text-indigo-800 dark:text-indigo-300">
+                        {bancada.maquina.hd} Disco
+                      </span>
+                    )}
+                    {bancada.maquina.sistemaOp && (
+                      <span className="rounded bg-slate-200 dark:bg-slate-800 px-1.5 py-0.5 text-[10px] font-mono text-slate-700 dark:text-slate-300">
+                        {bancada.maquina.sistemaOp}
+                      </span>
+                    )}
+                    {bancada.maquina.kaspersky && (
+                      <span className="rounded border border-emerald-300 dark:border-emerald-700/50 bg-emerald-50 dark:bg-emerald-950/50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-800 dark:text-emerald-300">
+                        Kaspersky: {bancada.maquina.kaspersky}
+                      </span>
+                    )}
+                  </div>
+                )}
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <div>
                     <label className="mb-1 block text-[11px] font-medium text-slate-500 dark:text-slate-400">

@@ -12,26 +12,30 @@ export default function PlantaSetor({
   origemSelecionada = null,
   mapaTrocasPendentes = {},
 }) {
-  // Agrupa as 122 bancadas nos 10 corredores horizontais, separando Fileira Lado B e Fileira Lado A
+  // Agrupa as 126 bancadas nos corredores:
+  // Renderiza do Meio Corredor 11 descendo até o Corredor 01 para que comecem de forma crescente a partir da base:
+  // Base do site = Corredor 01 | Topo da tela = Meio Corredor 11
+  // Em cada corredor: Lado D em cima (superior) e Lado E embaixo (inferior)
   const corredores = useMemo(() => {
     const mapa = new Map();
-    for (let c = 1; c <= 10; c++) {
-      mapa.set(c, { corredor: c, ladoB: [], ladoA: [] });
+    for (let c = 11; c >= 1; c--) {
+      mapa.set(c, { corredor: c, ladoD: [], ladoE: [] });
     }
 
     for (const b of bancadas) {
+      if (b.posicao > 6) continue;
       const grupo = mapa.get(b.corredor);
       if (!grupo) continue;
-      if (b.lado === 'B') {
-        grupo.ladoB.push(b);
+      if (b.lado === 'D' || b.lado === 'B') {
+        grupo.ladoD.push(b);
       } else {
-        grupo.ladoA.push(b);
+        grupo.ladoE.push(b);
       }
     }
 
     for (const grupo of mapa.values()) {
-      grupo.ladoB.sort((a, b) => a.posicao - b.posicao);
-      grupo.ladoA.sort((a, b) => a.posicao - b.posicao);
+      grupo.ladoD.sort((a, b) => b.posicao - a.posicao);
+      grupo.ladoE.sort((a, b) => b.posicao - a.posicao);
     }
 
     return Array.from(mapa.values());
@@ -47,12 +51,14 @@ export default function PlantaSetor({
             <div className="flex flex-wrap items-center justify-between gap-3 px-1">
               <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-slate-200">
                 <Compass className="h-4 w-4 text-henn-500 dark:text-emerald-400" />
-                <span>PLANTA FÍSICA DO SETOR DE COBRANÇA · 10 CORREDORES (122 BANCADAS)</span>
+                <span>PLANTA FÍSICA DO SETOR DE COBRANÇA · 126 BANCADAS (10 CORREDORES + MEIO CORREDOR 11)</span>
               </div>
               <div className="flex items-center gap-4 text-[11px] text-slate-500 dark:text-slate-400">
-                <span>Corredores 01 a 09: 12 bancadas (6 Lado B + 6 Lado A)</span>
+                <span>C01 na base até Meio Corredor 11 no topo</span>
                 <span>·</span>
-                <span>Corredor 10: 14 bancadas (7 Lado B + 7 Lado A)</span>
+                <span>Lado D em cima e Lado E embaixo</span>
+                <span>·</span>
+                <span>Posições 01 junto ao corredor de circulação (à direita)</span>
               </div>
             </div>
 
@@ -62,42 +68,89 @@ export default function PlantaSetor({
             </div>
           </div>
 
-          {/* Lista dos 10 Corredores Horizontais preenchendo o espaço */}
+          {/* Lista dos Corredores Horizontais (C01 na base até Meio Corredor 11 no topo) */}
           <div className="space-y-4">
-            {corredores.map(({ corredor, ladoB, ladoA }) => {
-              const todasCorredor = [...ladoB, ...ladoA];
+            {corredores.map(({ corredor, ladoD, ladoE }) => {
+              const todasCorredor = [...ladoD, ...ladoE];
               const ocupadasCorredor = todasCorredor.filter((b) => b.status === 'OCUPADA').length;
               const reservaCorredor = todasCorredor.filter((b) => b.status === 'RESERVA').length;
               const desativadasCorredor = todasCorredor.filter(
                 (b) => b.status === 'DESATIVADA'
               ).length;
-              const isCorredor10 = corredor === 10;
+              const isMeioCorredor = corredor === 11;
+              const isCorredor1 = corredor === 1;
 
               return (
                 <div
                   key={corredor}
                   className="grid grid-cols-[1fr_210px] items-stretch gap-3 w-full"
                 >
-                  {/* Ilha Horizontal do Corredor (Lado B em cima, Lado A embaixo) - Ocupa 100% da largura */}
-                  <div className="flex flex-col justify-between rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/70 p-3 shadow-2xs w-full transition-colors duration-200">
-                    {/* Fileira Superior: LADO B */}
-                    <div>
-                      <div className="mb-1.5 flex items-center justify-between text-[11px]">
-                        <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                          <span className="h-2 w-2 rounded-full bg-indigo-500 dark:bg-indigo-400 shadow-2xs shadow-indigo-400/50" />
-                          Corredor {pad(corredor)} · Fileira Lado B
-                        </span>
-                        <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">
-                          {ladoB.length} posições (B01–B{pad(ladoB.length)})
-                        </span>
-                      </div>
+                  {/* Ilha Horizontal do Corredor - Lado D em cima e Lado E embaixo */}
+                  <div
+                    className={`flex flex-col justify-between rounded-xl border ${
+                      isCorredor1
+                        ? 'border-rose-300/60 dark:border-rose-900/40 bg-rose-50/30 dark:bg-rose-950/20'
+                        : isMeioCorredor
+                        ? 'border-indigo-300/60 dark:border-indigo-900/40 bg-indigo-50/30 dark:bg-indigo-950/20'
+                        : 'border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/70'
+                    } p-3 shadow-2xs w-full transition-colors duration-200`}
+                  >
+                    {/* Fileira Superior: LADO D (presente nos Corredores 01 a 10; omitido no Meio Corredor 11) */}
+                    {!isMeioCorredor && (
+                      <div>
+                        <div className="mb-1.5 flex items-center justify-between text-[11px]">
+                          <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                            <span className="h-2 w-2 rounded-full bg-indigo-500 dark:bg-indigo-400 shadow-2xs shadow-indigo-400/50" />
+                            Corredor {pad(corredor)} · Fileira Lado D (Superior)
+                          </span>
+                          <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">
+                            {ladoD.length} posições (D06 na parede ← D01 no corredor)
+                          </span>
+                        </div>
 
-                      <div
-                        className={`grid ${
-                          isCorredor10 ? 'grid-cols-7' : 'grid-cols-6'
-                        } gap-2.5 w-full`}
-                      >
-                        {ladoB.map((bancada) => (
+                        <div className="grid grid-cols-6 gap-2.5 w-full">
+                          {ladoD.map((bancada) => (
+                            <CardBancada
+                              key={bancada.codigo}
+                              bancada={bancada}
+                              destacada={codigosDestacados.has(bancada.codigo)}
+                              onSelect={onSelectBancada}
+                              modoTrocaAtivo={modoTrocaAtivo}
+                              isOrigemSelecionada={origemSelecionada?.codigo === bancada.codigo}
+                              infoTrocaPendente={mapaTrocasPendentes[bancada.codigo] || null}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Divisória Central da Ilha (presente nos corredores completos 01 a 10) */}
+                    {!isMeioCorredor && (
+                      <div className="my-2.5 flex items-center gap-2">
+                        <div className="h-0.5 flex-1 rounded-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800" />
+                        <span className="rounded-md border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-900 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400 shadow-2xs">
+                          Divisória Central · Calha de Rede &amp; Elétrica · C{pad(corredor)}
+                        </span>
+                        <div className="h-0.5 flex-1 rounded-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800" />
+                      </div>
+                    )}
+
+                    {/* Fileira Inferior: LADO E (sempre embaixo do Lado D) */}
+                    <div>
+                      {isMeioCorredor && (
+                        <div className="mb-1.5 flex items-center justify-between text-[11px]">
+                          <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-indigo-700 dark:text-indigo-300">
+                            <span className="h-2 w-2 rounded-full bg-indigo-500 shadow-2xs shadow-indigo-400/50" />
+                            Meio Corredor 11 · Fileira Lado E (Única / 6 Postos)
+                          </span>
+                          <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">
+                            6 posições (E06 na parede ← E01 no corredor)
+                          </span>
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-6 gap-2.5 w-full">
+                        {ladoE.map((bancada) => (
                           <CardBancada
                             key={bancada.codigo}
                             bancada={bancada}
@@ -109,46 +162,18 @@ export default function PlantaSetor({
                           />
                         ))}
                       </div>
-                    </div>
 
-                    {/* Divisória Central da Ilha (Calha de Rede e Energia) */}
-                    <div className="my-2.5 flex items-center gap-2">
-                      <div className="h-0.5 flex-1 rounded-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800" />
-                      <span className="rounded-md border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-900 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400 shadow-2xs">
-                        Divisória Central · Calha de Rede &amp; Elétrica · C{pad(corredor)}
-                      </span>
-                      <div className="h-0.5 flex-1 rounded-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800" />
-                    </div>
-
-                    {/* Fileira Inferior: LADO A */}
-                    <div>
-                      <div
-                        className={`grid ${
-                          isCorredor10 ? 'grid-cols-7' : 'grid-cols-6'
-                        } gap-2.5 w-full`}
-                      >
-                        {ladoA.map((bancada) => (
-                          <CardBancada
-                            key={bancada.codigo}
-                            bancada={bancada}
-                            destacada={codigosDestacados.has(bancada.codigo)}
-                            onSelect={onSelectBancada}
-                            modoTrocaAtivo={modoTrocaAtivo}
-                            isOrigemSelecionada={origemSelecionada?.codigo === bancada.codigo}
-                            infoTrocaPendente={mapaTrocasPendentes[bancada.codigo] || null}
-                          />
-                        ))}
-                      </div>
-
-                      <div className="mt-1.5 flex items-center justify-between text-[11px]">
-                        <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                          <span className="h-2 w-2 rounded-full bg-henn-500 dark:bg-sky-400 shadow-2xs shadow-sky-400/50" />
-                          Corredor {pad(corredor)} · Fileira Lado A
-                        </span>
-                        <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">
-                          {ladoA.length} posições (A01–A{pad(ladoA.length)})
-                        </span>
-                      </div>
+                      {!isMeioCorredor && (
+                        <div className="mt-1.5 flex items-center justify-between text-[11px]">
+                          <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                            <span className="h-2 w-2 rounded-full bg-henn-500 dark:bg-sky-400 shadow-2xs shadow-sky-400/50" />
+                            Corredor {pad(corredor)} · Fileira Lado E (Inferior)
+                          </span>
+                          <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">
+                            {ladoE.length} posições (E06 na parede ← E01 no corredor)
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -179,11 +204,11 @@ export default function PlantaSetor({
                           TESTEIRA
                         </div>
                         <div className="text-base font-black tracking-tight text-white">
-                          CORREDOR {pad(corredor)}
+                          {isMeioCorredor ? 'MEIO CORREDOR 11' : `CORREDOR ${pad(corredor)}`}
                         </div>
-                        {isCorredor10 && (
-                          <span className="mt-0.5 inline-block rounded bg-sky-500/20 px-1.5 py-0.5 text-[9px] font-bold text-sky-300 border border-sky-500/30">
-                            CORREDOR EXPANDIDO (14)
+                        {isCorredor1 && (
+                          <span className="mt-0.5 inline-block rounded bg-rose-500/20 px-1.5 py-0.5 text-[9px] font-bold text-rose-300 border border-rose-500/30">
+                            CORREDOR DESATIVADO
                           </span>
                         )}
                       </div>

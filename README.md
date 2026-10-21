@@ -5,7 +5,7 @@
   <img src="frontend/public/logo-henn.png" alt="HENN Tecnologia" width="180" />
 </p>
 
-Sistema corporativo de gestão visual, governança patrimonial de TI e rastreabilidade histórica de postos de trabalho e computadores (`COBCON...`), projetado e implementado pela **HENN Tecnologia** para a operação de cobrança do **Grupo Consulth Soluções** (**10 corredores e 122 bancadas**).
+Sistema corporativo de gestão visual, governança patrimonial de TI e rastreabilidade histórica de postos de trabalho e computadores (`COBCON...`), projetado e implementado pela **HENN Tecnologia** para a operação de cobrança do **Grupo Consulth Soluções** (**126 bancadas distribuídas em 10 corredores + Meio Corredor 11**).
 
 ---
 
@@ -24,20 +24,30 @@ Sistema corporativo de gestão visual, governança patrimonial de TI e rastreabi
 
 ---
 
-### 3. 🗺️ Planta Baixa Visual e Interativa
-- **Distribuição Real do Setor:** Mapeamento fiel das 122 bancadas de atendimento divididas em 10 corredores horizontais:
-  - **Corredores 01 a 09:** 12 bancadas cada (6 no Lado A e 6 no Lado B).
-  - **Corredor 10:** 14 bancadas (7 no Lado A e 7 no Lado B).
-- **Interface Otimizada de Ponta a Ponta:** Aproveitamento total da largura da tela com ilhas de bancadas organizadas, corredores de circulação e visualização instantânea de todos os postos.
+### 3. 🗺️ Planta Baixa Visual e Interativa (126 Bancadas · Ordem Crescente da Base ao Topo)
+- **Distribuição Real e Padronizada do Setor (126 Postos):**
+  - **Corredor 01 (Base):** 12 bancadas desativadas (reserva de infraestrutura predial).
+  - **Corredores 02 a 10:** 12 bancadas por corredor (6 no Lado D e 6 no Lado E).
+  - **Meio Corredor 11 (Topo):** 6 bancadas exclusivas no Lado E (sem fileira D).
+- **Disposição Arquitetural Lado D (Superior) e Lado E (Inferior):**
+  - Cada ilha possui a **Fileira Lado D em cima** (`D06` a `D01`) e a **Fileira Lado E embaixo** (`E06` a `E01`), separadas pela calha central de rede e energia, seguindo à risca a convenção física da empresa.
+- **Orientação das Posições em Relação ao Corredor de Circulação:**
+  - O início da numeração de cada lado (`01`) é **sempre voltado para a ponta do corredor de circulação e testeiras (à direita da tela)**.
+  - O final da numeração (`06`) fica **na ponta oposta, voltada para a parede (à esquerda da tela)**.
+  - Dessa forma, postos como `Luis Cavalheiro (C02-E01)`, `Pamela Buch (C02-D01)`, `Barbara Fonceca (C03-E01)` e `Fernanda Bovo (C11-E01)` ficam posicionados junto ao corredor, enquanto postos como `Abdnego (C02-E06)`, `Maria Souza (C03-E05/E06)` e `Thayany Silva (C11-E06)` ficam na ponta oposta contra a parede.
+- **Ordem Crescente a Partir da Base do Site:**
+  - O **Corredor 01** posiciona-se na **base do mapa (parte inferior da tela)**, alinhado à perspectiva de quem adentra a operação física.
+  - A visualização cresce de maneira ascendente até o **Meio Corredor 11** no topo da tela (C01 na base até C11 no topo).
+  - Cada ilha de corredor integra o painel de postos, calha central de rede/elétrica e a testeira institucional CONSULT'H à direita.
 
 ---
 
 ### 4. 🚦 Identificação Visual e Estados das Bancadas
 Cada posto possui um cartão de status com cores normatizadas e ícones de identificação imediata, adaptadas perfeitamente para temas claro e escuro:
-- 🟢 **Ocupada (Verde):** Posto ativo com computador alocado e operador em atendimento.
-- 🔵 **Reserva - Pronta p/ Uso (Azul HENN `#019cdc` / Ciano):** Posto com máquina física montada (computador, monitor e periféricos), porém sem operador vinculado (ideal para desligamentos recentes ou postos de contingência prontos para novas contratações).
+- 🟢 **Ocupada (Verde):** Posto ativo com colaborador alocado. Se já possui computador instalado, exibe o hostname (ex: `COBCON239`); caso ainda não possua máquina montada, exibe o rótulo informativo `S/ MÁQUINA`.
+- 🔵 **Reserva - Pronta p/ Uso (Azul HENN `#019cdc` / Ciano):** Posto com máquina física montada e testada (computador, monitor e periféricos), porém sem operador vinculado (ideal para desligamentos recentes ou postos de contingência prontos para novas contratações).
 - ⚪ **Livre (Cinza):** Posto desocupado sem nenhum equipamento vinculado, pronto para novas instalações.
-- 🔴 **Desativada (Vermelho):** Bancada bloqueada por avaria física, elétrica ou de rede, exibindo o motivo da inoperância.
+- 🔴 **Desativada (Vermelho):** Bancada bloqueada por motivo técnico ou físico (ex: `Sem bancada física no local` ou `Corredor 01 Desativado`).
 - 🟡 **Manutenção (Âmbar):** Posto em intervenção técnica ou reparo predial.
 
 ---
@@ -45,11 +55,11 @@ Cada posto possui um cartão de status com cores normatizadas e ícones de ident
 ### 5. 🔍 Busca Global Instantânea com Ampla Visibilidade
 - **Campo de Busca Dedicado e Amplo:** Campo de pesquisa proeminente e expansivo (`max-w-xl`), estrategicamente posicionado em linha própria para garantir que o texto digitado pelo usuário permaneça sempre 100% legível e nunca comprimido por outros botões do cabeçalho.
 - **Localização Instantânea:** Localize qualquer posto em tempo real digitando:
-  - **Hostname da Máquina:** Ex: `COBCON220`.
-  - **Nome do(a) Colaborador(a):** Localize onde um operador está sentado.
-  - **Equipe ou Carteira:** Ex: `Negociação Especial`, `Preventiva`, `60+`.
-  - **Código da Bancada:** Ex: `C01-A01`, `C05-B04`.
-  - **Ponto de Rede ou Status:** Localize facilmente postos em `RESERVA` ou `DESATIVADA`.
+  - **Hostname da Máquina:** Ex: `COBCON239`, `COBCON220`, `ADMCON103`.
+  - **Nome do(a) Colaborador(a):** Ex: `Pamela Buch`, `Luis Cavalheiro`, `Joao Ritti`, `Murilo Almeida`.
+  - **Código da Bancada:** Ex: `C02-D01`, `C08-E05`, `C11-E01`.
+  - **Modelo de Processador / Hardware:** Ex: `N5095`, `J4125`, `i3`, `i5`, `10100`.
+  - **Status ou Ponto de Rede:** Localize facilmente postos em `RESERVA`, `DESATIVADA` ou `LIVRE`.
 - **Contador Integrado & Limpeza Rápida:** As bancadas encontradas recebem **destaque com borda amarela pulsante**, e o campo exibe o badge de resultados (`X achadas`) com espaçamento protegido (`pr-32`) para que nunca sobreponha o termo pesquisado, contando ainda com botão `✕` para limpeza instantânea.
 
 ---
@@ -99,6 +109,24 @@ O sistema conta com autenticação via Token JWT seguro e controle de permissõe
 
 ---
 
+### 10. 💻 Cruzamento Integral com o Inventário de TI & Ficha Técnica de Hardware
+Os dados da planta física foram 100% cruzados e enriquecidos com a **Planilha Oficial de Controle de Ativos de TI**:
+- **Preenchimento Bidirecional Completo:**
+  - Postos que continham apenas o hostname da máquina foram completados com o nome real do(a) colaborador(a) correspondente (ex: `COBCON206` associado a **Murilo Almeida**, `COBCON209` a **Karolayne Bonfim**, `COBCON198` a **Camilly Gomes**, `COBCON139` a **Maria Siqueira**).
+  - Postos que continham apenas o nome do colaborador foram vinculados ao seu computador específico e suas especificações completas de fábrica (ex: **Brenda Colenetz** em `COBCON232`, **Ana Schroeder** em `COBCON235`, **Keren Ferreira** em `COBCON212`, **Gabriel Vieira** em `COBCON231`).
+  - Identificação de postos com líderes e supervisores utilizando máquinas executivas da linha `ADMCON` (ex: **Barbara Fonseca** em `ADMCON103`, **Ana Rebello** em `ADMCON022`, **Thais Miranda** em `ADMCON045`, **Lorayne Lopes** em `ADMCON028`, **Juliana Ferreira** em `ADMCON105`, **Felipe Silva** em `ADMCON008`).
+- **Ficha Técnica de Hardware Integrada:**
+  - Cada máquina cadastrada no sistema possui suas especificações reais registradas e visíveis no modal de gerenciamento:
+    - **Processador / CPU:** Intel Celeron N5095, Celeron J4125, Core i3-4170, Core i3-7100, Core i3-8100, Core i3-10100, Core i5-4570.
+    - **Memória RAM:** 4 GB, 8 GB ou 16 GB.
+    - **Armazenamento:** SSDs de 120 GB, 240 GB ou 256 GB.
+    - **Sistema Operacional:** Windows 10 ou Windows 11.
+    - **Segurança:** Status do antivírus corporativo Kaspersky (`OK`).
+- **Catálogo de 248 Máquinas no Banco de Dados:**
+  - Além dos 100 computadores alocados nas bancadas operacionais e em reserva, o sistema registra 148 máquinas adicionais da operação em estado `ESTOQUE`, permitindo que os técnicos de TI selecionem equipamentos diretamente do catálogo oficial para novas alocações ou substituições.
+
+---
+
 ## 🚀 Como Executar o Projeto
 
 ### Pré-requisitos
@@ -143,6 +171,6 @@ O sistema já inicializa com contas para demonstração imediata de cada nível 
 
 > **O Sistema de Controle de Alocação e Trocas Mensais** foi desenvolvido e customizado sob medida pela **HENN Tecnologia** como uma plataforma corporativa para a governança patrimonial, gestão de postos de trabalho e suporte operacional da infraestrutura de TI do **Grupo Consulth Soluções**.
 >
-> Inspirado na identidade visual e no padrão de excelência da **HENN Tecnologia** ([henntecnologia.com.br](https://henntecnologia.com.br/)), o software oferece total flexibilidade visual ao usuário por meio da alternância entre **Tema Claro** e **Tema Escuro** (Dark Mode opcional persistido em navegador), alto poder de usabilidade na visualização interativa dos 10 corredores e 122 bancadas de atendimento, segurança robusta com autenticação JWT e controle de papéis (RBAC - ADM, TI e GESTOR), além de estrita integridade transacional nas operações de alocação, swap e rodízio em lote com geração instantânea de Romaneios/Ordens de Serviço oficiais.
+> Inspirado na identidade visual e no padrão de excelência da **HENN Tecnologia** ([henntecnologia.com.br](https://henntecnologia.com.br/)), o software oferece total flexibilidade visual ao usuário por meio da alternância entre **Tema Claro** e **Tema Escuro** (Dark Mode opcional persistido em navegador), alto poder de usabilidade na visualização interativa das 126 bancadas de atendimento (distribuídas nos Corredores 01 a 10 com Lado D superior e Lado E inferior, mais o Meio Corredor 11 no topo com fileira Lado E única, iniciando de forma crescente a partir da base do mapa físico e com as posições 01 sempre voltadas ao corredor de circulação à direita), segurança robusta com autenticação JWT e controle de papéis (RBAC - ADM, TI e GESTOR), além de estrita integridade transacional nas operações de alocação, swap e rodízio em lote com geração instantânea de Romaneios/Ordens de Serviço oficiais.
 >
-> Com esta solução, eliminam-se planilhas manuais vulneráveis a falhas, assegura-se o controle total sobre computadores (`COBCON...`), monitores e periféricos, e consolida-se um fluxo de trabalho ágil, moderno e transparente entre a equipe técnica da **HENN Tecnologia** e a operação de cobrança do **Grupo Consulth Soluções**.
+> Com esta solução alimentada e 100% cruzada com os dados da planilha de controle patrimonial da operação (vinculando todos os 126 postos aos seus respectivos colaboradores, hostnames `COBCON`/`ADMCON` e fichas técnicas de hardware com CPU, RAM, SSD, SO e Kaspersky), eliminam-se planilhas manuais vulneráveis a falhas, assegura-se o controle total sobre os ativos tecnológicos e periféricos, e consolida-se um fluxo de trabalho ágil, moderno e transparente entre a equipe técnica da **HENN Tecnologia** e a operação de cobrança do **Grupo Consulth Soluções**.

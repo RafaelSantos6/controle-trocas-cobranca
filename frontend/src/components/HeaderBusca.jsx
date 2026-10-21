@@ -46,7 +46,7 @@ export default function HeaderBusca({
   const { isDark, toggleTema } = useTheme();
 
   const {
-    total = 122,
+    total = 126,
     ocupadas = 0,
     reserva = 0,
     livres = 0,
@@ -81,7 +81,7 @@ export default function HeaderBusca({
                 </span>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Gestão Operacional de TI · 10 Corredores · 122 Bancadas · Rastreabilidade de Ativos
+                Gestão Operacional de TI · 126 Bancadas (10 Corredores + Meio Corredor 11) · Rastreabilidade de Ativos
               </p>
             </div>
           </div>

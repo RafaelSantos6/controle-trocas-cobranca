@@ -1,373 +1,4238 @@
+/**
+ * Seeder Oficial do Setor de Cobrança — HENN Tecnologia / Grupo Consulth
+ * 126 Bancadas (Corredores 01 a 10 com Lado D e E + Meio Corredor 11 Lado E)
+ * Cruzamento completo de dados reais com a Planilha de Controle de Ativos de TI.
+ */
 const { sequelize, Bancada, Maquina, HistoricoMovimento } = require('../models');
 
 const pad = (n) => String(n).padStart(2, '0');
 
-const DADOS_INICIAIS_OCUPACAO = [
+const BANCADAS_DATA = [
   {
-    codigoBancada: 'C01-B01',
-    hostname: 'COBCON201',
-    colaborador: 'Amanda Oliveira',
-    equipe: 'Cobrança Preventiva',
-    patrimonioPc: 'PAT-PC-9201',
-    patrimonioMonitor: 'PAT-MON-4201',
+    "codigo": "C01-D01",
+    "corredor": 1,
+    "lado": "D",
+    "posicao": 1,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C01-B03',
-    hostname: 'COBCON203',
-    colaborador: 'Beatriz Santos',
-    equipe: 'Cobrança Preventiva',
-    patrimonioPc: 'PAT-PC-9203',
-    patrimonioMonitor: 'PAT-MON-4203',
+    "codigo": "C01-D02",
+    "corredor": 1,
+    "lado": "D",
+    "posicao": 2,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C01-A02',
-    hostname: 'COBCON205',
-    colaborador: 'Camila Ferreira',
-    equipe: 'Cobrança Preventiva',
-    patrimonioPc: 'PAT-PC-9205',
-    patrimonioMonitor: 'PAT-MON-4205',
+    "codigo": "C01-D03",
+    "corredor": 1,
+    "lado": "D",
+    "posicao": 3,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C02-B02',
-    hostname: 'COBCON210',
-    colaborador: 'Daniela Costa',
-    equipe: 'Recuperação Crédito',
-    patrimonioPc: 'PAT-PC-9210',
-    patrimonioMonitor: 'PAT-MON-4210',
+    "codigo": "C01-D04",
+    "corredor": 1,
+    "lado": "D",
+    "posicao": 4,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C02-A04',
-    hostname: 'COBCON212',
-    colaborador: 'Eduarda Lima',
-    equipe: 'Recuperação Crédito',
-    patrimonioPc: 'PAT-PC-9212',
-    patrimonioMonitor: 'PAT-MON-4212',
+    "codigo": "C01-D05",
+    "corredor": 1,
+    "lado": "D",
+    "posicao": 5,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C03-B01',
-    hostname: 'COBCON220',
-    colaborador: 'Fernanda Souza',
-    equipe: 'Negociação Especial',
-    patrimonioPc: 'PAT-PC-9220',
-    patrimonioMonitor: 'PAT-MON-4220',
+    "codigo": "C01-D06",
+    "corredor": 1,
+    "lado": "D",
+    "posicao": 6,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C03-A05',
-    hostname: 'COBCON221',
-    colaborador: 'Gabriela Rocha',
-    equipe: 'Negociação Especial',
-    patrimonioPc: 'PAT-PC-9221',
-    patrimonioMonitor: 'PAT-MON-4221',
+    "codigo": "C01-E01",
+    "corredor": 1,
+    "lado": "E",
+    "posicao": 1,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C04-B04',
-    hostname: 'COBCON225',
-    colaborador: 'Helena Martins',
-    equipe: 'Acordos Judiciais',
-    patrimonioPc: 'PAT-PC-9225',
-    patrimonioMonitor: 'PAT-MON-4225',
+    "codigo": "C01-E02",
+    "corredor": 1,
+    "lado": "E",
+    "posicao": 2,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C04-A01',
-    hostname: 'COBCON228',
-    colaborador: 'Isabela Almeida',
-    equipe: 'Acordos Judiciais',
-    patrimonioPc: 'PAT-PC-9228',
-    patrimonioMonitor: 'PAT-MON-4228',
+    "codigo": "C01-E03",
+    "corredor": 1,
+    "lado": "E",
+    "posicao": 3,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C05-B02',
-    hostname: 'COBCON230',
-    colaborador: 'Juliana Pereira',
-    equipe: 'Retenção & Acordos',
-    patrimonioPc: 'PAT-PC-9230',
-    patrimonioMonitor: 'PAT-MON-4230',
+    "codigo": "C01-E04",
+    "corredor": 1,
+    "lado": "E",
+    "posicao": 4,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C05-A06',
-    hostname: 'COBCON234',
-    colaborador: 'Karina Gomes',
-    equipe: 'Retenção & Acordos',
-    patrimonioPc: 'PAT-PC-9234',
-    patrimonioMonitor: 'PAT-MON-4234',
+    "codigo": "C01-E05",
+    "corredor": 1,
+    "lado": "E",
+    "posicao": 5,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C06-B05',
-    hostname: 'COBCON240',
-    colaborador: 'Larissa Ribeiro',
-    equipe: 'Cobrança Ativa',
-    patrimonioPc: 'PAT-PC-9240',
-    patrimonioMonitor: 'PAT-MON-4240',
+    "codigo": "C01-E06",
+    "corredor": 1,
+    "lado": "E",
+    "posicao": 6,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Corredor 01 Desativado (Infraestrutura predial)"
   },
   {
-    codigoBancada: 'C06-A03',
-    hostname: 'COBCON242',
-    colaborador: 'Mariana Carvalho',
-    equipe: 'Cobrança Ativa',
-    patrimonioPc: 'PAT-PC-9242',
-    patrimonioMonitor: 'PAT-MON-4242',
+    "codigo": "C02-D01",
+    "corredor": 2,
+    "lado": "D",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Pamela Buch",
+    "hostname": "COBCON156"
   },
   {
-    codigoBancada: 'C07-B01',
-    hostname: 'COBCON250',
-    colaborador: 'Natália Araújo',
-    equipe: 'Cobrança Ativa',
-    patrimonioPc: 'PAT-PC-9250',
-    patrimonioMonitor: 'PAT-MON-4250',
+    "codigo": "C02-D02",
+    "corredor": 2,
+    "lado": "D",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Bruna Eduarda",
+    "hostname": "COBCON191"
   },
   {
-    codigoBancada: 'C08-A02',
-    hostname: 'COBCON260',
-    colaborador: 'Patrícia Melo',
-    equipe: 'Grandes Contas',
-    patrimonioPc: 'PAT-PC-9260',
-    patrimonioMonitor: 'PAT-MON-4260',
+    "codigo": "C02-D03",
+    "corredor": 2,
+    "lado": "D",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Francielly Felipe",
+    "hostname": "COBCON094"
   },
   {
-    codigoBancada: 'C09-B06',
-    hostname: 'COBCON270',
-    colaborador: 'Renata Cardoso',
-    equipe: 'Grandes Contas',
-    patrimonioPc: 'PAT-PC-9270',
-    patrimonioMonitor: 'PAT-MON-4270',
+    "codigo": "C02-D04",
+    "corredor": 2,
+    "lado": "D",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Gisely Lima",
+    "hostname": "COBCON101"
   },
   {
-    codigoBancada: 'C10-B03',
-    hostname: 'COBCON280',
-    colaborador: 'Sabrina Teixeira',
-    equipe: 'Supervisão / Apoio',
-    patrimonioPc: 'PAT-PC-9280',
-    patrimonioMonitor: 'PAT-MON-4280',
+    "codigo": "C02-D05",
+    "corredor": 2,
+    "lado": "D",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Andressa Wagner",
+    "hostname": "COBCON141"
   },
   {
-    codigoBancada: 'C10-A07',
-    hostname: 'COBCON285',
-    colaborador: 'Tatiane Moreira',
-    equipe: 'Supervisão / Apoio',
-    patrimonioPc: 'PAT-PC-9285',
-    patrimonioMonitor: 'PAT-MON-4285',
+    "codigo": "C02-D06",
+    "corredor": 2,
+    "lado": "D",
+    "posicao": 6,
+    "status": "LIVRE",
+    "colaborador": null,
+    "hostname": null
   },
+  {
+    "codigo": "C02-E01",
+    "corredor": 2,
+    "lado": "E",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Luis Cavalheiro",
+    "hostname": "COBCON239"
+  },
+  {
+    "codigo": "C02-E02",
+    "corredor": 2,
+    "lado": "E",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Gabrielly Ferreira",
+    "hostname": "COBCON229"
+  },
+  {
+    "codigo": "C02-E03",
+    "corredor": 2,
+    "lado": "E",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Gabriela Pinto",
+    "hostname": "COBCON155"
+  },
+  {
+    "codigo": "C02-E04",
+    "corredor": 2,
+    "lado": "E",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Isabelle Andrade",
+    "hostname": "COBCON119"
+  },
+  {
+    "codigo": "C02-E05",
+    "corredor": 2,
+    "lado": "E",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Fernanda Hardt",
+    "hostname": "COBCON189"
+  },
+  {
+    "codigo": "C02-E06",
+    "corredor": 2,
+    "lado": "E",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Abdenego Melo",
+    "hostname": "COBCON151"
+  },
+  {
+    "codigo": "C03-D01",
+    "corredor": 3,
+    "lado": "D",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Jamile Lima",
+    "hostname": "COBCON138"
+  },
+  {
+    "codigo": "C03-D02",
+    "corredor": 3,
+    "lado": "D",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Elane Silva",
+    "hostname": "COBCON223"
+  },
+  {
+    "codigo": "C03-D03",
+    "corredor": 3,
+    "lado": "D",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Jenifer Ribas",
+    "hostname": "COBCON140"
+  },
+  {
+    "codigo": "C03-D04",
+    "corredor": 3,
+    "lado": "D",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Thayna Soares",
+    "hostname": "COBCON113"
+  },
+  {
+    "codigo": "C03-D05",
+    "corredor": 3,
+    "lado": "D",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Bruna Csilva",
+    "hostname": "COBCON193"
+  },
+  {
+    "codigo": "C03-D06",
+    "corredor": 3,
+    "lado": "D",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Vitoria Espig",
+    "hostname": "COBCON172"
+  },
+  {
+    "codigo": "C03-E01",
+    "corredor": 3,
+    "lado": "E",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Barbara Fonseca (Supervisora)",
+    "hostname": "ADMCON103"
+  },
+  {
+    "codigo": "C03-E02",
+    "corredor": 3,
+    "lado": "E",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Ariane Soares",
+    "hostname": "COBCON077"
+  },
+  {
+    "codigo": "C03-E03",
+    "corredor": 3,
+    "lado": "E",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Flavio Schaefer",
+    "hostname": "COBCON200"
+  },
+  {
+    "codigo": "C03-E04",
+    "corredor": 3,
+    "lado": "E",
+    "posicao": 4,
+    "status": "RESERVA",
+    "colaborador": null,
+    "hostname": "COBCON132"
+  },
+  {
+    "codigo": "C03-E05",
+    "corredor": 3,
+    "lado": "E",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Maria Souza",
+    "hostname": "COBCON173"
+  },
+  {
+    "codigo": "C03-E06",
+    "corredor": 3,
+    "lado": "E",
+    "posicao": 6,
+    "status": "LIVRE",
+    "colaborador": null,
+    "hostname": null
+  },
+  {
+    "codigo": "C04-D01",
+    "corredor": 4,
+    "lado": "D",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Brenda Colenetz",
+    "hostname": "COBCON232"
+  },
+  {
+    "codigo": "C04-D02",
+    "corredor": 4,
+    "lado": "D",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Murilo Almeida",
+    "hostname": "COBCON206"
+  },
+  {
+    "codigo": "C04-D03",
+    "corredor": 4,
+    "lado": "D",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Karolayne Bonfim",
+    "hostname": "COBCON209"
+  },
+  {
+    "codigo": "C04-D04",
+    "corredor": 4,
+    "lado": "D",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Julia Oliveira",
+    "hostname": "COBCON205"
+  },
+  {
+    "codigo": "C04-D05",
+    "corredor": 4,
+    "lado": "D",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Camilly Gomes",
+    "hostname": "COBCON198"
+  },
+  {
+    "codigo": "C04-D06",
+    "corredor": 4,
+    "lado": "D",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Jamilly Sell",
+    "hostname": "COBCON167"
+  },
+  {
+    "codigo": "C04-E01",
+    "corredor": 4,
+    "lado": "E",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Thais Miranda (Líder)",
+    "hostname": "ADMCON045"
+  },
+  {
+    "codigo": "C04-E02",
+    "corredor": 4,
+    "lado": "E",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Ana Schroeder",
+    "hostname": "COBCON235"
+  },
+  {
+    "codigo": "C04-E03",
+    "corredor": 4,
+    "lado": "E",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Keren Ferreira",
+    "hostname": "COBCON212"
+  },
+  {
+    "codigo": "C04-E04",
+    "corredor": 4,
+    "lado": "E",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Stefany Rodrigues",
+    "hostname": "COBCON129"
+  },
+  {
+    "codigo": "C04-E05",
+    "corredor": 4,
+    "lado": "E",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Maria Ferreira",
+    "hostname": "COBCON215"
+  },
+  {
+    "codigo": "C04-E06",
+    "corredor": 4,
+    "lado": "E",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Diogo Ladislau",
+    "hostname": "COBCON084"
+  },
+  {
+    "codigo": "C05-D01",
+    "corredor": 5,
+    "lado": "D",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Ana Dsouza",
+    "hostname": "COBCON125"
+  },
+  {
+    "codigo": "C05-D02",
+    "corredor": 5,
+    "lado": "D",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Danielli Almeida",
+    "hostname": "COBCON197"
+  },
+  {
+    "codigo": "C05-D03",
+    "corredor": 5,
+    "lado": "D",
+    "posicao": 3,
+    "status": "RESERVA",
+    "colaborador": null,
+    "hostname": "COBCON203"
+  },
+  {
+    "codigo": "C05-D04",
+    "corredor": 5,
+    "lado": "D",
+    "posicao": 4,
+    "status": "RESERVA",
+    "colaborador": null,
+    "hostname": "COBCON136"
+  },
+  {
+    "codigo": "C05-D05",
+    "corredor": 5,
+    "lado": "D",
+    "posicao": 5,
+    "status": "RESERVA",
+    "colaborador": null,
+    "hostname": "COBCON105"
+  },
+  {
+    "codigo": "C05-D06",
+    "corredor": 5,
+    "lado": "D",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Israel Barreto",
+    "hostname": "COBCON233"
+  },
+  {
+    "codigo": "C05-E01",
+    "corredor": 5,
+    "lado": "E",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Maria Siqueira",
+    "hostname": "COBCON139"
+  },
+  {
+    "codigo": "C05-E02",
+    "corredor": 5,
+    "lado": "E",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Gabriel Vieira",
+    "hostname": "COBCON231"
+  },
+  {
+    "codigo": "C05-E03",
+    "corredor": 5,
+    "lado": "E",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Jessyca Martins",
+    "hostname": "COBCON221"
+  },
+  {
+    "codigo": "C05-E04",
+    "corredor": 5,
+    "lado": "E",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Kelvin Luz",
+    "hostname": "COBCON216"
+  },
+  {
+    "codigo": "C05-E05",
+    "corredor": 5,
+    "lado": "E",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Emily Antunes",
+    "hostname": "COBCON224"
+  },
+  {
+    "codigo": "C05-E06",
+    "corredor": 5,
+    "lado": "E",
+    "posicao": 6,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Sem bancada física no local"
+  },
+  {
+    "codigo": "C06-D01",
+    "corredor": 6,
+    "lado": "D",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Matheus Muller",
+    "hostname": "COBCON199"
+  },
+  {
+    "codigo": "C06-D02",
+    "corredor": 6,
+    "lado": "D",
+    "posicao": 2,
+    "status": "LIVRE",
+    "colaborador": null,
+    "hostname": null
+  },
+  {
+    "codigo": "C06-D03",
+    "corredor": 6,
+    "lado": "D",
+    "posicao": 3,
+    "status": "LIVRE",
+    "colaborador": null,
+    "hostname": null
+  },
+  {
+    "codigo": "C06-D04",
+    "corredor": 6,
+    "lado": "D",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Carla Justino",
+    "hostname": "COBCON103"
+  },
+  {
+    "codigo": "C06-D05",
+    "corredor": 6,
+    "lado": "D",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Benjamim Silva",
+    "hostname": "COBCON144"
+  },
+  {
+    "codigo": "C06-D06",
+    "corredor": 6,
+    "lado": "D",
+    "posicao": 6,
+    "status": "LIVRE",
+    "colaborador": null,
+    "hostname": null
+  },
+  {
+    "codigo": "C06-E01",
+    "corredor": 6,
+    "lado": "E",
+    "posicao": 1,
+    "status": "LIVRE",
+    "colaborador": null,
+    "hostname": null
+  },
+  {
+    "codigo": "C06-E02",
+    "corredor": 6,
+    "lado": "E",
+    "posicao": 2,
+    "status": "LIVRE",
+    "colaborador": null,
+    "hostname": null
+  },
+  {
+    "codigo": "C06-E03",
+    "corredor": 6,
+    "lado": "E",
+    "posicao": 3,
+    "status": "LIVRE",
+    "colaborador": null,
+    "hostname": null
+  },
+  {
+    "codigo": "C06-E04",
+    "corredor": 6,
+    "lado": "E",
+    "posicao": 4,
+    "status": "LIVRE",
+    "colaborador": null,
+    "hostname": null
+  },
+  {
+    "codigo": "C06-E05",
+    "corredor": 6,
+    "lado": "E",
+    "posicao": 5,
+    "status": "LIVRE",
+    "colaborador": null,
+    "hostname": null
+  },
+  {
+    "codigo": "C06-E06",
+    "corredor": 6,
+    "lado": "E",
+    "posicao": 6,
+    "status": "LIVRE",
+    "colaborador": null,
+    "hostname": null
+  },
+  {
+    "codigo": "C07-D01",
+    "corredor": 7,
+    "lado": "D",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Julia Sevegnani",
+    "hostname": "COBCON194"
+  },
+  {
+    "codigo": "C07-D02",
+    "corredor": 7,
+    "lado": "D",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Amanda Oliveira",
+    "hostname": "COBCON131"
+  },
+  {
+    "codigo": "C07-D03",
+    "corredor": 7,
+    "lado": "D",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Brenda Moreira",
+    "hostname": "COBCON192"
+  },
+  {
+    "codigo": "C07-D04",
+    "corredor": 7,
+    "lado": "D",
+    "posicao": 4,
+    "status": "RESERVA",
+    "colaborador": null,
+    "hostname": "COBCON164"
+  },
+  {
+    "codigo": "C07-D05",
+    "corredor": 7,
+    "lado": "D",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Gabriel Fernandes",
+    "hostname": "COBCON137"
+  },
+  {
+    "codigo": "C07-D06",
+    "corredor": 7,
+    "lado": "D",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Rafael Souza",
+    "hostname": "COBCON222"
+  },
+  {
+    "codigo": "C07-E01",
+    "corredor": 7,
+    "lado": "E",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Ana Rebello (Supervisora)",
+    "hostname": "ADMCON022"
+  },
+  {
+    "codigo": "C07-E02",
+    "corredor": 7,
+    "lado": "E",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Joao Baeza",
+    "hostname": "COBCON148"
+  },
+  {
+    "codigo": "C07-E03",
+    "corredor": 7,
+    "lado": "E",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Henrique Silva",
+    "hostname": "COBCON219"
+  },
+  {
+    "codigo": "C07-E04",
+    "corredor": 7,
+    "lado": "E",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Monica Santos",
+    "hostname": "COBCON236"
+  },
+  {
+    "codigo": "C07-E05",
+    "corredor": 7,
+    "lado": "E",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Breno Menegolo",
+    "hostname": "COBCON150"
+  },
+  {
+    "codigo": "C07-E06",
+    "corredor": 7,
+    "lado": "E",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Lubiane Souza",
+    "hostname": "COBCON088"
+  },
+  {
+    "codigo": "C08-D01",
+    "corredor": 8,
+    "lado": "D",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Lorayne Lopes (Líder)",
+    "hostname": "ADMCON028"
+  },
+  {
+    "codigo": "C08-D02",
+    "corredor": 8,
+    "lado": "D",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Gabriela Pacifico",
+    "hostname": "COBCON188"
+  },
+  {
+    "codigo": "C08-D03",
+    "corredor": 8,
+    "lado": "D",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Isabela Carmo",
+    "hostname": "COBCON098"
+  },
+  {
+    "codigo": "C08-D04",
+    "corredor": 8,
+    "lado": "D",
+    "posicao": 4,
+    "status": "RESERVA",
+    "colaborador": null,
+    "hostname": "COBCON196"
+  },
+  {
+    "codigo": "C08-D05",
+    "corredor": 8,
+    "lado": "D",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Gizele Santos",
+    "hostname": "COBCON226"
+  },
+  {
+    "codigo": "C08-D06",
+    "corredor": 8,
+    "lado": "D",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Larissa Santana (Afastada)",
+    "hostname": "COBCON079"
+  },
+  {
+    "codigo": "C08-E01",
+    "corredor": 8,
+    "lado": "E",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Pamela Farias",
+    "hostname": "COBCON237"
+  },
+  {
+    "codigo": "C08-E02",
+    "corredor": 8,
+    "lado": "E",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Daiane Souza",
+    "hostname": "COBCON130"
+  },
+  {
+    "codigo": "C08-E03",
+    "corredor": 8,
+    "lado": "E",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Heloisa Nunes",
+    "hostname": "COBCON207"
+  },
+  {
+    "codigo": "C08-E04",
+    "corredor": 8,
+    "lado": "E",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Maria Pollnow",
+    "hostname": "COBCON234"
+  },
+  {
+    "codigo": "C08-E05",
+    "corredor": 8,
+    "lado": "E",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Joao Ritti",
+    "hostname": "COBCON220"
+  },
+  {
+    "codigo": "C08-E06",
+    "corredor": 8,
+    "lado": "E",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Simone Pereira",
+    "hostname": "COBCON074"
+  },
+  {
+    "codigo": "C09-D01",
+    "corredor": 9,
+    "lado": "D",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Juliana Ferreira (Líder)",
+    "hostname": "ADMCON105"
+  },
+  {
+    "codigo": "C09-D02",
+    "corredor": 9,
+    "lado": "D",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Kaua Candido",
+    "hostname": "COBCON058"
+  },
+  {
+    "codigo": "C09-D03",
+    "corredor": 9,
+    "lado": "D",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Jaqueline D Silva",
+    "hostname": "COBCON072"
+  },
+  {
+    "codigo": "C09-D04",
+    "corredor": 9,
+    "lado": "D",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Emily Estevao",
+    "hostname": "COBCON143"
+  },
+  {
+    "codigo": "C09-D05",
+    "corredor": 9,
+    "lado": "D",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Isabelle Pereira",
+    "hostname": "COBCON238"
+  },
+  {
+    "codigo": "C09-D06",
+    "corredor": 9,
+    "lado": "D",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Lucas Heinzen",
+    "hostname": "COBCON213"
+  },
+  {
+    "codigo": "C09-E01",
+    "corredor": 9,
+    "lado": "E",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Osmair Amaral",
+    "hostname": "COBCON162"
+  },
+  {
+    "codigo": "C09-E02",
+    "corredor": 9,
+    "lado": "E",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Isabelly Cesconetto",
+    "hostname": "COBCON218"
+  },
+  {
+    "codigo": "C09-E03",
+    "corredor": 9,
+    "lado": "E",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Bernardo Souza",
+    "hostname": "COBCON208"
+  },
+  {
+    "codigo": "C09-E04",
+    "corredor": 9,
+    "lado": "E",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Nathalia Freitas",
+    "hostname": "COBCON201"
+  },
+  {
+    "codigo": "C09-E05",
+    "corredor": 9,
+    "lado": "E",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Maria Inocencio",
+    "hostname": "COBCON153"
+  },
+  {
+    "codigo": "C09-E06",
+    "corredor": 9,
+    "lado": "E",
+    "posicao": 6,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Sem bancada física no local"
+  },
+  {
+    "codigo": "C10-D01",
+    "corredor": 10,
+    "lado": "D",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Andreza Marian",
+    "hostname": "COBCON202"
+  },
+  {
+    "codigo": "C10-D02",
+    "corredor": 10,
+    "lado": "D",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Debora Mendes",
+    "hostname": "COBCON165"
+  },
+  {
+    "codigo": "C10-D03",
+    "corredor": 10,
+    "lado": "D",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Gustavo Souza",
+    "hostname": "COBCON185"
+  },
+  {
+    "codigo": "C10-D04",
+    "corredor": 10,
+    "lado": "D",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Giulia Santos",
+    "hostname": "COBCON118"
+  },
+  {
+    "codigo": "C10-D05",
+    "corredor": 10,
+    "lado": "D",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Julia Maia",
+    "hostname": "COBCON180"
+  },
+  {
+    "codigo": "C10-D06",
+    "corredor": 10,
+    "lado": "D",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Fernando Santos",
+    "hostname": "COBCON210"
+  },
+  {
+    "codigo": "C10-E01",
+    "corredor": 10,
+    "lado": "E",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Felipe Silva (Líder)",
+    "hostname": "ADMCON008"
+  },
+  {
+    "codigo": "C10-E02",
+    "corredor": 10,
+    "lado": "E",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Andrey Nere",
+    "hostname": "COBCON073"
+  },
+  {
+    "codigo": "C10-E03",
+    "corredor": 10,
+    "lado": "E",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Gabrielly Marques",
+    "hostname": "COBCON121"
+  },
+  {
+    "codigo": "C10-E04",
+    "corredor": 10,
+    "lado": "E",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Laura Lima",
+    "hostname": "COBCON176"
+  },
+  {
+    "codigo": "C10-E05",
+    "corredor": 10,
+    "lado": "E",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Ruan Gonçalves",
+    "hostname": "COBCON145"
+  },
+  {
+    "codigo": "C10-E06",
+    "corredor": 10,
+    "lado": "E",
+    "posicao": 6,
+    "status": "DESATIVADA",
+    "colaborador": null,
+    "hostname": null,
+    "motivoBloqueio": "Sem bancada física no local"
+  },
+  {
+    "codigo": "C11-E01",
+    "corredor": 11,
+    "lado": "E",
+    "posicao": 1,
+    "status": "OCUPADA",
+    "colaborador": "Fernanda Bovo",
+    "hostname": "COBCON211"
+  },
+  {
+    "codigo": "C11-E02",
+    "corredor": 11,
+    "lado": "E",
+    "posicao": 2,
+    "status": "OCUPADA",
+    "colaborador": "Flavia Santana",
+    "hostname": "COBCON090"
+  },
+  {
+    "codigo": "C11-E03",
+    "corredor": 11,
+    "lado": "E",
+    "posicao": 3,
+    "status": "OCUPADA",
+    "colaborador": "Erick Almeida",
+    "hostname": "COBCON149"
+  },
+  {
+    "codigo": "C11-E04",
+    "corredor": 11,
+    "lado": "E",
+    "posicao": 4,
+    "status": "OCUPADA",
+    "colaborador": "Carla Pereira",
+    "hostname": "COBCON133"
+  },
+  {
+    "codigo": "C11-E05",
+    "corredor": 11,
+    "lado": "E",
+    "posicao": 5,
+    "status": "OCUPADA",
+    "colaborador": "Joshua Tome",
+    "hostname": "COBCON228"
+  },
+  {
+    "codigo": "C11-E06",
+    "corredor": 11,
+    "lado": "E",
+    "posicao": 6,
+    "status": "OCUPADA",
+    "colaborador": "Thayany Silva",
+    "hostname": "COBCON204"
+  }
 ];
 
-const BANCADAS_RESERVA_INICIAIS = [
+const MAQUINAS_DATA = [
   {
-    codigoBancada: 'C01-A06',
-    hostname: 'COBCON208',
-    colaboradorAnterior: 'Marcos Vinícius',
-    equipe: 'Cobrança Preventiva',
-    patrimonioPc: 'PAT-PC-9208',
-    patrimonioMonitor: 'PAT-MON-4208',
-    observacao: 'Desligamento de Marcos Vinícius — Máquina COBCON208 higienizada e pronta p/ uso',
+    "hostname": "COBCON156",
+    "patrimonioPc": "PAT-PC-156",
+    "patrimonioMonitor": "PAT-MON-156",
+    "cpu": "Intel® Core™ i5-4570 (Cache de 6M, até 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "240GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
   },
   {
-    codigoBancada: 'C04-B02',
-    hostname: 'COBCON224',
-    colaboradorAnterior: 'Aline Cavalcanti',
-    equipe: 'Acordos Judiciais',
-    patrimonioPc: 'PAT-PC-9224',
-    patrimonioMonitor: 'PAT-MON-4224',
-    observacao: 'Transferência de setor de Aline Cavalcanti — Kit completo testado em RESERVA',
+    "hostname": "COBCON191",
+    "patrimonioPc": "PAT-PC-191",
+    "patrimonioMonitor": "PAT-MON-191",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
   },
   {
-    codigoBancada: 'C07-A05',
-    hostname: 'COBCON255',
-    colaboradorAnterior: 'Bruna Nascimento',
-    equipe: 'Cobrança Ativa',
-    patrimonioPc: 'PAT-PC-9255',
-    patrimonioMonitor: 'PAT-MON-4255',
-    observacao: 'Desligamento de colaboradora — Computador COBCON255 pronto para próxima contratação',
+    "hostname": "COBCON094",
+    "patrimonioPc": "PAT-PC-094",
+    "patrimonioMonitor": "PAT-MON-094",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
   },
+  {
+    "hostname": "COBCON101",
+    "patrimonioPc": "PAT-PC-101",
+    "patrimonioMonitor": "PAT-MON-101",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON141",
+    "patrimonioPc": "PAT-PC-141",
+    "patrimonioMonitor": "PAT-MON-141",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON239",
+    "patrimonioPc": "PAT-PC-239",
+    "patrimonioMonitor": "PAT-MON-239",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON229",
+    "patrimonioPc": "PAT-PC-229",
+    "patrimonioMonitor": "PAT-MON-229",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON155",
+    "patrimonioPc": "PAT-PC-155",
+    "patrimonioMonitor": "PAT-MON-155",
+    "cpu": "Intel® Core™ i5-4570 (Cache de 6M, até 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "240GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON119",
+    "patrimonioPc": "PAT-PC-119",
+    "patrimonioMonitor": "PAT-MON-119",
+    "cpu": "Intel Core i3 / Celeron",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON189",
+    "patrimonioPc": "PAT-PC-189",
+    "patrimonioMonitor": "PAT-MON-189",
+    "cpu": "Intel® Core™ i3-10100 Cache de 6 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON151",
+    "patrimonioPc": "PAT-PC-151",
+    "patrimonioMonitor": "PAT-MON-151",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "xGB",
+    "hd": "xGB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON138",
+    "patrimonioPc": "PAT-PC-138",
+    "patrimonioMonitor": "PAT-MON-138",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON223",
+    "patrimonioPc": "PAT-PC-223",
+    "patrimonioMonitor": "PAT-MON-223",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON140",
+    "patrimonioPc": "PAT-PC-140",
+    "patrimonioMonitor": "PAT-MON-140",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON113",
+    "patrimonioPc": "PAT-PC-113",
+    "patrimonioMonitor": "PAT-MON-113",
+    "cpu": "Intel® Core™ i3-3220 (Cache 3M, 3,30 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON193",
+    "patrimonioPc": "PAT-PC-193",
+    "patrimonioMonitor": "PAT-MON-193",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON172",
+    "patrimonioPc": "PAT-PC-172",
+    "patrimonioMonitor": "PAT-MON-172",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "ADMCON103",
+    "patrimonioPc": "PAT-PC-103",
+    "patrimonioMonitor": "PAT-MON-103",
+    "cpu": "Intel® Core™ i3-10100 Cache de 6 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON077",
+    "patrimonioPc": "PAT-PC-077",
+    "patrimonioMonitor": "PAT-MON-077",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON200",
+    "patrimonioPc": "PAT-PC-200",
+    "patrimonioMonitor": "PAT-MON-200",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON132",
+    "patrimonioPc": "PAT-PC-132",
+    "patrimonioMonitor": "PAT-MON-132",
+    "cpu": "Intel® Core™ i3-7350K (4M de cache, 4,20 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON173",
+    "patrimonioPc": "PAT-PC-173",
+    "patrimonioMonitor": "PAT-MON-173",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON232",
+    "patrimonioPc": "PAT-PC-232",
+    "patrimonioMonitor": "PAT-MON-232",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON206",
+    "patrimonioPc": "PAT-PC-206",
+    "patrimonioMonitor": "PAT-MON-206",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON209",
+    "patrimonioPc": "PAT-PC-209",
+    "patrimonioMonitor": "PAT-MON-209",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON205",
+    "patrimonioPc": "PAT-PC-205",
+    "patrimonioMonitor": "PAT-MON-205",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON198",
+    "patrimonioPc": "PAT-PC-198",
+    "patrimonioMonitor": "PAT-MON-198",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON167",
+    "patrimonioPc": "PAT-PC-167",
+    "patrimonioMonitor": "PAT-MON-167",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "ADMCON045",
+    "patrimonioPc": "PAT-PC-045",
+    "patrimonioMonitor": "PAT-MON-045",
+    "cpu": "Intel® Core™ i5-4570 (Cache de 6M, até 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "240GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON235",
+    "patrimonioPc": "PAT-PC-235",
+    "patrimonioMonitor": "PAT-MON-235",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON212",
+    "patrimonioPc": "PAT-PC-212",
+    "patrimonioMonitor": "PAT-MON-212",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON129",
+    "patrimonioPc": "PAT-PC-129",
+    "patrimonioMonitor": "PAT-MON-129",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON215",
+    "patrimonioPc": "PAT-PC-215",
+    "patrimonioMonitor": "PAT-MON-215",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON084",
+    "patrimonioPc": "PAT-PC-084",
+    "patrimonioMonitor": "PAT-MON-084",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON125",
+    "patrimonioPc": "PAT-PC-125",
+    "patrimonioMonitor": "PAT-MON-125",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON197",
+    "patrimonioPc": "PAT-PC-197",
+    "patrimonioMonitor": "PAT-MON-197",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON203",
+    "patrimonioPc": "PAT-PC-203",
+    "patrimonioMonitor": "PAT-MON-203",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON136",
+    "patrimonioPc": "PAT-PC-136",
+    "patrimonioMonitor": "PAT-MON-136",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON105",
+    "patrimonioPc": "PAT-PC-105",
+    "patrimonioMonitor": "PAT-MON-105",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON233",
+    "patrimonioPc": "PAT-PC-233",
+    "patrimonioMonitor": "PAT-MON-233",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON139",
+    "patrimonioPc": "PAT-PC-139",
+    "patrimonioMonitor": "PAT-MON-139",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON231",
+    "patrimonioPc": "PAT-PC-231",
+    "patrimonioMonitor": "PAT-MON-231",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON221",
+    "patrimonioPc": "PAT-PC-221",
+    "patrimonioMonitor": "PAT-MON-221",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON216",
+    "patrimonioPc": "PAT-PC-216",
+    "patrimonioMonitor": "PAT-MON-216",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON224",
+    "patrimonioPc": "PAT-PC-224",
+    "patrimonioMonitor": "PAT-MON-224",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON199",
+    "patrimonioPc": "PAT-PC-199",
+    "patrimonioMonitor": "PAT-MON-199",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON103",
+    "patrimonioPc": "PAT-PC-103",
+    "patrimonioMonitor": "PAT-MON-103",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON144",
+    "patrimonioPc": "PAT-PC-144",
+    "patrimonioMonitor": "PAT-MON-144",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON194",
+    "patrimonioPc": "PAT-PC-194",
+    "patrimonioMonitor": "PAT-MON-194",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON131",
+    "patrimonioPc": "PAT-PC-131",
+    "patrimonioMonitor": "PAT-MON-131",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON192",
+    "patrimonioPc": "PAT-PC-192",
+    "patrimonioMonitor": "PAT-MON-192",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON164",
+    "patrimonioPc": "PAT-PC-164",
+    "patrimonioMonitor": "PAT-MON-164",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON137",
+    "patrimonioPc": "PAT-PC-137",
+    "patrimonioMonitor": "PAT-MON-137",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON222",
+    "patrimonioPc": "PAT-PC-222",
+    "patrimonioMonitor": "PAT-MON-222",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "ADMCON022",
+    "patrimonioPc": "PAT-PC-022",
+    "patrimonioMonitor": "PAT-MON-022",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "16GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON148",
+    "patrimonioPc": "PAT-PC-148",
+    "patrimonioMonitor": "PAT-MON-148",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON219",
+    "patrimonioPc": "PAT-PC-219",
+    "patrimonioMonitor": "PAT-MON-219",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON236",
+    "patrimonioPc": "PAT-PC-236",
+    "patrimonioMonitor": "PAT-MON-236",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON150",
+    "patrimonioPc": "PAT-PC-150",
+    "patrimonioMonitor": "PAT-MON-150",
+    "cpu": "Intel® Core™ i3-8100 (6 M de cache, 3,60 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON088",
+    "patrimonioPc": "PAT-PC-088",
+    "patrimonioMonitor": "PAT-MON-088",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "ADMCON028",
+    "patrimonioPc": "PAT-PC-028",
+    "patrimonioMonitor": "PAT-MON-028",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON188",
+    "patrimonioPc": "PAT-PC-188",
+    "patrimonioMonitor": "PAT-MON-188",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON098",
+    "patrimonioPc": "PAT-PC-098",
+    "patrimonioMonitor": "PAT-MON-098",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "8GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON196",
+    "patrimonioPc": "PAT-PC-196",
+    "patrimonioMonitor": "PAT-MON-196",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON226",
+    "patrimonioPc": "PAT-PC-226",
+    "patrimonioMonitor": "PAT-MON-226",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON079",
+    "patrimonioPc": "PAT-PC-079",
+    "patrimonioMonitor": "PAT-MON-079",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON237",
+    "patrimonioPc": "PAT-PC-237",
+    "patrimonioMonitor": "PAT-MON-237",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON130",
+    "patrimonioPc": "PAT-PC-130",
+    "patrimonioMonitor": "PAT-MON-130",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON207",
+    "patrimonioPc": "PAT-PC-207",
+    "patrimonioMonitor": "PAT-MON-207",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON234",
+    "patrimonioPc": "PAT-PC-234",
+    "patrimonioMonitor": "PAT-MON-234",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON220",
+    "patrimonioPc": "PAT-PC-220",
+    "patrimonioMonitor": "PAT-MON-220",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON074",
+    "patrimonioPc": "PAT-PC-074",
+    "patrimonioMonitor": "PAT-MON-074",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "ADMCON105",
+    "patrimonioPc": "PAT-PC-105",
+    "patrimonioMonitor": "PAT-MON-105",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "8GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON058",
+    "patrimonioPc": "PAT-PC-058",
+    "patrimonioMonitor": "PAT-MON-058",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON072",
+    "patrimonioPc": "PAT-PC-072",
+    "patrimonioMonitor": "PAT-MON-072",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON143",
+    "patrimonioPc": "PAT-PC-143",
+    "patrimonioMonitor": "PAT-MON-143",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON238",
+    "patrimonioPc": "PAT-PC-238",
+    "patrimonioMonitor": "PAT-MON-238",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON213",
+    "patrimonioPc": "PAT-PC-213",
+    "patrimonioMonitor": "PAT-MON-213",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON162",
+    "patrimonioPc": "PAT-PC-162",
+    "patrimonioMonitor": "PAT-MON-162",
+    "cpu": "Intel® Core™ i3-7100T (3M de Cache, 3,40 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON218",
+    "patrimonioPc": "PAT-PC-218",
+    "patrimonioMonitor": "PAT-MON-218",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON208",
+    "patrimonioPc": "PAT-PC-208",
+    "patrimonioMonitor": "PAT-MON-208",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON201",
+    "patrimonioPc": "PAT-PC-201",
+    "patrimonioMonitor": "PAT-MON-201",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON153",
+    "patrimonioPc": "PAT-PC-153",
+    "patrimonioMonitor": "PAT-MON-153",
+    "cpu": "Intel® Core™ i5-4570 (Cache de 6M, até 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "240GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON202",
+    "patrimonioPc": "PAT-PC-202",
+    "patrimonioMonitor": "PAT-MON-202",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON165",
+    "patrimonioPc": "PAT-PC-165",
+    "patrimonioMonitor": "PAT-MON-165",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON185",
+    "patrimonioPc": "PAT-PC-185",
+    "patrimonioMonitor": "PAT-MON-185",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON118",
+    "patrimonioPc": "PAT-PC-118",
+    "patrimonioMonitor": "PAT-MON-118",
+    "cpu": "Intel® Core™ i3-8100 (6 M de cache, 3,60 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON180",
+    "patrimonioPc": "PAT-PC-180",
+    "patrimonioMonitor": "PAT-MON-180",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON210",
+    "patrimonioPc": "PAT-PC-210",
+    "patrimonioMonitor": "PAT-MON-210",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "ADMCON008",
+    "patrimonioPc": "PAT-PC-008",
+    "patrimonioMonitor": "PAT-MON-008",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "8GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON073",
+    "patrimonioPc": "PAT-PC-073",
+    "patrimonioMonitor": "PAT-MON-073",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON121",
+    "patrimonioPc": "PAT-PC-121",
+    "patrimonioMonitor": "PAT-MON-121",
+    "cpu": "Intel® Core™ i3-8100 (6 M de cache, 3,60 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON176",
+    "patrimonioPc": "PAT-PC-176",
+    "patrimonioMonitor": "PAT-MON-176",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON145",
+    "patrimonioPc": "PAT-PC-145",
+    "patrimonioMonitor": "PAT-MON-145",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON211",
+    "patrimonioPc": "PAT-PC-211",
+    "patrimonioMonitor": "PAT-MON-211",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON090",
+    "patrimonioPc": "PAT-PC-090",
+    "patrimonioMonitor": "PAT-MON-090",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON149",
+    "patrimonioPc": "PAT-PC-149",
+    "patrimonioMonitor": "PAT-MON-149",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON133",
+    "patrimonioPc": "PAT-PC-133",
+    "patrimonioMonitor": "PAT-MON-133",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON228",
+    "patrimonioPc": "PAT-PC-228",
+    "patrimonioMonitor": "PAT-MON-228",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON204",
+    "patrimonioPc": "PAT-PC-204",
+    "patrimonioMonitor": "PAT-MON-204",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset QD",
+    "statusMaquina": "ATIVA"
+  },
+  {
+    "hostname": "COBCON001",
+    "patrimonioPc": "PAT-PC-001",
+    "patrimonioMonitor": "PAT-MON-001",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON002",
+    "patrimonioPc": "PAT-PC-002",
+    "patrimonioMonitor": "PAT-MON-002",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON003",
+    "patrimonioPc": "PAT-PC-003",
+    "patrimonioMonitor": "PAT-MON-003",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON004",
+    "patrimonioPc": "PAT-PC-004",
+    "patrimonioMonitor": "PAT-MON-004",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON005",
+    "patrimonioPc": "PAT-PC-005",
+    "patrimonioMonitor": "PAT-MON-005",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON006",
+    "patrimonioPc": "PAT-PC-006",
+    "patrimonioMonitor": "PAT-MON-006",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON007",
+    "patrimonioPc": "PAT-PC-007",
+    "patrimonioMonitor": "PAT-MON-007",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON008",
+    "patrimonioPc": "PAT-PC-008",
+    "patrimonioMonitor": "PAT-MON-008",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON009",
+    "patrimonioPc": "PAT-PC-009",
+    "patrimonioMonitor": "PAT-MON-009",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON010",
+    "patrimonioPc": "PAT-PC-010",
+    "patrimonioMonitor": "PAT-MON-010",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON011",
+    "patrimonioPc": "PAT-PC-011",
+    "patrimonioMonitor": "PAT-MON-011",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON012",
+    "patrimonioPc": "PAT-PC-012",
+    "patrimonioMonitor": "PAT-MON-012",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON013",
+    "patrimonioPc": "PAT-PC-013",
+    "patrimonioMonitor": "PAT-MON-013",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON014",
+    "patrimonioPc": "PAT-PC-014",
+    "patrimonioMonitor": "PAT-MON-014",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON015",
+    "patrimonioPc": "PAT-PC-015",
+    "patrimonioMonitor": "PAT-MON-015",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON016",
+    "patrimonioPc": "PAT-PC-016",
+    "patrimonioMonitor": "PAT-MON-016",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON017",
+    "patrimonioPc": "PAT-PC-017",
+    "patrimonioMonitor": "PAT-MON-017",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON018",
+    "patrimonioPc": "PAT-PC-018",
+    "patrimonioMonitor": "PAT-MON-018",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON019",
+    "patrimonioPc": "PAT-PC-019",
+    "patrimonioMonitor": "PAT-MON-019",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON020",
+    "patrimonioPc": "PAT-PC-020",
+    "patrimonioMonitor": "PAT-MON-020",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON021",
+    "patrimonioPc": "PAT-PC-021",
+    "patrimonioMonitor": "PAT-MON-021",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON022",
+    "patrimonioPc": "PAT-PC-022",
+    "patrimonioMonitor": "PAT-MON-022",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON023",
+    "patrimonioPc": "PAT-PC-023",
+    "patrimonioMonitor": "PAT-MON-023",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON024",
+    "patrimonioPc": "PAT-PC-024",
+    "patrimonioMonitor": "PAT-MON-024",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON025",
+    "patrimonioPc": "PAT-PC-025",
+    "patrimonioMonitor": "PAT-MON-025",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON026",
+    "patrimonioPc": "PAT-PC-026",
+    "patrimonioMonitor": "PAT-MON-026",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON027",
+    "patrimonioPc": "PAT-PC-027",
+    "patrimonioMonitor": "PAT-MON-027",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON028",
+    "patrimonioPc": "PAT-PC-028",
+    "patrimonioMonitor": "PAT-MON-028",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON029",
+    "patrimonioPc": "PAT-PC-029",
+    "patrimonioMonitor": "PAT-MON-029",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON030",
+    "patrimonioPc": "PAT-PC-030",
+    "patrimonioMonitor": "PAT-MON-030",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON031",
+    "patrimonioPc": "PAT-PC-031",
+    "patrimonioMonitor": "PAT-MON-031",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON032",
+    "patrimonioPc": "PAT-PC-032",
+    "patrimonioMonitor": "PAT-MON-032",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON033",
+    "patrimonioPc": "PAT-PC-033",
+    "patrimonioMonitor": "PAT-MON-033",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON034",
+    "patrimonioPc": "PAT-PC-034",
+    "patrimonioMonitor": "PAT-MON-034",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON035",
+    "patrimonioPc": "PAT-PC-035",
+    "patrimonioMonitor": "PAT-MON-035",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON036",
+    "patrimonioPc": "PAT-PC-036",
+    "patrimonioMonitor": "PAT-MON-036",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON037",
+    "patrimonioPc": "PAT-PC-037",
+    "patrimonioMonitor": "PAT-MON-037",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON038",
+    "patrimonioPc": "PAT-PC-038",
+    "patrimonioMonitor": "PAT-MON-038",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON039",
+    "patrimonioPc": "PAT-PC-039",
+    "patrimonioMonitor": "PAT-MON-039",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON040",
+    "patrimonioPc": "PAT-PC-040",
+    "patrimonioMonitor": "PAT-MON-040",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON041",
+    "patrimonioPc": "PAT-PC-041",
+    "patrimonioMonitor": "PAT-MON-041",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON042",
+    "patrimonioPc": "PAT-PC-042",
+    "patrimonioMonitor": "PAT-MON-042",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON043",
+    "patrimonioPc": "PAT-PC-043",
+    "patrimonioMonitor": "PAT-MON-043",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON044",
+    "patrimonioPc": "PAT-PC-044",
+    "patrimonioMonitor": "PAT-MON-044",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON045",
+    "patrimonioPc": "PAT-PC-045",
+    "patrimonioMonitor": "PAT-MON-045",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON046",
+    "patrimonioPc": "PAT-PC-046",
+    "patrimonioMonitor": "PAT-MON-046",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON047",
+    "patrimonioPc": "PAT-PC-047",
+    "patrimonioMonitor": "PAT-MON-047",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON048",
+    "patrimonioPc": "PAT-PC-048",
+    "patrimonioMonitor": "PAT-MON-048",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON049",
+    "patrimonioPc": "PAT-PC-049",
+    "patrimonioMonitor": "PAT-MON-049",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON050",
+    "patrimonioPc": "PAT-PC-050",
+    "patrimonioMonitor": "PAT-MON-050",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON051",
+    "patrimonioPc": "PAT-PC-051",
+    "patrimonioMonitor": "PAT-MON-051",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON052",
+    "patrimonioPc": "PAT-PC-052",
+    "patrimonioMonitor": "PAT-MON-052",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON053",
+    "patrimonioPc": "PAT-PC-053",
+    "patrimonioMonitor": "PAT-MON-053",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON054",
+    "patrimonioPc": "PAT-PC-054",
+    "patrimonioMonitor": "PAT-MON-054",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON055",
+    "patrimonioPc": "PAT-PC-055",
+    "patrimonioMonitor": "PAT-MON-055",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON056",
+    "patrimonioPc": "PAT-PC-056",
+    "patrimonioMonitor": "PAT-MON-056",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON057",
+    "patrimonioPc": "PAT-PC-057",
+    "patrimonioMonitor": "PAT-MON-057",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON059",
+    "patrimonioPc": "PAT-PC-059",
+    "patrimonioMonitor": "PAT-MON-059",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON060",
+    "patrimonioPc": "PAT-PC-060",
+    "patrimonioMonitor": "PAT-MON-060",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON061",
+    "patrimonioPc": "PAT-PC-061",
+    "patrimonioMonitor": "PAT-MON-061",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON062",
+    "patrimonioPc": "PAT-PC-062",
+    "patrimonioMonitor": "PAT-MON-062",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON063",
+    "patrimonioPc": "PAT-PC-063",
+    "patrimonioMonitor": "PAT-MON-063",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON064",
+    "patrimonioPc": "PAT-PC-064",
+    "patrimonioMonitor": "PAT-MON-064",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON065",
+    "patrimonioPc": "PAT-PC-065",
+    "patrimonioMonitor": "PAT-MON-065",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON066",
+    "patrimonioPc": "PAT-PC-066",
+    "patrimonioMonitor": "PAT-MON-066",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON067",
+    "patrimonioPc": "PAT-PC-067",
+    "patrimonioMonitor": "PAT-MON-067",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON068",
+    "patrimonioPc": "PAT-PC-068",
+    "patrimonioMonitor": "PAT-MON-068",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON069",
+    "patrimonioPc": "PAT-PC-069",
+    "patrimonioMonitor": "PAT-MON-069",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON070",
+    "patrimonioPc": "PAT-PC-070",
+    "patrimonioMonitor": "PAT-MON-070",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON071",
+    "patrimonioPc": "PAT-PC-071",
+    "patrimonioMonitor": "PAT-MON-071",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON075",
+    "patrimonioPc": "PAT-PC-075",
+    "patrimonioMonitor": "PAT-MON-075",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON076",
+    "patrimonioPc": "PAT-PC-076",
+    "patrimonioMonitor": "PAT-MON-076",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON078",
+    "patrimonioPc": "PAT-PC-078",
+    "patrimonioMonitor": "PAT-MON-078",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON080",
+    "patrimonioPc": "PAT-PC-080",
+    "patrimonioMonitor": "PAT-MON-080",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON081",
+    "patrimonioPc": "PAT-PC-081",
+    "patrimonioMonitor": "PAT-MON-081",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON082",
+    "patrimonioPc": "PAT-PC-082",
+    "patrimonioMonitor": "PAT-MON-082",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON083",
+    "patrimonioPc": "PAT-PC-083",
+    "patrimonioMonitor": "PAT-MON-083",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON085",
+    "patrimonioPc": "PAT-PC-085",
+    "patrimonioMonitor": "PAT-MON-085",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON086",
+    "patrimonioPc": "PAT-PC-086",
+    "patrimonioMonitor": "PAT-MON-086",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON087",
+    "patrimonioPc": "PAT-PC-087",
+    "patrimonioMonitor": "PAT-MON-087",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON089",
+    "patrimonioPc": "PAT-PC-089",
+    "patrimonioMonitor": "PAT-MON-089",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON091",
+    "patrimonioPc": "PAT-PC-091",
+    "patrimonioMonitor": "PAT-MON-091",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON092",
+    "patrimonioPc": "PAT-PC-092",
+    "patrimonioMonitor": "PAT-MON-092",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON093",
+    "patrimonioPc": "PAT-PC-093",
+    "patrimonioMonitor": "PAT-MON-093",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON095",
+    "patrimonioPc": "PAT-PC-095",
+    "patrimonioMonitor": "PAT-MON-095",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON096",
+    "patrimonioPc": "PAT-PC-096",
+    "patrimonioMonitor": "PAT-MON-096",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON097",
+    "patrimonioPc": "PAT-PC-097",
+    "patrimonioMonitor": "PAT-MON-097",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON099",
+    "patrimonioPc": "PAT-PC-099",
+    "patrimonioMonitor": "PAT-MON-099",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON100",
+    "patrimonioPc": "PAT-PC-100",
+    "patrimonioMonitor": "PAT-MON-100",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON102",
+    "patrimonioPc": "PAT-PC-102",
+    "patrimonioMonitor": "PAT-MON-102",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON104",
+    "patrimonioPc": "PAT-PC-104",
+    "patrimonioMonitor": "PAT-MON-104",
+    "cpu": "Intel® Core™ i3-4170 (Cache de 3 M, 3,70 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON106",
+    "patrimonioPc": "PAT-PC-106",
+    "patrimonioMonitor": "PAT-MON-106",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON107",
+    "patrimonioPc": "PAT-PC-107",
+    "patrimonioMonitor": "PAT-MON-107",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON108",
+    "patrimonioPc": "PAT-PC-108",
+    "patrimonioMonitor": "PAT-MON-108",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON109",
+    "patrimonioPc": "PAT-PC-109",
+    "patrimonioMonitor": "PAT-MON-109",
+    "cpu": "Intel® Core™ i3-3220 (Cache 3M, 3,30 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON110",
+    "patrimonioPc": "PAT-PC-110",
+    "patrimonioMonitor": "PAT-MON-110",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON111",
+    "patrimonioPc": "PAT-PC-111",
+    "patrimonioMonitor": "PAT-MON-111",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON112",
+    "patrimonioPc": "PAT-PC-112",
+    "patrimonioMonitor": "PAT-MON-112",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON114",
+    "patrimonioPc": "PAT-PC-114",
+    "patrimonioMonitor": "PAT-MON-114",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON115",
+    "patrimonioPc": "PAT-PC-115",
+    "patrimonioMonitor": "PAT-MON-115",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON116",
+    "patrimonioPc": "PAT-PC-116",
+    "patrimonioMonitor": "PAT-MON-116",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON117",
+    "patrimonioPc": "PAT-PC-117",
+    "patrimonioMonitor": "PAT-MON-117",
+    "cpu": "Intel® Core™ i3-8100 (6 M de cache, 3,60 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON122",
+    "patrimonioPc": "PAT-PC-122",
+    "patrimonioMonitor": "PAT-MON-122",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON123",
+    "patrimonioPc": "PAT-PC-123",
+    "patrimonioMonitor": "PAT-MON-123",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON124",
+    "patrimonioPc": "PAT-PC-124",
+    "patrimonioMonitor": "PAT-MON-124",
+    "cpu": "Intel® Core™ i3-8100T (6M de Cache, 3,10 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON126",
+    "patrimonioPc": "PAT-PC-126",
+    "patrimonioMonitor": "PAT-MON-126",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON127",
+    "patrimonioPc": "PAT-PC-127",
+    "patrimonioMonitor": "PAT-MON-127",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON128",
+    "patrimonioPc": "PAT-PC-128",
+    "patrimonioMonitor": "PAT-MON-128",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON134",
+    "patrimonioPc": "PAT-PC-134",
+    "patrimonioMonitor": "PAT-MON-134",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON135",
+    "patrimonioPc": "PAT-PC-135",
+    "patrimonioMonitor": "PAT-MON-135",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON142",
+    "patrimonioPc": "PAT-PC-142",
+    "patrimonioMonitor": "PAT-MON-142",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON146",
+    "patrimonioPc": "PAT-PC-146",
+    "patrimonioMonitor": "PAT-MON-146",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON147",
+    "patrimonioPc": "PAT-PC-147",
+    "patrimonioMonitor": "PAT-MON-147",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON152",
+    "patrimonioPc": "PAT-PC-152",
+    "patrimonioMonitor": "PAT-MON-152",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON154",
+    "patrimonioPc": "PAT-PC-154",
+    "patrimonioMonitor": "PAT-MON-154",
+    "cpu": "Intel® Core™ i5-4570 (Cache de 6M, até 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "240GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON157",
+    "patrimonioPc": "PAT-PC-157",
+    "patrimonioMonitor": "PAT-MON-157",
+    "cpu": "Intel® Core™ i5-4570 (Cache de 6M, até 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "240GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON158",
+    "patrimonioPc": "PAT-PC-158",
+    "patrimonioMonitor": "PAT-MON-158",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON159",
+    "patrimonioPc": "PAT-PC-159",
+    "patrimonioMonitor": "PAT-MON-159",
+    "cpu": "Intel® Core™ i5-4570 (Cache de 6M, até 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "240GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON160",
+    "patrimonioPc": "PAT-PC-160",
+    "patrimonioMonitor": "PAT-MON-160",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON161",
+    "patrimonioPc": "PAT-PC-161",
+    "patrimonioMonitor": "PAT-MON-161",
+    "cpu": "Intel® Core™ i5-4570 (Cache de 6M, até 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "240GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON163",
+    "patrimonioPc": "PAT-PC-163",
+    "patrimonioMonitor": "PAT-MON-163",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON166",
+    "patrimonioPc": "PAT-PC-166",
+    "patrimonioMonitor": "PAT-MON-166",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON168",
+    "patrimonioPc": "PAT-PC-168",
+    "patrimonioMonitor": "PAT-MON-168",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON169",
+    "patrimonioPc": "PAT-PC-169",
+    "patrimonioMonitor": "PAT-MON-169",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON170",
+    "patrimonioPc": "PAT-PC-170",
+    "patrimonioMonitor": "PAT-MON-170",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON171",
+    "patrimonioPc": "PAT-PC-171",
+    "patrimonioMonitor": "PAT-MON-171",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON174",
+    "patrimonioPc": "PAT-PC-174",
+    "patrimonioMonitor": "PAT-MON-174",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON175",
+    "patrimonioPc": "PAT-PC-175",
+    "patrimonioMonitor": "PAT-MON-175",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON177",
+    "patrimonioPc": "PAT-PC-177",
+    "patrimonioMonitor": "PAT-MON-177",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON178",
+    "patrimonioPc": "PAT-PC-178",
+    "patrimonioMonitor": "PAT-MON-178",
+    "cpu": "Intel® Core™ i3-7100 (3M de Cache, 3,90 GHz)",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON179",
+    "patrimonioPc": "PAT-PC-179",
+    "patrimonioMonitor": "PAT-MON-179",
+    "cpu": "Intel® Core™ i3-4160 (Cache de 3 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON181",
+    "patrimonioPc": "PAT-PC-181",
+    "patrimonioMonitor": "PAT-MON-181",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON182",
+    "patrimonioPc": "PAT-PC-182",
+    "patrimonioMonitor": "PAT-MON-182",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON183",
+    "patrimonioPc": "PAT-PC-183",
+    "patrimonioMonitor": "PAT-MON-183",
+    "cpu": "Intel® Core™ i3-10100 Cache de 6 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON184",
+    "patrimonioPc": "PAT-PC-184",
+    "patrimonioMonitor": "PAT-MON-184",
+    "cpu": "Intel® Core™ i3-10100 Cache de 6 M, 3,60 GHz)",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON186",
+    "patrimonioPc": "PAT-PC-186",
+    "patrimonioMonitor": "PAT-MON-186",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON187",
+    "patrimonioPc": "PAT-PC-187",
+    "patrimonioMonitor": "PAT-MON-187",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON190",
+    "patrimonioPc": "PAT-PC-190",
+    "patrimonioMonitor": "PAT-MON-190",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON195",
+    "patrimonioPc": "PAT-PC-195",
+    "patrimonioMonitor": "PAT-MON-195",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON214",
+    "patrimonioPc": "PAT-PC-214",
+    "patrimonioMonitor": "PAT-MON-214",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON217",
+    "patrimonioPc": "PAT-PC-217",
+    "patrimonioMonitor": "PAT-MON-217",
+    "cpu": "MINI-PC - Intel® Celeron® J4125 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON225",
+    "patrimonioPc": "PAT-PC-225",
+    "patrimonioMonitor": "PAT-MON-225",
+    "cpu": "Intel Core i3",
+    "ram": "4GB",
+    "hd": "120GB",
+    "sistemaOp": "Windows 10",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON227",
+    "patrimonioPc": "PAT-PC-227",
+    "patrimonioMonitor": "PAT-MON-227",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON230",
+    "patrimonioPc": "PAT-PC-230",
+    "patrimonioMonitor": "PAT-MON-230",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON240",
+    "patrimonioPc": "PAT-PC-240",
+    "patrimonioMonitor": "PAT-MON-240",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON241",
+    "patrimonioPc": "PAT-PC-241",
+    "patrimonioMonitor": "PAT-MON-241",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON242",
+    "patrimonioPc": "PAT-PC-242",
+    "patrimonioMonitor": "PAT-MON-242",
+    "cpu": "MINI-PC - Intel® Celeron® N5095 CPU 2.00Ghz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  },
+  {
+    "hostname": "COBCON243",
+    "patrimonioPc": "PAT-PC-243",
+    "patrimonioMonitor": "PAT-MON-243",
+    "cpu": "Notebook Dell Vostro 15 3520 - 12th Intel Core i3 1215U - 1.20 GHz",
+    "ram": "8GB",
+    "hd": "256GB",
+    "sistemaOp": "Windows 11",
+    "kaspersky": "OK",
+    "kitPerifericos": "Teclado + Mouse + Headset",
+    "statusMaquina": "ESTOQUE"
+  }
 ];
 
-const BANCADAS_DESATIVADAS_INICIAIS = [
-  {
-    codigo: 'C02-A06',
-    motivoBloqueio: 'Ponto de rede sem sinal (Chamado TI #4812)',
-  },
-  {
-    codigo: 'C06-B02',
-    motivoBloqueio: 'Tomada elétrica da bancada em curto — aguardando manutenção predial',
-  },
-  {
-    codigo: 'C09-A04',
-    motivoBloqueio: 'Suporte ergonômico e calha de cabos danificados',
-  },
-];
-
-/**
- * Popula as 122 bancadas automaticamente caso a tabela esteja vazia:
- * - Corredores 1 a 9: 12 bancadas cada (6 Lado A e 6 Lado B) = 108 bancadas
- * - Corredor 10: 14 bancadas (7 Lado A e 7 Lado B) = 14 bancadas
- * Total = 122 bancadas.
- */
-async function initBancadas({ closeConnection = false } = {}) {
+async function initBancadas({ closeConnection = false, force = false } = {}) {
   await sequelize.sync();
 
-  const totalExistente = await Bancada.count();
-  if (totalExistente > 0) {
-    console.log(`[Seeder] ${totalExistente} bancadas já cadastradas no banco.`);
-    if (closeConnection) await sequelize.close();
-    return;
-  }
-
-  console.log('[Seeder] Populando as 122 bancadas do setor de cobrança...');
-  const bancadasParaCriar = [];
-
-  for (let corredor = 1; corredor <= 10; corredor++) {
-    const posicoesPorLado = corredor === 10 ? 7 : 6;
-    const lados = ['A', 'B'];
-
-    for (const lado of lados) {
-      for (let posicao = 1; posicao <= posicoesPorLado; posicao++) {
-        const codigo = `C${pad(corredor)}-${lado}${pad(posicao)}`;
-        bancadasParaCriar.push({
-          codigo,
-          corredor,
-          lado,
-          posicao,
-          status: 'LIVRE',
-          colaborador: null,
-          equipe: null,
-          motivoBloqueio: null,
-          pontoRede: `PR-${pad(corredor)}${lado}${pad(posicao)}`,
-          maquinaId: null,
-        });
-      }
+  if (force) {
+    console.log('[Seeder] Flag --force detectada: recriando e sincronizando tabelas (Maquina, Bancada, Historico)...');
+    await Bancada.drop().catch(() => {});
+    await Maquina.drop().catch(() => {});
+    await HistoricoMovimento.drop().catch(() => {});
+    await Maquina.sync();
+    await Bancada.sync();
+    await HistoricoMovimento.sync();
+  } else {
+    const count = await Bancada.count();
+    if (count > 0) {
+      console.log(`[Seeder] ${count} bancadas já cadastradas no banco de dados.`);
+      if (closeConnection) await sequelize.close();
+      return;
     }
   }
+
+  console.log('[Seeder] Cadastrando o inventário completo de computadores (máquinas)...');
+  const mapaMaquinasCriadas = new Map();
+
+  for (const m of MAQUINAS_DATA) {
+    const maquina = await Maquina.create(m);
+    mapaMaquinasCriadas.set(m.hostname, maquina.id);
+  }
+  console.log(`[Seeder] ${mapaMaquinasCriadas.size} máquinas criadas com sucesso.`);
+
+  console.log('[Seeder] Populando as 126 bancadas do setor...');
+  const bancadasParaCriar = BANCADAS_DATA.map((b) => {
+    const maquinaId = b.hostname ? mapaMaquinasCriadas.get(b.hostname) || null : null;
+    const pontoRede = `PR-${pad(b.corredor)}${b.lado}${pad(b.posicao)}`;
+
+    return {
+      codigo: b.codigo,
+      corredor: b.corredor,
+      lado: b.lado,
+      posicao: b.posicao,
+      status: b.status,
+      colaborador: b.colaborador,
+      equipe: b.colaborador ? 'Operação Cobrança Consulth / Oslo' : null,
+      motivoBloqueio: b.motivoBloqueio || null,
+      pontoRede,
+      maquinaId,
+    };
+  });
 
   await Bancada.bulkCreate(bancadasParaCriar);
-  console.log(`[Seeder] ${bancadasParaCriar.length} bancadas criadas com sucesso.`);
+  console.log(`[Seeder] ${bancadasParaCriar.length} bancadas inseridas com sucesso.`);
 
-  const totalMaquinas = await Maquina.count();
-  if (totalMaquinas === 0) {
-    // 1. Bancadas OCUPADAS
-    for (const item of DADOS_INICIAIS_OCUPACAO) {
-      const maquina = await Maquina.create({
-        hostname: item.hostname,
-        patrimonioPc: item.patrimonioPc,
-        patrimonioMonitor: item.patrimonioMonitor,
-        kitPerifericos: 'Teclado + Mouse + Headset QD',
-        statusMaquina: 'ATIVA',
+  // Gerar histórico inicial de alocação para auditoria
+  console.log('[Seeder] Registrando histórico inicial de auditoria...');
+  const historicoInicial = [];
+  const agora = new Date();
+
+  for (const b of BANCADAS_DATA) {
+    if (b.status === 'OCUPADA' && b.hostname) {
+      historicoInicial.push({
+        hostname: b.hostname,
+        bancadaOrigem: null,
+        bancadaDestino: b.codigo,
+        colaboradorAnterior: null,
+        colaboradorNovo: b.colaborador,
+        tipoEvento: 'ALOCACAO',
+        observacao: `Inventário HENN: Ativo ${b.hostname} alocado para ${b.colaborador} na bancada ${b.codigo}`,
+        createdAt: agora,
       });
-
-      await Bancada.update(
-        {
-          status: 'OCUPADA',
-          maquinaId: maquina.id,
-          colaborador: item.colaborador,
-          equipe: item.equipe,
-        },
-        { where: { codigo: item.codigoBancada } }
-      );
-
-      if (item.hostname === 'COBCON220') {
-        const d1 = new Date(Date.now() - 1000 * 60 * 60 * 24 * 60);
-        const d2 = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30);
-        const d3 = new Date(Date.now() - 1000 * 60 * 60 * 24 * 2);
-
-        await HistoricoMovimento.bulkCreate([
-          {
-            hostname: 'COBCON220',
-            bancadaOrigem: null,
-            bancadaDestino: 'C01-A04',
-            colaboradorAnterior: null,
-            colaboradorNovo: 'Lucas Mendonça',
-            tipoEvento: 'ALOCACAO',
-            observacao: 'Alocação inicial de inventário no corredor 01',
-            createdAt: d1,
-          },
-          {
-            hostname: 'COBCON220',
-            bancadaOrigem: 'C01-A04',
-            bancadaDestino: 'C02-B05',
-            colaboradorAnterior: 'Lucas Mendonça',
-            colaboradorNovo: 'Vanessa Prado',
-            tipoEvento: 'TROCA_MENSAL',
-            observacao: 'Rodízio mensal de campanha de cobrança',
-            createdAt: d2,
-          },
-          {
-            hostname: 'COBCON220',
-            bancadaOrigem: 'C02-B05',
-            bancadaDestino: 'C03-B01',
-            colaboradorAnterior: 'Vanessa Prado',
-            colaboradorNovo: 'Fernanda Souza',
-            tipoEvento: 'TROCA_MENSAL',
-            observacao: 'Transferência para célula de Negociação Especial',
-            createdAt: d3,
-          },
-        ]);
-      } else {
-        await HistoricoMovimento.create({
-          hostname: item.hostname,
-          bancadaOrigem: null,
-          bancadaDestino: item.codigoBancada,
-          colaboradorAnterior: null,
-          colaboradorNovo: item.colaborador,
-          tipoEvento: 'ALOCACAO',
-          observacao: `Alocação inicial do ativo ${item.hostname} na bancada ${item.codigoBancada}`,
-        });
-      }
-    }
-
-    // 2. Bancadas em RESERVA (Máquina pronta p/ uso após desligamento)
-    for (const resItem of BANCADAS_RESERVA_INICIAIS) {
-      const maquina = await Maquina.create({
-        hostname: resItem.hostname,
-        patrimonioPc: resItem.patrimonioPc,
-        patrimonioMonitor: resItem.patrimonioMonitor,
-        kitPerifericos: 'Teclado + Mouse + Headset QD',
-        statusMaquina: 'ATIVA',
-      });
-
-      await Bancada.update(
-        {
-          status: 'RESERVA',
-          maquinaId: maquina.id,
-          colaborador: null,
-          equipe: resItem.equipe,
-          motivoBloqueio: null,
-        },
-        { where: { codigo: resItem.codigoBancada } }
-      );
-
-      await HistoricoMovimento.create({
-        hostname: resItem.hostname,
-        bancadaOrigem: resItem.codigoBancada,
-        bancadaDestino: resItem.codigoBancada,
-        colaboradorAnterior: resItem.colaboradorAnterior,
+    } else if (b.status === 'RESERVA' && b.hostname) {
+      historicoInicial.push({
+        hostname: b.hostname,
+        bancadaOrigem: b.codigo,
+        bancadaDestino: b.codigo,
+        colaboradorAnterior: null,
         colaboradorNovo: null,
         tipoEvento: 'DESLIGAMENTO_RESERVA',
-        observacao: resItem.observacao,
+        observacao: `Posto ${b.codigo} em Reserva com máquina ${b.hostname} pronta p/ uso`,
+        createdAt: agora,
       });
-    }
-
-    // 3. Bancadas DESATIVADAS
-    for (const bloq of BANCADAS_DESATIVADAS_INICIAIS) {
-      await Bancada.update(
-        {
-          status: 'DESATIVADA',
-          motivoBloqueio: bloq.motivoBloqueio,
-          maquinaId: null,
-          colaborador: null,
-        },
-        { where: { codigo: bloq.codigo } }
-      );
-
-      await HistoricoMovimento.create({
+    } else if (b.status === 'DESATIVADA') {
+      historicoInicial.push({
         hostname: null,
-        bancadaOrigem: bloq.codigo,
+        bancadaOrigem: b.codigo,
         bancadaDestino: null,
         colaboradorAnterior: null,
         colaboradorNovo: null,
         tipoEvento: 'DESATIVACAO_BANCADA',
-        observacao: bloq.motivoBloqueio,
+        observacao: b.motivoBloqueio || 'Bancada desativada',
+        createdAt: agora,
       });
     }
-
-    console.log('[Seeder] Alocações iniciais, bancadas em RESERVA e histórico criados.');
   }
+
+  await HistoricoMovimento.bulkCreate(historicoInicial);
+  console.log(`[Seeder] ${historicoInicial.length} eventos históricos registrados.`);
 
   if (closeConnection) {
     await sequelize.close();
@@ -375,7 +4240,8 @@ async function initBancadas({ closeConnection = false } = {}) {
 }
 
 if (require.main === module) {
-  initBancadas({ closeConnection: true }).catch((err) => {
+  const force = process.argv.includes('--force');
+  initBancadas({ closeConnection: true, force }).catch((err) => {
     console.error('[Seeder Error]:', err);
     process.exit(1);
   });

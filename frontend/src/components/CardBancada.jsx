@@ -133,7 +133,7 @@ export default function CardBancada({
             ? 'BLOQUEADA'
             : status === 'MANUTENCAO'
             ? 'MANUTENÇÃO'
-            : hostname || 'LIVRE'}
+            : hostname || (colaborador ? 'S/ MÁQUINA' : 'LIVRE')}
         </span>
       </div>
 

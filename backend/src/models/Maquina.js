@@ -25,6 +25,26 @@ const Maquina = sequelize.define(
       type: DataTypes.STRING(50),
       allowNull: true,
     },
+    cpu: {
+      type: DataTypes.STRING(150),
+      allowNull: true,
+    },
+    ram: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    hd: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    sistemaOp: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    kaspersky: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
     kitPerifericos: {
       type: DataTypes.STRING(150),
       allowNull: true,

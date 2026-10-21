@@ -20,11 +20,11 @@ const Bancada = sequelize.define(
       allowNull: false,
       validate: {
         min: 1,
-        max: 10,
+        max: 11,
       },
     },
     lado: {
-      type: DataTypes.ENUM('A', 'B'),
+      type: DataTypes.ENUM('D', 'E', 'A', 'B'),
       allowNull: false,
     },
     posicao: {
@@ -32,7 +32,7 @@ const Bancada = sequelize.define(
       allowNull: false,
       validate: {
         min: 1,
-        max: 7,
+        max: 6,
       },
     },
     status: {

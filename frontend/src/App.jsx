@@ -78,7 +78,7 @@ export default function App() {
     }
   }, [autenticado, carregarBancadas]);
 
-  // Estatísticas globais das 122 bancadas (incluindo RESERVA)
+  // Estatísticas globais das 126 bancadas (incluindo RESERVA)
   const estatisticas = useMemo(() => {
     const total = bancadas.length;
     let ocupadas = 0;
@@ -111,6 +111,7 @@ export default function App() {
       const matchEquipe = b.equipe?.toLowerCase().includes(termo);
       const matchPontoRede = b.pontoRede?.toLowerCase().includes(termo);
       const matchStatus = b.status?.toLowerCase().includes(termo);
+      const matchCpu = b.maquina?.cpu?.toLowerCase().includes(termo);
 
       if (
         matchCodigo ||
@@ -118,7 +119,8 @@ export default function App() {
         matchColaborador ||
         matchEquipe ||
         matchPontoRede ||
-        matchStatus
+        matchStatus ||
+        matchCpu
       ) {
         encontrados.add(b.codigo);
       }
@@ -402,7 +404,7 @@ export default function App() {
         <div className="no-print flex h-96 flex-col items-center justify-center gap-3 text-slate-500 dark:text-slate-400">
           <Loader2 className="h-8 w-8 animate-spin text-henn-blue" />
           <p className="text-sm font-medium">
-            Carregando planta das 122 bancadas do setor de cobrança...
+            Carregando planta das 126 bancadas do setor de cobrança...
           </p>
         </div>
       ) : (
@@ -463,7 +465,7 @@ export default function App() {
             Prestação de Serviços de TI para o <strong className="text-slate-800 dark:text-slate-300">Grupo Consulth Soluções</strong>
           </span>
           <span>·</span>
-          <span>Setor de Cobrança (122 Bancadas)</span>
+          <span>Setor de Cobrança (126 Bancadas)</span>
         </div>
       </footer>
     </div>

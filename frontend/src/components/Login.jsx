@@ -117,7 +117,7 @@ export default function Login() {
             Mapa de Alocação &amp; Trocas Mensais
           </h1>
           <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            Gestão Operacional de TI · 10 Corredores · 122 Bancadas
+            Gestão Operacional de TI · 126 Bancadas (10 Corredores + Meio Corredor 11)
           </p>
         </div>
 

@@ -23,14 +23,14 @@ async function buscarBancadaPorCodigo(codigo, transaction = null) {
 
 const TrocaService = {
   /**
-   * Lista todas as 122 bancadas com suas máquinas associadas
+   * Lista todas as 126 bancadas com suas máquinas associadas
    */
   async listarBancadas() {
     return Bancada.findAll({
       include: [{ model: Maquina, as: 'maquina' }],
       order: [
         ['corredor', 'ASC'],
-        ['lado', 'DESC'], // Lado B em cima, Lado A embaixo em cada corredor
+        ['lado', 'ASC'], // Lado D em cima, Lado E embaixo em cada corredor
         ['posicao', 'ASC'],
       ],
     });

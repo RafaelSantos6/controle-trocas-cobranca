@@ -56,7 +56,7 @@ export const api = {
       .then((res) => res.data),
 
   // === PLANTA DE BANCADAS & MOVIMENTAÇÕES ===
-  // Lista todas as 122 bancadas com suas máquinas associadas
+  // Lista todas as 126 bancadas com suas máquinas associadas
   listarBancadas: () => apiClient.get('/bancadas').then((res) => res.data),
 
   // Detalhes de uma bancada específica
